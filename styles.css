@@ -176,81 +176,15 @@ textarea {
   min-height: 535px;
 }
 
-.trust-pill {
+.hero-visual img {
   position: absolute;
-  top: 152px;
-  left: 32px;
-  z-index: 4;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #57575c;
-  font-size: 11px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.avatar-stack {
-  display: inline-flex;
-}
-
-.avatar-stack i {
-  width: 18px;
-  height: 18px;
-  margin-left: -5px;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #121212, #ff7a1a 50%, #e7e7e7);
-}
-
-.avatar-stack i:first-child {
-  margin-left: 0;
-}
-
-.avatar-stack i:nth-child(2) {
-  background: linear-gradient(135deg, #3268ff, #f7d04a);
-}
-
-.avatar-stack i:nth-child(3) {
-  background: linear-gradient(135deg, #ed3b3b, #111);
-}
-
-.avatar-stack i:nth-child(4) {
-  background: linear-gradient(135deg, #f6f6f6, #52a47e);
-}
-
-.block {
-  position: absolute;
+  top: 34px;
   right: 0;
-  bottom: 0;
-  background: #cfcfcf;
-}
-
-.block-back {
-  width: 490px;
-  height: 172px;
-  right: -2px;
-  bottom: 270px;
-  clip-path: polygon(46% 30%, 100% 0, 100% 100%, 46% 100%, 0 78%);
-  background: #dfdfdf;
-}
-
-.block-left {
-  width: 380px;
-  height: 220px;
-  right: 286px;
-  bottom: 0;
-  clip-path: polygon(0 22%, 100% 0, 100% 100%, 0 100%);
-  background: #d7d7d7;
-}
-
-.block-right {
-  width: 300px;
-  height: 315px;
-  right: 0;
-  bottom: 0;
-  clip-path: polygon(0 0, 100% 18%, 100% 100%, 0 100%);
-  background: #c9c9c9;
+  width: 482px;
+  height: 672px;
+  max-width: none;
+  display: block;
+  object-fit: contain;
 }
 
 .services {
@@ -680,9 +614,11 @@ address span:first-child {
     min-height: 340px;
   }
 
-  .trust-pill {
-    top: 42px;
-    left: 38px;
+  .hero-visual img {
+    top: 24px;
+    right: 24px;
+    width: min(482px, calc(100vw - 72px));
+    height: auto;
   }
 
   .service-grid,
@@ -741,28 +677,10 @@ address span:first-child {
     min-height: 285px;
   }
 
-  .trust-pill {
-    top: 28px;
-    left: 24px;
-    max-width: calc(100% - 48px);
-    font-size: 9px;
-  }
-
-  .block-back {
-    width: 330px;
-    height: 118px;
-    bottom: 168px;
-  }
-
-  .block-left {
-    width: 260px;
-    height: 170px;
-    right: 146px;
-  }
-
-  .block-right {
-    width: 190px;
-    height: 225px;
+  .hero-visual img {
+    top: 18px;
+    right: -18px;
+    width: min(420px, calc(100vw - 18px));
   }
 
   .services,
