@@ -7,7 +7,7 @@ export const Footer: React.FC = () => {
         <div>
           <a className="footer-brand inline-flex items-center w-max" href="#home" aria-label="Horode home">
             <img
-              src="assets/horode-logo-black.png"
+              src="/assets/horode-logo-black.png"
               alt="Horode"
               className="block w-[292px] h-auto invert max-sm:w-[210px]"
             />

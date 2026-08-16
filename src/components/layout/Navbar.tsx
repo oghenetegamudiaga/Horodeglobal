@@ -24,7 +24,7 @@ export const Navbar: React.FC = () => {
   return (
     <header className="site-header" id="home">
       <a className="brand" href="#home" aria-label="Horode home" onClick={closeMenu}>
-        <img src="assets/horode-logo-black.png" alt="Horode" />
+        <img src="/assets/horode-logo-black.png" alt="Horode" />
       </a>
 
       <button

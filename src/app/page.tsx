@@ -46,7 +46,7 @@ export default function Home() {
           aria-hidden="true"
         >
           <img
-            src="assets/hero-visual.png"
+            src="/assets/hero-visual.png"
             alt=""
             className="absolute top-[34px] right-0 w-[482px] h-[672px] max-w-none block object-contain max-lg:top-[24px] max-lg:right-[24px] max-lg:w-[min(482px,calc(100vw-72px))] max-lg:h-auto max-sm:top-[18px] max-sm:right-[-18px] max-sm:w-[min(420px,calc(100vw-18px))]"
           />
@@ -126,7 +126,7 @@ export default function Home() {
           <ProjectCard
             title="Zalyx Ledger"
             description="Zalyx Ledger help African business owners manage and track their business records seamlessly."
-            imageSrc="assets/zalyx-ledger.png"
+            imageSrc="/assets/zalyx-ledger.png"
             imageAlt="Zalyx Ledger mobile app interface"
             tags={[
               "Branding Services",
@@ -137,7 +137,7 @@ export default function Home() {
           <ProjectCard
             title="Ravex"
             description="A fintech product that help users easily pay utility bills"
-            imageSrc="assets/ravex.png"
+            imageSrc="/assets/ravex.png"
             imageAlt="Ravex payment app campaign mockup"
             tags={["Branding Services", "Social Media Design"]}
           />
