@@ -230,6 +230,7 @@ export default function Home() {
               imageSrc={project.thumbnail_url || "/assets/zalyx-ledger.png"}
               imageAlt={project.name}
               tags={project.service_tags || []}
+              href={`/work/${project.slug}`}
             />
           ))}
         </div>

@@ -6,6 +6,7 @@ interface ProjectCardProps {
   imageSrc: string;
   imageAlt: string;
   tags: string[];
+  href?: string;
   className?: string;
 }
 
@@ -15,18 +16,33 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   imageSrc,
   imageAlt,
   tags,
+  href,
   className = "",
 }) => {
-  return (
-    <article className={`project-card ${className}`}>
-      <img
-        src={imageSrc}
-        alt={imageAlt}
-        className="block w-full aspect-[1.56/1] object-cover rounded-[22px]"
-      />
-      <h3 className="m-[28px_0_8px] text-[#25252a] text-[28px] max-sm:text-[24px] font-semibold">
+  const content = (
+    <>
+      <div className="overflow-hidden rounded-[22px] group">
+        <img
+          src={imageSrc}
+          alt={imageAlt}
+          className="block w-full aspect-[1.56/1] object-cover rounded-[22px] transition-transform duration-300 group-hover:scale-[1.02]"
+        />
+      </div>
+      <h3 className="m-[28px_0_8px] text-[#25252a] text-[28px] max-sm:text-[24px] font-semibold hover:text-black transition-colors">
         {title}
       </h3>
+    </>
+  );
+
+  return (
+    <article className={`project-card ${className}`}>
+      {href ? (
+        <a href={href} className="block group">
+          {content}
+        </a>
+      ) : (
+        content
+      )}
       <p className="max-w-[620px] m-0 mb-[18px] text-[#8e8e95] text-[14px] leading-[1.6]">
         {description}
       </p>

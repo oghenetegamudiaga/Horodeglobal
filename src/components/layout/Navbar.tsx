@@ -48,7 +48,7 @@ export const Navbar: React.FC = () => {
         <a href="/about" onClick={closeMenu}>
           About Us
         </a>
-        <a href="#works" onClick={closeMenu}>
+        <a href="/work" onClick={closeMenu}>
           Works
         </a>
         <Button
