@@ -5,7 +5,7 @@ export const Footer: React.FC = () => {
     <footer className="site-footer bg-[#000000] text-white">
       <div className="footer-inner grid grid-cols-[1fr_auto] gap-[40px] pt-[148px] pb-[36px] max-lg:grid-cols-1 max-lg:pt-[72px]">
         <div>
-          <a className="footer-brand inline-flex items-center w-max" href="#home" aria-label="Horode home">
+          <a className="footer-brand inline-flex items-center w-max" href="/" aria-label="Horode home">
             <img
               src="/assets/horode-logo-black.png"
               alt="Horode"

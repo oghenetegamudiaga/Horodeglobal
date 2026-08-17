@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 
 export const Navbar: React.FC = () => {
@@ -22,10 +23,10 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="site-header" id="home">
-      <a className="brand" href="#home" aria-label="Horode home" onClick={closeMenu}>
+    <header className="site-header" id="top">
+      <Link href="/" className="brand" aria-label="Horode home" onClick={closeMenu}>
         <img src="/assets/horode-logo-black.png" alt="Horode" />
-      </a>
+      </Link>
 
       <button
         className="menu-toggle"
@@ -39,24 +40,24 @@ export const Navbar: React.FC = () => {
       </button>
 
       <nav className="site-nav" aria-label="Primary navigation">
-        <a href="#home" onClick={closeMenu}>
+        <Link href="/" onClick={closeMenu}>
           Home
-        </a>
-        <a href="/services" onClick={closeMenu}>
+        </Link>
+        <Link href="/services" onClick={closeMenu}>
           Services
-        </a>
-        <a href="/about" onClick={closeMenu}>
+        </Link>
+        <Link href="/about" onClick={closeMenu}>
           About Us
-        </a>
-        <a href="/work" onClick={closeMenu}>
+        </Link>
+        <Link href="/work" onClick={closeMenu}>
           Works
-        </a>
-        <a href="/blog" onClick={closeMenu}>
+        </Link>
+        <Link href="/blog" onClick={closeMenu}>
           Blog
-        </a>
+        </Link>
         <Button
           variant="filled"
-          href="#contact"
+          href="/contact"
           className="nav-button"
           onClick={closeMenu}
         >
