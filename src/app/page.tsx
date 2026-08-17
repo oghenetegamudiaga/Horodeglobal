@@ -1,11 +1,28 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
+import React from "react";
+import type { Metadata } from "next";
 import { EyebrowLabel } from "@/components/ui/EyebrowLabel";
 import { Button } from "@/components/ui/Button";
 import { ServiceCard } from "@/components/ui/ServiceCard";
 import { ProjectCard } from "@/components/ui/ProjectCard";
-import { supabase, Service, Project } from "@/lib/supabase";
+import { HomeContactForm } from "@/components/home/HomeContactForm";
+import {
+  supabase,
+  Service,
+  Project,
+  getSiteContentMap,
+  getSiteSettings,
+  DEFAULT_SITE_CONTENT,
+} from "@/lib/supabase";
+
+export const revalidate = 60;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  return {
+    title: `${settings.site_title || "Horode Design Studio"} | Brand, Design & Software`,
+    description: settings.meta_description,
+  };
+}
 
 // Fallback seed data matching Milestone 1 static port
 const defaultServices: Service[] = [
@@ -65,49 +82,63 @@ const defaultProjects: Project[] = [
   },
 ];
 
-export default function Home() {
-  const [formNote, setFormNote] = useState("");
-  const [services, setServices] = useState<Service[]>(defaultServices);
-  const [projects, setProjects] = useState<Project[]>(defaultProjects);
-
-  useEffect(() => {
-    async function loadData() {
-      // Check if real Supabase URL is configured
-      if (
-        !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-        process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
-      ) {
-        return;
-      }
-
-      try {
-        const [servicesRes, projectsRes] = await Promise.all([
-          supabase.from("services").select("*").order("sort_order", { ascending: true }),
-          supabase
-            .from("projects")
-            .select("*")
-            .eq("featured", true)
-            .order("sort_order", { ascending: true }),
-        ]);
-
-        if (servicesRes.data && servicesRes.data.length > 0) {
-          setServices(servicesRes.data);
-        }
-        if (projectsRes.data && projectsRes.data.length > 0) {
-          setProjects(projectsRes.data);
-        }
-      } catch (err) {
-        console.warn("Supabase fetch fallback to local seed copy:", err);
-      }
+async function getServices(): Promise<Service[]> {
+  try {
+    if (
+      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+      process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
+    ) {
+      return defaultServices;
     }
+    const { data, error } = await supabase
+      .from("services")
+      .select("*")
+      .order("sort_order", { ascending: true });
 
-    loadData();
-  }, []);
+    if (error || !data || data.length === 0) {
+      return defaultServices;
+    }
+    return data;
+  } catch {
+    return defaultServices;
+  }
+}
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setFormNote("Thanks. Your request is ready to connect to a backend.");
-  };
+async function getProjects(): Promise<Project[]> {
+  try {
+    if (
+      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+      process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
+    ) {
+      return defaultProjects;
+    }
+    const { data, error } = await supabase
+      .from("projects")
+      .select("*")
+      .eq("featured", true)
+      .order("sort_order", { ascending: true });
+
+    if (error || !data || data.length === 0) {
+      return defaultProjects;
+    }
+    return data;
+  } catch {
+    return defaultProjects;
+  }
+}
+
+export default async function Home() {
+  const [services, projects, content] = await Promise.all([
+    getServices(),
+    getProjects(),
+    getSiteContentMap(),
+  ]);
+
+  const heroHeadline = content.hero_headline || DEFAULT_SITE_CONTENT.hero_headline;
+  const heroSubhead = content.hero_subhead || DEFAULT_SITE_CONTENT.hero_subhead;
+  const heroCtaText = content.hero_cta_text || DEFAULT_SITE_CONTENT.hero_cta_text;
+  const whoWeAreHeadline = content.who_we_are_headline || DEFAULT_SITE_CONTENT.who_we_are_headline;
+  const whoWeAreText = content.who_we_are_text || DEFAULT_SITE_CONTENT.who_we_are_text;
 
   return (
     <main>
@@ -121,18 +152,17 @@ export default function Home() {
             id="hero-title"
             className="max-w-[690px] m-0 mb-[28px] text-[#333337] text-[clamp(44px,4.1vw,72px)] max-sm:text-[42px] max-[430px]:text-[32px] font-bold leading-[1.08] tracking-normal"
           >
-            We Build Brands That Refuse to Stay Small.
+            {heroHeadline}
           </h1>
           <p className="max-w-[540px] m-0 mb-[36px] text-[#97979d] text-[18px] max-sm:text-[15px] leading-[1.28]">
-            We combine strategy, design, and technology to help ambitious
-            businesses grow into market leaders.
+            {heroSubhead}
           </p>
           <Button
             variant="outline"
             href="#contact"
             className="primary-button min-h-[72px] px-[30px] text-[18px] max-sm:min-h-[58px] max-sm:px-[22px] max-sm:text-[14px]"
           >
-            Book Free Consultation
+            {heroCtaText}
           </Button>
         </div>
 
@@ -188,15 +218,12 @@ export default function Home() {
             id="about-title"
             className="m-0 text-[clamp(42px,4vw,63px)] max-sm:text-[38px] max-[430px]:text-[32px] font-medium leading-[1.08] tracking-normal"
           >
-            We Create Solutions We Build Systems,
+            {whoWeAreHeadline}
           </h2>
         </div>
         <div className="max-w-[560px] m-0 mt-[76px] ml-auto max-lg:m-0">
           <p className="m-0 mb-[24px] text-[#333337] text-[16px] leading-[1.55]">
-            We build digital foundations that help businesses grow with intention.
-            From brand strategy and identity design to custom software and app
-            development, every system we build is engineered to make your company
-            visible, trusted, and infinitely scalable.
+            {whoWeAreText}
           </p>
           <a
             href="/about"
@@ -247,7 +274,7 @@ export default function Home() {
           className="max-w-[720px] mx-auto text-center text-[clamp(40px,4vw,64px)] max-sm:text-[38px] max-[430px]:text-[32px] font-medium leading-[1.1] tracking-normal"
         >
           Have a project in mind?{" "}
-          <span className="block">Let's creat greatness</span>
+          <span className="block">Let's create greatness</span>
         </h2>
 
         <div className="contact-layout grid grid-cols-[440px_minmax(0,1fr)] gap-[90px] items-start mt-[72px] max-lg:grid-cols-1 max-lg:gap-[42px] max-sm:mt-[48px]">
@@ -271,104 +298,7 @@ export default function Home() {
             </ol>
           </aside>
 
-          <form
-            className="contact-form p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-white max-sm:p-[20px] max-sm:rounded-[18px]"
-            onSubmit={handleSubmit}
-          >
-            <label className="block mb-[18px]">
-              <span className="sr-only">Full Name*</span>
-              <input
-                type="text"
-                name="name"
-                required
-                placeholder="Full Name*"
-                className="w-full h-[60px] px-[22px] border border-dashed border-[#d4d4d7] rounded-[10px] bg-white text-[#232327] text-[13px] outline-none placeholder-[#a0a0a6] focus:border-[#777] focus:ring-2 focus:ring-black/5 max-sm:h-[54px]"
-              />
-            </label>
-
-            <label className="block mb-[18px]">
-              <span className="sr-only">Email*</span>
-              <input
-                type="email"
-                name="email"
-                required
-                placeholder="Email*"
-                className="w-full h-[60px] px-[22px] border border-dashed border-[#d4d4d7] rounded-[10px] bg-white text-[#232327] text-[13px] outline-none placeholder-[#a0a0a6] focus:border-[#777] focus:ring-2 focus:ring-black/5 max-sm:h-[54px]"
-              />
-            </label>
-
-            <label className="phone-field block mb-[18px]">
-              <span className="sr-only">Phone</span>
-              <input
-                type="tel"
-                name="phone"
-                placeholder="🇺🇸  +1 Phone"
-                className="w-full h-[60px] px-[22px] border border-dashed border-[#d4d4d7] rounded-[10px] bg-white text-[#232327] text-[13px] outline-none placeholder-[#a0a0a6] focus:border-[#777] focus:ring-2 focus:ring-black/5 max-sm:h-[54px]"
-              />
-            </label>
-
-            <div className="form-row grid grid-cols-2 gap-[18px] mb-[18px] max-sm:grid-cols-1">
-              <label className="block">
-                <span className="sr-only">How did you hear about us</span>
-                <select
-                  name="source"
-                  className="w-full h-[60px] px-[22px] border border-dashed border-[#d4d4d7] rounded-[10px] bg-white text-[#232327] text-[13px] outline-none text-[#a0a0a6] focus:border-[#777] focus:ring-2 focus:ring-black/5 max-sm:h-[54px]"
-                >
-                  <option value="">How did you hear about us</option>
-                  <option>Instagram</option>
-                  <option>Referral</option>
-                  <option>Google Search</option>
-                  <option>LinkedIn</option>
-                </select>
-              </label>
-
-              <label className="block">
-                <span className="sr-only">What is your budget</span>
-                <select
-                  name="budget"
-                  className="w-full h-[60px] px-[22px] border border-dashed border-[#d4d4d7] rounded-[10px] bg-white text-[#232327] text-[13px] outline-none text-[#a0a0a6] focus:border-[#777] focus:ring-2 focus:ring-black/5 max-sm:h-[54px]"
-                >
-                  <option value="">What is your budget</option>
-                  <option>$1,000 - $5,000</option>
-                  <option>$5,000 - $10,000</option>
-                  <option>$10,000+</option>
-                </select>
-              </label>
-            </div>
-
-            <label className="block mb-[18px]">
-              <span className="sr-only">Message</span>
-              <textarea
-                name="message"
-                rows={7}
-                placeholder="Message"
-                className="w-full min-h-[170px] p-[24px_22px] border border-dashed border-[#d4d4d7] rounded-[10px] bg-white text-[#232327] text-[13px] outline-none resize-y placeholder-[#a0a0a6] focus:border-[#777] focus:ring-2 focus:ring-black/5"
-              ></textarea>
-            </label>
-
-            <div className="form-actions flex items-center justify-between gap-[18px] mt-[28px] max-sm:flex-col max-sm:items-start">
-              <label className="file-link inline-flex items-center gap-[7px] text-[#9999a0] text-[13px] cursor-pointer">
-                <input type="file" multiple className="hidden" />
-                <span aria-hidden="true">◎</span> Attach files (2 Files max -
-                5MB each)
-              </label>
-              <button
-                className="submit-button tega-btn tega-btn-outline min-w-[112px] px-[23px] cursor-pointer"
-                type="submit"
-              >
-                Submit
-              </button>
-            </div>
-
-            {formNote && (
-              <p
-                className="form-note min-h-[18px] mt-[14px] mb-0 text-[#4f4f55] text-[12px]"
-                aria-live="polite"
-              >
-                {formNote}
-              </p>
-            )}
-          </form>
+          <HomeContactForm />
         </div>
       </section>
     </main>

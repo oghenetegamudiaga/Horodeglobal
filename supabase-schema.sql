@@ -78,3 +78,44 @@ create policy "Public reads projects" on public.projects
   for select using (true);
 
 create index if not exists projects_slug_idx on public.projects (slug);
+
+
+-- 4. Site Content Table (Key-Value Content Store)
+create table if not exists public.site_content (
+  id            uuid primary key default gen_random_uuid(),
+  key           text not null unique,
+  value         jsonb,
+  updated_at    timestamptz default now()
+);
+
+alter table public.site_content enable row level security;
+
+drop policy if exists "Public reads site_content" on public.site_content;
+create policy "Public reads site_content" on public.site_content
+  for select using (true);
+
+create index if not exists site_content_key_idx on public.site_content (key);
+
+
+-- 5. Site Settings Table (Global Settings)
+create table if not exists public.site_settings (
+  id               uuid primary key default gen_random_uuid(),
+  phone            text,
+  email            text,
+  address          text,
+  social_x         text,
+  social_linkedin  text,
+  social_instagram text,
+  social_tiktok    text,
+  copyright_text   text,
+  site_title       text,
+  meta_description text,
+  updated_at       timestamptz default now()
+);
+
+alter table public.site_settings enable row level security;
+
+drop policy if exists "Public reads site_settings" on public.site_settings;
+create policy "Public reads site_settings" on public.site_settings
+  for select using (true);
+

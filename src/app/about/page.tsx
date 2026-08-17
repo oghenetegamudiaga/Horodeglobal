@@ -2,6 +2,9 @@ import React from "react";
 import type { Metadata } from "next";
 import { EyebrowLabel } from "@/components/ui/EyebrowLabel";
 import { Button } from "@/components/ui/Button";
+import { getSiteContentMap, DEFAULT_SITE_CONTENT } from "@/lib/supabase";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "About Us | Horode Design Studio",
@@ -9,45 +12,26 @@ export const metadata: Metadata = {
     "Learn about Horode Design Studio — our story, working principles, system-driven philosophy, and mission to build brands that refuse to stay small.",
 };
 
-const workingPrinciples = [
-  {
-    number: "01",
-    title: "Systemic Thinking",
-    description:
-      "We build reusable design systems and modular codebase architectures rather than short-term fixes. Every asset is engineered to scale with your business.",
-  },
-  {
-    number: "02",
-    title: "Uncompromising Craftsmanship",
-    description:
-      "Every typographic detail, layout grid, micro-interaction, and backend endpoint is crafted with rigorous standards for clarity and performance.",
-  },
-  {
-    number: "03",
-    title: "Direct Collaboration",
-    description:
-      "We work side-by-side with founders and executive teams as long-term strategic partners, maintaining clear, transparent feedback loops.",
-  },
-  {
-    number: "04",
-    title: "Measurable Impact",
-    description:
-      "Design and code are means to an end — driving user trust, market positioning, and sustainable enterprise revenue growth.",
-  },
-];
+export default async function AboutPage() {
+  const content = await getSiteContentMap();
 
-export default function AboutPage() {
+  const heroTitle = content.about_hero_title || DEFAULT_SITE_CONTENT.about_hero_title;
+  const heroSubhead = content.about_hero_subhead || DEFAULT_SITE_CONTENT.about_hero_subhead;
+  const philosophyTitle = content.about_philosophy_title || DEFAULT_SITE_CONTENT.about_philosophy_title;
+  const storyRaw = content.about_story || DEFAULT_SITE_CONTENT.about_story;
+  const storyParagraphs = typeof storyRaw === "string" ? storyRaw.split("\n\n").filter(Boolean) : [storyRaw];
+  const values = Array.isArray(content.about_values) ? content.about_values : DEFAULT_SITE_CONTENT.about_values;
+
   return (
     <main className="py-[60px] max-sm:py-[36px]">
       {/* Header Section */}
       <section className="about-header section-shell">
         <EyebrowLabel className="mb-[26px]">Who We Are</EyebrowLabel>
         <h1 className="max-w-[840px] m-0 text-[clamp(44px,4.5vw,72px)] max-sm:text-[42px] max-[430px]:text-[32px] font-bold text-[#333337] leading-[1.08] tracking-normal">
-          We Create Solutions, We Build Systems.
+          {heroTitle}
         </h1>
         <p className="max-w-[640px] mt-[24px] mb-0 text-[#97979d] text-[19px] max-sm:text-[16px] leading-[1.45]">
-          We combine strategy, design, and technology to help ambitious businesses
-          grow into market leaders.
+          {heroSubhead}
         </p>
       </section>
 
@@ -59,23 +43,15 @@ export default function AboutPage() {
               Our Philosophy
             </span>
             <h2 className="m-0 text-[clamp(32px,3.2vw,48px)] font-bold text-[#25252a] leading-[1.12]">
-              Building Foundations for Intention and Scale
+              {philosophyTitle}
             </h2>
           </div>
           <div className="space-y-[20px] text-[#333337] text-[16px] leading-[1.6]">
-            <p className="m-0">
-              We build digital foundations that help businesses grow with intention.
-              From brand strategy and identity design to custom software and app
-              development, every system we build is engineered to make your company
-              visible, trusted, and infinitely scalable.
-            </p>
-            <p className="m-0">
-              Horode was founded on a core insight: modern companies don't just need
-              isolated logos or standalone web pages — they need integrated brand and
-              technology systems. When strategy, visual identity, and code work in
-              harmony, businesses move faster, communicate clearer, and command higher
-              market value.
-            </p>
+            {storyParagraphs.map((paragraph: string, idx: number) => (
+              <p key={idx} className="m-0">
+                {paragraph}
+              </p>
+            ))}
           </div>
         </div>
       </section>
@@ -88,13 +64,13 @@ export default function AboutPage() {
         </h2>
 
         <div className="grid grid-cols-2 gap-[24px] max-lg:grid-cols-1">
-          {workingPrinciples.map((item) => (
+          {values.map((item: any, idx: number) => (
             <div
-              key={item.number}
+              key={item.number || idx}
               className="p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-white max-sm:p-[28px]"
             >
               <span className="text-[#9999a0] text-[14px] font-bold block mb-[16px]">
-                {item.number}
+                {item.number || `0${idx + 1}`}
               </span>
               <h3 className="m-0 mb-[12px] text-[22px] font-semibold text-[#25252a]">
                 {item.title}

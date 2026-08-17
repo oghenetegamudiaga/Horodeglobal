@@ -7,12 +7,14 @@ import { Service, Project, Post } from "@/lib/supabase";
 
 export default function AdminDashboardClient() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<"services" | "projects" | "posts">("services");
+  const [activeTab, setActiveTab] = useState<"services" | "projects" | "posts" | "site-content">("services");
 
   // Data states
   const [services, setServices] = useState<Service[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
+  const [siteContent, setSiteContent] = useState<Record<string, any>>({});
+  const [siteSettings, setSiteSettings] = useState<any>({});
   const [loading, setLoading] = useState(true);
 
   // Form & Modal states
@@ -22,6 +24,12 @@ export default function AdminDashboardClient() {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Site Content & Settings Form States
+  const [isSavingContent, setIsSavingContent] = useState(false);
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
+  const [contentSuccessMsg, setContentSuccessMsg] = useState<string | null>(null);
+  const [settingsSuccessMsg, setSettingsSuccessMsg] = useState<string | null>(null);
+
   useEffect(() => {
     loadAllData();
   }, []);
@@ -29,13 +37,15 @@ export default function AdminDashboardClient() {
   const loadAllData = async () => {
     setLoading(true);
     try {
-      const [resS, resP, resB] = await Promise.all([
+      const [resS, resP, resB, resC, resSet] = await Promise.all([
         fetch("/api/admin/services"),
         fetch("/api/admin/projects"),
         fetch("/api/admin/posts"),
+        fetch("/api/admin/site-content"),
+        fetch("/api/admin/site-settings"),
       ]);
 
-      if (resS.status === 401 || resP.status === 401 || resB.status === 401) {
+      if (resS.status === 401 || resP.status === 401 || resB.status === 401 || resC.status === 401 || resSet.status === 401) {
         router.push("/admin/login");
         return;
       }
@@ -43,14 +53,64 @@ export default function AdminDashboardClient() {
       const sData = await resS.json();
       const pData = await resP.json();
       const bData = await resB.json();
+      const cData = await resC.json();
+      const setDat = await resSet.json();
 
       setServices(Array.isArray(sData) ? sData : []);
       setProjects(Array.isArray(pData) ? pData : []);
       setPosts(Array.isArray(bData) ? bData : []);
+      setSiteContent(cData || {});
+      setSiteSettings(setDat || {});
     } catch (err) {
       console.error("Failed to load dashboard data", err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSaveContent = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSavingContent(true);
+    setContentSuccessMsg(null);
+    try {
+      const res = await fetch("/api/admin/site-content", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: siteContent }),
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        throw new Error(data.error || "Save failed");
+      }
+      setContentSuccessMsg("Site copy saved and live!");
+      setTimeout(() => setContentSuccessMsg(null), 4000);
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : "Failed to save site content");
+    } finally {
+      setIsSavingContent(false);
+    }
+  };
+
+  const handleSaveSettings = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSavingSettings(true);
+    setSettingsSuccessMsg(null);
+    try {
+      const res = await fetch("/api/admin/site-settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(siteSettings),
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        throw new Error(data.error || "Save failed");
+      }
+      setSettingsSuccessMsg("Global settings saved and live!");
+      setTimeout(() => setSettingsSuccessMsg(null), 4000);
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : "Failed to save site settings");
+    } finally {
+      setIsSavingSettings(false);
     }
   };
 
@@ -275,14 +335,26 @@ export default function AdminDashboardClient() {
             >
               Blog Posts ({posts.length})
             </button>
+            <button
+              onClick={() => setActiveTab("site-content")}
+              className={`px-[18px] py-[10px] rounded-[12px] text-[14px] font-semibold transition-all ${
+                activeTab === "site-content"
+                  ? "bg-[#111111] text-white shadow-sm"
+                  : "bg-white border border-[var(--border)] text-[#77777e] hover:text-[#111111]"
+              }`}
+            >
+              Site Content & Settings
+            </button>
           </div>
 
-          <button
-            onClick={() => openForm()}
-            className="px-[20px] py-[10px] rounded-[12px] bg-[#111111] text-white text-[13px] font-bold hover:bg-[#333337] transition-colors flex items-center gap-[6px]"
-          >
-            + Create New {activeTab === "services" ? "Service" : activeTab === "projects" ? "Project" : "Post"}
-          </button>
+          {activeTab !== "site-content" && (
+            <button
+              onClick={() => openForm()}
+              className="px-[20px] py-[10px] rounded-[12px] bg-[#111111] text-white text-[13px] font-bold hover:bg-[#333337] transition-colors flex items-center gap-[6px]"
+            >
+              + Create New {activeTab === "services" ? "Service" : activeTab === "projects" ? "Project" : "Post"}
+            </button>
+          )}
         </div>
 
         {/* Content Section */}
@@ -290,8 +362,302 @@ export default function AdminDashboardClient() {
           <div className="p-[60px] text-center text-[#8c8c93]">
             Loading dashboard data...
           </div>
+        ) : activeTab === "site-content" ? (
+          <div className="space-y-[32px]">
+            {/* Form 1: Site Copy Form */}
+            <div className="bg-white border border-[var(--border)] rounded-[var(--radius-lg)] p-[32px] max-sm:p-[20px] shadow-sm">
+              <div className="flex items-center justify-between mb-[24px] flex-wrap gap-[12px]">
+                <div>
+                  <h2 className="m-0 text-[20px] font-bold text-[#25252a]">
+                    Home & About Page Copy
+                  </h2>
+                  <p className="m-0 text-[13px] text-[#8c8c93] mt-[4px]">
+                    Edit headlines, text blocks, and brand story for Home and About pages.
+                  </p>
+                </div>
+                {contentSuccessMsg && (
+                  <span className="text-[13px] font-semibold text-[#166534] bg-[#dcfce7] px-[12px] py-[6px] rounded-[8px]">
+                    {contentSuccessMsg}
+                  </span>
+                )}
+              </div>
+
+              <form onSubmit={handleSaveContent} className="space-y-[20px]">
+                <div className="grid grid-cols-2 gap-[20px] max-lg:grid-cols-1">
+                  <div>
+                    <label className="block text-[13px] font-bold mb-[6px]">Hero Headline</label>
+                    <input
+                      type="text"
+                      value={siteContent.hero_headline || ""}
+                      onChange={(e) => setSiteContent({ ...siteContent, hero_headline: e.target.value })}
+                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[13px] font-bold mb-[6px]">Hero CTA Text</label>
+                    <input
+                      type="text"
+                      value={siteContent.hero_cta_text || ""}
+                      onChange={(e) => setSiteContent({ ...siteContent, hero_cta_text: e.target.value })}
+                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[13px] font-bold mb-[6px]">Hero Subhead</label>
+                  <textarea
+                    rows={2}
+                    value={siteContent.hero_subhead || ""}
+                    onChange={(e) => setSiteContent({ ...siteContent, hero_subhead: e.target.value })}
+                    className="w-full p-[12px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                  />
+                </div>
+
+                <hr className="border-[var(--border)] my-[20px]" />
+
+                <div className="grid grid-cols-2 gap-[20px] max-lg:grid-cols-1">
+                  <div>
+                    <label className="block text-[13px] font-bold mb-[6px]">Home "Who We Are" Headline</label>
+                    <input
+                      type="text"
+                      value={siteContent.who_we_are_headline || ""}
+                      onChange={(e) => setSiteContent({ ...siteContent, who_we_are_headline: e.target.value })}
+                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[13px] font-bold mb-[6px]">About Page Hero Title</label>
+                    <input
+                      type="text"
+                      value={siteContent.about_hero_title || ""}
+                      onChange={(e) => setSiteContent({ ...siteContent, about_hero_title: e.target.value })}
+                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[13px] font-bold mb-[6px]">Home "Who We Are" Text</label>
+                  <textarea
+                    rows={3}
+                    value={siteContent.who_we_are_text || ""}
+                    onChange={(e) => setSiteContent({ ...siteContent, who_we_are_text: e.target.value })}
+                    className="w-full p-[12px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-[20px] max-lg:grid-cols-1">
+                  <div>
+                    <label className="block text-[13px] font-bold mb-[6px]">About Page Subhead</label>
+                    <input
+                      type="text"
+                      value={siteContent.about_hero_subhead || ""}
+                      onChange={(e) => setSiteContent({ ...siteContent, about_hero_subhead: e.target.value })}
+                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[13px] font-bold mb-[6px]">About Philosophy Section Title</label>
+                    <input
+                      type="text"
+                      value={siteContent.about_philosophy_title || ""}
+                      onChange={(e) => setSiteContent({ ...siteContent, about_philosophy_title: e.target.value })}
+                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[13px] font-bold mb-[6px]">About Page Brand Story</label>
+                  <textarea
+                    rows={5}
+                    value={siteContent.about_story || ""}
+                    onChange={(e) => setSiteContent({ ...siteContent, about_story: e.target.value })}
+                    className="w-full p-[12px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[13px] font-bold mb-[12px]">About Page Core Values / Principles</label>
+                  <div className="space-y-[12px]">
+                    {Array.isArray(siteContent.about_values) &&
+                      siteContent.about_values.map((val: any, idx: number) => (
+                        <div key={idx} className="p-[16px] border border-[var(--border)] rounded-[10px] bg-[#fafafa] flex gap-[16px] items-start">
+                          <span className="font-bold text-[14px] text-[#8c8c93] mt-[8px]">{val.number || `0${idx + 1}`}</span>
+                          <div className="flex-1 grid grid-cols-1 gap-[10px]">
+                            <input
+                              type="text"
+                              placeholder="Title"
+                              value={val.title || ""}
+                              onChange={(e) => {
+                                const newVals = [...siteContent.about_values];
+                                newVals[idx] = { ...newVals[idx], title: e.target.value };
+                                setSiteContent({ ...siteContent, about_values: newVals });
+                              }}
+                              className="w-full h-[40px] px-[12px] border border-[var(--border)] rounded-[6px] bg-white text-[13px] font-semibold"
+                            />
+                            <textarea
+                              rows={2}
+                              placeholder="Description"
+                              value={val.description || ""}
+                              onChange={(e) => {
+                                const newVals = [...siteContent.about_values];
+                                newVals[idx] = { ...newVals[idx], description: e.target.value };
+                                setSiteContent({ ...siteContent, about_values: newVals });
+                              }}
+                              className="w-full p-[10px] border border-[var(--border)] rounded-[6px] bg-white text-[13px]"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSavingContent}
+                  className="px-[24px] py-[12px] rounded-[10px] bg-[#111111] text-white text-[14px] font-bold hover:bg-[#333337] transition-colors disabled:opacity-50"
+                >
+                  {isSavingContent ? "Saving Copy..." : "Save Site Copy"}
+                </button>
+              </form>
+            </div>
+
+            {/* Form 2: Global Settings Form */}
+            <div className="bg-white border border-[var(--border)] rounded-[var(--radius-lg)] p-[32px] max-sm:p-[20px] shadow-sm">
+              <div className="flex items-center justify-between mb-[24px] flex-wrap gap-[12px]">
+                <div>
+                  <h2 className="m-0 text-[20px] font-bold text-[#25252a]">
+                    Global Site Settings & Contact
+                  </h2>
+                  <p className="m-0 text-[13px] text-[#8c8c93] mt-[4px]">
+                    Edit sitewide footer contact details, social URLs, site title, and copyright.
+                  </p>
+                </div>
+                {settingsSuccessMsg && (
+                  <span className="text-[13px] font-semibold text-[#166534] bg-[#dcfce7] px-[12px] py-[6px] rounded-[8px]">
+                    {settingsSuccessMsg}
+                  </span>
+                )}
+              </div>
+
+              <form onSubmit={handleSaveSettings} className="space-y-[20px]">
+                <div className="grid grid-cols-2 gap-[20px] max-lg:grid-cols-1">
+                  <div>
+                    <label className="block text-[13px] font-bold mb-[6px]">Site Title</label>
+                    <input
+                      type="text"
+                      value={siteSettings.site_title || ""}
+                      onChange={(e) => setSiteSettings({ ...siteSettings, site_title: e.target.value })}
+                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[13px] font-bold mb-[6px]">Copyright Text</label>
+                    <input
+                      type="text"
+                      value={siteSettings.copyright_text || ""}
+                      onChange={(e) => setSiteSettings({ ...siteSettings, copyright_text: e.target.value })}
+                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[13px] font-bold mb-[6px]">Meta Description</label>
+                  <textarea
+                    rows={2}
+                    value={siteSettings.meta_description || ""}
+                    onChange={(e) => setSiteSettings({ ...siteSettings, meta_description: e.target.value })}
+                    className="w-full p-[12px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                  />
+                </div>
+
+                <hr className="border-[var(--border)] my-[20px]" />
+
+                <div className="grid grid-cols-3 gap-[20px] max-lg:grid-cols-1">
+                  <div>
+                    <label className="block text-[13px] font-bold mb-[6px]">Phone Number</label>
+                    <input
+                      type="text"
+                      value={siteSettings.phone || ""}
+                      onChange={(e) => setSiteSettings({ ...siteSettings, phone: e.target.value })}
+                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[13px] font-bold mb-[6px]">Email Address</label>
+                    <input
+                      type="email"
+                      value={siteSettings.email || ""}
+                      onChange={(e) => setSiteSettings({ ...siteSettings, email: e.target.value })}
+                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[13px] font-bold mb-[6px]">Address / Location</label>
+                    <input
+                      type="text"
+                      value={siteSettings.address || ""}
+                      onChange={(e) => setSiteSettings({ ...siteSettings, address: e.target.value })}
+                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-[20px] max-lg:grid-cols-1">
+                  <div>
+                    <label className="block text-[13px] font-bold mb-[6px]">X (Twitter) URL</label>
+                    <input
+                      type="text"
+                      value={siteSettings.social_x || ""}
+                      onChange={(e) => setSiteSettings({ ...siteSettings, social_x: e.target.value })}
+                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[13px] font-bold mb-[6px]">LinkedIn URL</label>
+                    <input
+                      type="text"
+                      value={siteSettings.social_linkedin || ""}
+                      onChange={(e) => setSiteSettings({ ...siteSettings, social_linkedin: e.target.value })}
+                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[13px] font-bold mb-[6px]">Instagram URL</label>
+                    <input
+                      type="text"
+                      value={siteSettings.social_instagram || ""}
+                      onChange={(e) => setSiteSettings({ ...siteSettings, social_instagram: e.target.value })}
+                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[13px] font-bold mb-[6px]">TikTok URL</label>
+                    <input
+                      type="text"
+                      value={siteSettings.social_tiktok || ""}
+                      onChange={(e) => setSiteSettings({ ...siteSettings, social_tiktok: e.target.value })}
+                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSavingSettings}
+                  className="px-[24px] py-[12px] rounded-[10px] bg-[#111111] text-white text-[14px] font-bold hover:bg-[#333337] transition-colors disabled:opacity-50"
+                >
+                  {isSavingSettings ? "Saving Settings..." : "Save Global Settings"}
+                </button>
+              </form>
+            </div>
+          </div>
         ) : (
           <div className="bg-white border border-[var(--border)] rounded-[var(--radius-lg)] overflow-hidden shadow-sm">
+
             {/* Services List */}
             {activeTab === "services" && (
               <div className="divide-y divide-[var(--border)]">

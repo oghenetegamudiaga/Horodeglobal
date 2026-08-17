@@ -50,6 +50,75 @@ export interface Project {
   updated_at?: string;
 }
 
+export interface SiteContent {
+  id?: string;
+  key: string;
+  value: any;
+  updated_at?: string;
+}
+
+export interface SiteSettings {
+  id?: string;
+  phone: string;
+  email: string;
+  address: string;
+  social_x: string;
+  social_linkedin: string;
+  social_instagram: string;
+  social_tiktok: string;
+  copyright_text: string;
+  site_title: string;
+  meta_description: string;
+  updated_at?: string;
+}
+
+export const DEFAULT_SITE_CONTENT: Record<string, any> = {
+  hero_headline: "We Build Brands That Refuse to Stay Small.",
+  hero_subhead: "We combine strategy, design, and technology to help ambitious businesses grow into market leaders.",
+  hero_cta_text: "Book Free Consultation",
+  who_we_are_headline: "We Create Solutions We Build Systems,",
+  who_we_are_text: "We build digital foundations that help businesses grow with intention. From brand strategy and identity design to custom software and app development, every system we build is engineered to make your company visible, trusted, and infinitely scalable.",
+  about_hero_title: "We Create Solutions, We Build Systems.",
+  about_hero_subhead: "We combine strategy, design, and technology to help ambitious businesses grow into market leaders.",
+  about_philosophy_title: "Building Foundations for Intention and Scale",
+  about_story: "We build digital foundations that help businesses grow with intention. From brand strategy and identity design to custom software and app development, every system we build is engineered to make your company visible, trusted, and infinitely scalable.\n\nHorode was founded on a core insight: modern companies don't just need isolated logos or standalone web pages — they need integrated brand and technology systems. When strategy, visual identity, and code work in harmony, businesses move faster, communicate clearer, and command higher market value.",
+  about_values: [
+    {
+      number: "01",
+      title: "Systemic Thinking",
+      description: "We build reusable design systems and modular codebase architectures rather than short-term fixes. Every asset is engineered to scale with your business.",
+    },
+    {
+      number: "02",
+      title: "Uncompromising Craftsmanship",
+      description: "Every typographic detail, layout grid, micro-interaction, and backend endpoint is crafted with rigorous standards for clarity and performance.",
+    },
+    {
+      number: "03",
+      title: "Direct Collaboration",
+      description: "We work side-by-side with founders and executive teams as long-term strategic partners, maintaining clear, transparent feedback loops.",
+    },
+    {
+      number: "04",
+      title: "Measurable Impact",
+      description: "Design and code are means to an end — driving user trust, market positioning, and sustainable enterprise revenue growth.",
+    },
+  ],
+};
+
+export const DEFAULT_SITE_SETTINGS: SiteSettings = {
+  phone: "+23480-6009-1147",
+  email: "hello@horodeglobal.com",
+  address: "Warri, Delta State, Nigeria",
+  social_x: "https://www.x.com/horodeglobal",
+  social_linkedin: "https://www.linkedin.com/company/horodeglobal",
+  social_instagram: "https://www.instagram.com/horodeglobal",
+  social_tiktok: "https://www.tiktok.com/@horodeglobal",
+  copyright_text: "Copyright @2026 Horode",
+  site_title: "Horode Design Studio",
+  meta_description: "We craft brand identities, UI/UX designs, and software solutions that make your business clear, premium, and impossible to ignore.",
+};
+
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 
@@ -67,3 +136,48 @@ export const getAdminSupabase = () => {
   }
   return createClient(supabaseUrl, serviceRoleKey);
 };
+
+export async function getSiteContentMap(): Promise<Record<string, any>> {
+  try {
+    if (
+      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+      process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
+    ) {
+      return DEFAULT_SITE_CONTENT;
+    }
+    const { data, error } = await supabase.from("site_content").select("*");
+    if (error || !data || data.length === 0) {
+      return DEFAULT_SITE_CONTENT;
+    }
+    const contentMap: Record<string, any> = { ...DEFAULT_SITE_CONTENT };
+    data.forEach((item: { key: string; value: any }) => {
+      contentMap[item.key] = item.value;
+    });
+    return contentMap;
+  } catch {
+    return DEFAULT_SITE_CONTENT;
+  }
+}
+
+export async function getSiteSettings(): Promise<SiteSettings> {
+  try {
+    if (
+      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+      process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
+    ) {
+      return DEFAULT_SITE_SETTINGS;
+    }
+    const { data, error } = await supabase
+      .from("site_settings")
+      .select("*")
+      .limit(1)
+      .maybeSingle();
+    if (error || !data) {
+      return DEFAULT_SITE_SETTINGS;
+    }
+    return { ...DEFAULT_SITE_SETTINGS, ...data };
+  } catch {
+    return DEFAULT_SITE_SETTINGS;
+  }
+}
+
