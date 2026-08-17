@@ -11,6 +11,7 @@ create table if not exists public.posts (
   content       text,
   published     boolean default false,
   read_time     text,
+  cover_image_url text,
   published_at  timestamptz,
   created_at    timestamptz default now(),
   updated_at    timestamptz default now()

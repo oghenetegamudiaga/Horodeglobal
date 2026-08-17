@@ -8,6 +8,7 @@ export interface Post {
   excerpt: string | null;
   category: string | null;
   content: string | null;
+  cover_image_url?: string | null;
   published: boolean;
   read_time: string | null;
   published_at: string | null;

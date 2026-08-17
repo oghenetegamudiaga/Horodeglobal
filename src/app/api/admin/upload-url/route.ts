@@ -1,9 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminSupabase } from "@/lib/supabase";
+import { getAdminSession } from "@/lib/session";
 import { ALLOWED_BUCKETS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE, StorageBucket } from "@/lib/storage";
 
 export async function POST(request: NextRequest) {
   try {
+    // 0. Session Auth Check
+    const session = await getAdminSession();
+    if (!session.isLoggedIn) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await request.json();
     const { bucket, filename, contentType, fileSize, slug } = body;
 
@@ -23,7 +30,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 3. Validate File Size (if provided by client)
+    // 3. Validate File Size
     if (fileSize && fileSize > MAX_FILE_SIZE) {
       return NextResponse.json(
         { error: "File size exceeds 5MB limit." },
@@ -39,7 +46,6 @@ export async function POST(request: NextRequest) {
     // 5. Generate Signed Upload URL via Supabase Admin Client
     const adminSupabase = getAdminSupabase();
 
-    // Ensure bucket exists
     const { data: bucketData, error: bucketError } = await adminSupabase.storage.getBucket(bucket);
     if (bucketError || !bucketData) {
       await adminSupabase.storage.createBucket(bucket, {

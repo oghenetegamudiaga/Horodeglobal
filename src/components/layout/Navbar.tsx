@@ -51,6 +51,9 @@ export const Navbar: React.FC = () => {
         <a href="/work" onClick={closeMenu}>
           Works
         </a>
+        <a href="/blog" onClick={closeMenu}>
+          Blog
+        </a>
         <Button
           variant="filled"
           href="#contact"
