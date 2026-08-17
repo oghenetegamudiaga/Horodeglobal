@@ -170,7 +170,7 @@ export default function Home() {
               key={service.id || service.slug}
               title={service.name}
               description={service.one_liner || ""}
-              href={`#contact`}
+              href={`/services/${service.slug}`}
             />
           ))}
         </div>
