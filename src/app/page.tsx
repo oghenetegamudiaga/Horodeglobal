@@ -1,13 +1,108 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { EyebrowLabel } from "@/components/ui/EyebrowLabel";
 import { Button } from "@/components/ui/Button";
 import { ServiceCard } from "@/components/ui/ServiceCard";
 import { ProjectCard } from "@/components/ui/ProjectCard";
+import { supabase, Service, Project } from "@/lib/supabase";
+
+// Fallback seed data matching Milestone 1 static port
+const defaultServices: Service[] = [
+  {
+    id: "1",
+    slug: "branding-strategy",
+    name: "Branding & Strategy",
+    one_liner:
+      "We craft brand identities and positioning systems that make your business clear, premium, and impossible to ignore.",
+    icon: null,
+    image_url: null,
+    sort_order: 1,
+  },
+  {
+    id: "2",
+    slug: "ui-ux-design",
+    name: "UI/UX Design",
+    one_liner:
+      "We bring expertise in all stages of design, from research to polished prototypes.",
+    icon: null,
+    image_url: null,
+    sort_order: 2,
+  },
+  {
+    id: "3",
+    slug: "software-app-dev",
+    name: "Software & App Dev",
+    one_liner:
+      "We build scalable websites, web apps, and mobile applications tailored precisely to your business goals.",
+    icon: null,
+    image_url: null,
+    sort_order: 3,
+  },
+];
+
+const defaultProjects: Project[] = [
+  {
+    id: "1",
+    slug: "zalyx-ledger",
+    name: "Zalyx Ledger",
+    one_liner:
+      "Zalyx Ledger help African business owners manage and track their business records seamlessly.",
+    service_tags: ["Branding Services", "Product Design", "Social Media Design"],
+    thumbnail_url: "/assets/zalyx-ledger.png",
+    featured: true,
+    sort_order: 1,
+  },
+  {
+    id: "2",
+    slug: "ravex",
+    name: "Ravex",
+    one_liner: "A fintech product that help users easily pay utility bills",
+    service_tags: ["Branding Services", "Social Media Design"],
+    thumbnail_url: "/assets/ravex.png",
+    featured: true,
+    sort_order: 2,
+  },
+];
 
 export default function Home() {
   const [formNote, setFormNote] = useState("");
+  const [services, setServices] = useState<Service[]>(defaultServices);
+  const [projects, setProjects] = useState<Project[]>(defaultProjects);
+
+  useEffect(() => {
+    async function loadData() {
+      // Check if real Supabase URL is configured
+      if (
+        !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+        process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
+      ) {
+        return;
+      }
+
+      try {
+        const [servicesRes, projectsRes] = await Promise.all([
+          supabase.from("services").select("*").order("sort_order", { ascending: true }),
+          supabase
+            .from("projects")
+            .select("*")
+            .eq("featured", true)
+            .order("sort_order", { ascending: true }),
+        ]);
+
+        if (servicesRes.data && servicesRes.data.length > 0) {
+          setServices(servicesRes.data);
+        }
+        if (projectsRes.data && projectsRes.data.length > 0) {
+          setProjects(projectsRes.data);
+        }
+      } catch (err) {
+        console.warn("Supabase fetch fallback to local seed copy:", err);
+      }
+    }
+
+    loadData();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -70,18 +165,14 @@ export default function Home() {
         </h2>
 
         <div className="service-grid grid grid-cols-3 gap-[18px] mt-[52px] max-lg:grid-cols-1 max-sm:mt-[34px]">
-          <ServiceCard
-            title="Branding & Strategy"
-            description="We craft brand identities and positioning systems that make your business clear, premium, and impossible to ignore."
-          />
-          <ServiceCard
-            title="UI/UX Design"
-            description="We bring expertise in all stages of design, from research to polished prototypes."
-          />
-          <ServiceCard
-            title="Software & App Dev"
-            description="We build scalable websites, web apps, and mobile applications tailored precisely to your business goals."
-          />
+          {services.map((service) => (
+            <ServiceCard
+              key={service.id || service.slug}
+              title={service.name}
+              description={service.one_liner || ""}
+              href={`#contact`}
+            />
+          ))}
         </div>
       </section>
 
@@ -123,24 +214,16 @@ export default function Home() {
         </h2>
 
         <div className="project-grid grid grid-cols-2 gap-[62px] mt-[38px] max-lg:grid-cols-1 max-sm:gap-[44px]">
-          <ProjectCard
-            title="Zalyx Ledger"
-            description="Zalyx Ledger help African business owners manage and track their business records seamlessly."
-            imageSrc="/assets/zalyx-ledger.png"
-            imageAlt="Zalyx Ledger mobile app interface"
-            tags={[
-              "Branding Services",
-              "Product Design",
-              "Social Media Design",
-            ]}
-          />
-          <ProjectCard
-            title="Ravex"
-            description="A fintech product that help users easily pay utility bills"
-            imageSrc="/assets/ravex.png"
-            imageAlt="Ravex payment app campaign mockup"
-            tags={["Branding Services", "Social Media Design"]}
-          />
+          {projects.map((project) => (
+            <ProjectCard
+              key={project.id || project.slug}
+              title={project.name}
+              description={project.one_liner || ""}
+              imageSrc={project.thumbnail_url || "/assets/zalyx-ledger.png"}
+              imageAlt={project.name}
+              tags={project.service_tags || []}
+            />
+          ))}
         </div>
       </section>
 
