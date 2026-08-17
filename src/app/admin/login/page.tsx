@@ -61,12 +61,20 @@ export default function AdminLoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-[20px]">
           <div>
-            <label
-              htmlFor="password"
-              className="block text-[13px] font-semibold text-[#25252a] mb-[8px]"
-            >
-              Admin Password
-            </label>
+            <div className="flex items-center justify-between mb-[8px]">
+              <label
+                htmlFor="password"
+                className="block text-[13px] font-semibold text-[#25252a]"
+              >
+                Admin Password
+              </label>
+              <a
+                href="/admin/forgot-password"
+                className="text-[12px] font-semibold text-[#8c8c93] hover:text-black transition-colors"
+              >
+                Forgot password?
+              </a>
+            </div>
             <input
               id="password"
               type="password"

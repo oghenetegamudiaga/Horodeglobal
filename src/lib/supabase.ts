@@ -57,6 +57,19 @@ export interface SiteContent {
   updated_at?: string;
 }
 
+export interface ContactSubmission {
+  id?: string;
+  name: string;
+  email: string;
+  phone?: string | null;
+  source?: string | null;
+  budget_range?: string | null;
+  message?: string | null;
+  attachment_urls?: string[];
+  service_context?: string | null;
+  created_at?: string;
+}
+
 export interface SiteSettings {
   id?: string;
   phone: string;
@@ -69,6 +82,7 @@ export interface SiteSettings {
   copyright_text: string;
   site_title: string;
   meta_description: string;
+  admin_password_hash?: string | null;
   updated_at?: string;
 }
 

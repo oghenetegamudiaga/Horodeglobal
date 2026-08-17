@@ -99,18 +99,19 @@ create index if not exists site_content_key_idx on public.site_content (key);
 
 -- 5. Site Settings Table (Global Settings)
 create table if not exists public.site_settings (
-  id               uuid primary key default gen_random_uuid(),
-  phone            text,
-  email            text,
-  address          text,
-  social_x         text,
-  social_linkedin  text,
-  social_instagram text,
-  social_tiktok    text,
-  copyright_text   text,
-  site_title       text,
-  meta_description text,
-  updated_at       timestamptz default now()
+  id                  uuid primary key default gen_random_uuid(),
+  phone               text,
+  email               text,
+  address             text,
+  social_x            text,
+  social_linkedin     text,
+  social_instagram    text,
+  social_tiktok       text,
+  copyright_text      text,
+  site_title          text,
+  meta_description    text,
+  admin_password_hash text,
+  updated_at          timestamptz default now()
 );
 
 alter table public.site_settings enable row level security;
@@ -118,4 +119,49 @@ alter table public.site_settings enable row level security;
 drop policy if exists "Public reads site_settings" on public.site_settings;
 create policy "Public reads site_settings" on public.site_settings
   for select using (true);
+
+
+-- 6. Contact Submissions Table
+create table if not exists public.contact_submissions (
+  id               uuid primary key default gen_random_uuid(),
+  name             text not null,
+  email            text not null,
+  phone            text,
+  source           text,
+  budget_range     text,
+  message          text,
+  attachment_urls  text[] default '{}',
+  service_context  text,
+  created_at       timestamptz default now()
+);
+
+alter table public.contact_submissions enable row level security;
+
+drop policy if exists "Public inserts contact submissions" on public.contact_submissions;
+create policy "Public inserts contact submissions" on public.contact_submissions
+  for insert with check (true);
+
+
+-- 7. Contact Attachments Storage Bucket Setup
+insert into storage.buckets (id, name, public)
+values ('contact-attachments', 'contact-attachments', true)
+on conflict (id) do nothing;
+
+drop policy if exists "Public uploads contact attachments" on storage.objects;
+create policy "Public uploads contact attachments" on storage.objects
+  for insert with check (bucket_id = 'contact-attachments');
+
+
+-- 8. Admin Password Reset Tokens Table
+create table if not exists public.admin_reset_tokens (
+  id          uuid primary key default gen_random_uuid(),
+  token       text not null unique,
+  expires_at  timestamptz not null,
+  used        boolean default false,
+  created_at  timestamptz default now()
+);
+
+alter table public.admin_reset_tokens enable row level security;
+
+
 

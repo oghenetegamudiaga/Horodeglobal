@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { getAdminSession } from "@/lib/session";
+import { getAdminSupabase } from "@/lib/supabase";
 
 export async function POST(request: NextRequest) {
   try {
     const { password } = await request.json();
-    const envPassword = process.env.ADMIN_PASSWORD || "REDACTED";
 
     if (!password) {
       return NextResponse.json(
@@ -15,10 +15,31 @@ export async function POST(request: NextRequest) {
     }
 
     let isValid = false;
-    if (envPassword.startsWith("$2a$") || envPassword.startsWith("$2b$")) {
-      isValid = await bcrypt.compare(password, envPassword);
-    } else {
-      isValid = password === envPassword;
+
+    // Check DB stored hash first
+    try {
+      const supabaseAdmin = getAdminSupabase();
+      const { data: settings } = await supabaseAdmin
+        .from("site_settings")
+        .select("admin_password_hash")
+        .limit(1)
+        .maybeSingle();
+
+      if (settings?.admin_password_hash) {
+        isValid = await bcrypt.compare(password, settings.admin_password_hash);
+      }
+    } catch (dbErr) {
+      console.warn("Could not check DB admin_password_hash, falling back to env:", dbErr);
+    }
+
+    // Fallback to env variable or default if DB hash wasn't matched/present
+    if (!isValid) {
+      const envPassword = process.env.ADMIN_PASSWORD || "REDACTED";
+      if (envPassword.startsWith("$2a$") || envPassword.startsWith("$2b$")) {
+        isValid = await bcrypt.compare(password, envPassword);
+      } else {
+        isValid = password === envPassword;
+      }
     }
 
     if (!isValid) {

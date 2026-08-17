@@ -30,6 +30,62 @@ export default function AdminDashboardClient() {
   const [contentSuccessMsg, setContentSuccessMsg] = useState<string | null>(null);
   const [settingsSuccessMsg, setSettingsSuccessMsg] = useState<string | null>(null);
 
+  // Admin Password Change States
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [passwordSuccessMsg, setPasswordSuccessMsg] = useState<string | null>(null);
+  const [passwordErrMsg, setPasswordErrMsg] = useState<string | null>(null);
+
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordErrMsg(null);
+    setPasswordSuccessMsg(null);
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setPasswordErrMsg("All password fields are required.");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setPasswordErrMsg("New passwords do not match.");
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setPasswordErrMsg("New password must be at least 6 characters.");
+      return;
+    }
+
+    setIsChangingPassword(true);
+
+    try {
+      const res = await fetch("/api/admin/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || data.error) {
+        throw new Error(data.error || "Failed to update password.");
+      }
+
+      setPasswordSuccessMsg(data.message || "Password updated successfully!");
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setTimeout(() => setPasswordSuccessMsg(null), 5000);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Error updating password";
+      setPasswordErrMsg(msg);
+    } finally {
+      setIsChangingPassword(false);
+    }
+  };
+
   useEffect(() => {
     loadAllData();
   }, []);
@@ -651,6 +707,77 @@ export default function AdminDashboardClient() {
                   className="px-[24px] py-[12px] rounded-[10px] bg-[#111111] text-white text-[14px] font-bold hover:bg-[#333337] transition-colors disabled:opacity-50"
                 >
                   {isSavingSettings ? "Saving Settings..." : "Save Global Settings"}
+                </button>
+              </form>
+            </div>
+
+            {/* Form 3: Admin Security & Password Form */}
+            <div className="bg-white border border-[var(--border)] rounded-[var(--radius-lg)] p-[32px] max-sm:p-[20px] shadow-sm">
+              <div className="flex items-center justify-between mb-[24px] flex-wrap gap-[12px]">
+                <div>
+                  <h2 className="m-0 text-[20px] font-bold text-[#25252a]">
+                    Admin Security & Password
+                  </h2>
+                  <p className="m-0 text-[13px] text-[#8c8c93] mt-[4px]">
+                    Update your dashboard login password.
+                  </p>
+                </div>
+                {passwordSuccessMsg && (
+                  <span className="text-[13px] font-semibold text-[#166534] bg-[#dcfce7] px-[12px] py-[6px] rounded-[8px]">
+                    ✓ {passwordSuccessMsg}
+                  </span>
+                )}
+              </div>
+
+              <form onSubmit={handleChangePassword} className="space-y-[20px] max-w-[500px]">
+                <div>
+                  <label className="block text-[13px] font-bold mb-[6px]">Current Password</label>
+                  <input
+                    type="password"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    placeholder="••••••••••••"
+                    required
+                    className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[13px] font-bold mb-[6px]">New Password</label>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="••••••••••••"
+                    required
+                    className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[13px] font-bold mb-[6px]">Confirm New Password</label>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="••••••••••••"
+                    required
+                    className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                  />
+                </div>
+
+                {passwordErrMsg && (
+                  <p className="text-[13px] text-[#e11d48] font-medium m-0">
+                    ⚠️ {passwordErrMsg}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={isChangingPassword}
+                  className="px-[24px] py-[12px] rounded-[10px] bg-[#111111] text-white text-[14px] font-bold hover:bg-[#333337] transition-colors disabled:opacity-50"
+                >
+                  {isChangingPassword ? "Updating Password..." : "Update Admin Password"}
                 </button>
               </form>
             </div>
