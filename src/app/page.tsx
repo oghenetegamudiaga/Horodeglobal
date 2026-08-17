@@ -191,12 +191,20 @@ export default function Home() {
             We Create Solutions We Build Systems,
           </h2>
         </div>
-        <p className="max-w-[560px] m-0 mt-[76px] ml-auto text-[#333337] text-[16px] leading-[1.55] max-lg:m-0">
-          We build digital foundations that help businesses grow with intention.
-          From brand strategy and identity design to custom software and app
-          development, every system we build is engineered to make your company
-          visible, trusted, and infinitely scalable.
-        </p>
+        <div className="max-w-[560px] m-0 mt-[76px] ml-auto max-lg:m-0">
+          <p className="m-0 mb-[24px] text-[#333337] text-[16px] leading-[1.55]">
+            We build digital foundations that help businesses grow with intention.
+            From brand strategy and identity design to custom software and app
+            development, every system we build is engineered to make your company
+            visible, trusted, and infinitely scalable.
+          </p>
+          <a
+            href="/about"
+            className="text-[#222226] text-[13px] font-bold inline-flex items-center gap-1 hover:underline"
+          >
+            Learn more about our studio <span aria-hidden="true">&nearr;</span>
+          </a>
+        </div>
       </section>
 
       {/* Selected Works Section */}
