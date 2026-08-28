@@ -198,7 +198,7 @@ export async function POST(request: NextRequest) {
         `;
 
         const resendRes = await resend.emails.send({
-          from: "Horode Website <onboarding@resend.dev>",
+          from: "Horode Website <hello@horodeglobal.com>",
           to: "hello@horodeglobal.com",
           subject: `New Contact Submission from ${validated.name}`,
           html: htmlContent,
