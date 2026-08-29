@@ -32,9 +32,9 @@ export async function POST(request: NextRequest) {
       console.warn("Could not check DB admin_password_hash, falling back to env:", dbErr);
     }
 
-    // Fallback to env variable or default if DB hash wasn't matched/present
-    if (!isValid) {
-      const envPassword = process.env.ADMIN_PASSWORD || "REDACTED";
+    // Fallback to env variable if DB hash wasn't matched/present
+    if (!isValid && process.env.ADMIN_PASSWORD) {
+      const envPassword = process.env.ADMIN_PASSWORD;
       if (envPassword.startsWith("$2a$") || envPassword.startsWith("$2b$")) {
         isValid = await bcrypt.compare(password, envPassword);
       } else {

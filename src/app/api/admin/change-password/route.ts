@@ -40,8 +40,8 @@ export async function POST(request: NextRequest) {
         currentPassword,
         settings.admin_password_hash
       );
-    } else {
-      const envPassword = process.env.ADMIN_PASSWORD || "REDACTED";
+    } else if (process.env.ADMIN_PASSWORD) {
+      const envPassword = process.env.ADMIN_PASSWORD;
       if (envPassword.startsWith("$2a$") || envPassword.startsWith("$2b$")) {
         isCurrentValid = await bcrypt.compare(currentPassword, envPassword);
       } else {

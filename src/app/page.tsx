@@ -1,5 +1,6 @@
 import React from "react";
 import type { Metadata } from "next";
+import { ArrowUpRight } from "lucide-react";
 import { EyebrowLabel } from "@/components/ui/EyebrowLabel";
 import { Button } from "@/components/ui/Button";
 import { ServiceCard } from "@/components/ui/ServiceCard";
@@ -231,7 +232,7 @@ export default async function Home() {
             href="/about"
             className="text-[#222226] text-[13px] font-bold inline-flex items-center gap-1 hover:underline"
           >
-            Learn more about our studio <span aria-hidden="true">&nearr;</span>
+            Learn more about our studio <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
           </a>
         </div>
       </Reveal>

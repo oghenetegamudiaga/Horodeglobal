@@ -1,5 +1,6 @@
 import React from "react";
 import type { Metadata } from "next";
+import { ArrowUpRight } from "lucide-react";
 import { EyebrowLabel } from "@/components/ui/EyebrowLabel";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
@@ -133,7 +134,7 @@ export default async function BlogIndexPage() {
                     href={`/blog/${post.slug}`}
                     className="text-[#222226] text-[13px] font-bold inline-flex items-center gap-1 group-hover:underline"
                   >
-                    Read article <span aria-hidden="true">&nearr;</span>
+                    Read article <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
                   </a>
                 </div>
               </article>
