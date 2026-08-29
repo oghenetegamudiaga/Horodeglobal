@@ -2,29 +2,37 @@
 -- Supabase Postgres SQL
 
 -- Seed Services
-insert into public.services (slug, name, one_liner, sort_order)
+insert into public.services (slug, name, one_liner, icon, icon_type, sort_order)
 values
   (
     'branding-strategy',
     'Branding & Strategy',
     'We craft brand identities and positioning systems that make your business clear, premium, and impossible to ignore.',
+    'Sparkles',
+    'lucide',
     1
   ),
   (
     'ui-ux-design',
     'UI/UX Design',
     'We bring expertise in all stages of design, from research to polished prototypes.',
+    'LayoutGrid',
+    'lucide',
     2
   ),
   (
     'software-app-dev',
     'Software & App Dev',
     'We build scalable websites, web apps, and mobile applications tailored precisely to your business goals.',
+    'Code2',
+    'lucide',
     3
   )
 on conflict (slug) do update set
   name = excluded.name,
   one_liner = excluded.one_liner,
+  icon = excluded.icon,
+  icon_type = excluded.icon_type,
   sort_order = excluded.sort_order;
 
 -- Seed Projects (Selected Works)
@@ -73,6 +81,29 @@ values
     {"number": "02", "title": "Uncompromising Craftsmanship", "description": "Every typographic detail, layout grid, micro-interaction, and backend endpoint is crafted with rigorous standards for clarity and performance."},
     {"number": "03", "title": "Direct Collaboration", "description": "We work side-by-side with founders and executive teams as long-term strategic partners, maintaining clear, transparent feedback loops."},
     {"number": "04", "title": "Measurable Impact", "description": "Design and code are means to an end — driving user trust, market positioning, and sustainable enterprise revenue growth."}
+  ]'::jsonb),
+  ('services_intro_eyebrow', '"Our Services"'::jsonb),
+  ('services_intro_heading', '"The Systems Behind Your Next Level"'::jsonb),
+  ('services_intro_subhead', '"We combine brand strategy, user experience design, and custom technology engineering to build foundations that scale with intention."'::jsonb),
+  ('services_cta_title', '"Ready to Build Your System?"'::jsonb),
+  ('services_cta_text', '"Let''s discuss how our strategic design and engineering capabilities can help transform your business ideas into market leaders."'::jsonb),
+  ('works_intro_eyebrow', '"Our Works"'::jsonb),
+  ('works_intro_heading', '"Selected Projects"'::jsonb),
+  ('works_intro_subhead', '"A showcase of strategic brand design, digital products, and web/mobile application architectures built for client growth."'::jsonb),
+  ('works_cta_title', '"Have a Project in Mind?"'::jsonb),
+  ('works_cta_text', '"Let''s build a market-leading product or brand identity system tailored for your company."'::jsonb),
+  ('blog_intro_eyebrow', '"Our Journal"'::jsonb),
+  ('blog_intro_heading', '"Articles & Insights"'::jsonb),
+  ('blog_intro_subhead', '"Perspectives on brand positioning, user experience design, and software engineering for modern companies."'::jsonb),
+  ('blog_cta_title', '"Need Strategic Guidance?"'::jsonb),
+  ('blog_cta_text', '"Let''s discuss how our design strategy and engineering capabilities can transform your brand."'::jsonb),
+  ('contact_eyebrow', '"Contact Us"'::jsonb),
+  ('contact_heading', '"Have a project in mind? Let''s create greatness"'::jsonb),
+  ('contact_subheading', '"What next?"'::jsonb),
+  ('contact_steps', '[
+    "We will reach out to you within one business day to discuss the next steps.",
+    "If necessary, we will sign the NDA and begin the project discussion.",
+    "Our team of experts will analyze your requirements and make recommendations on the best ways to bring your concept to life."
   ]'::jsonb)
 on conflict (key) do update set
   value = excluded.value,

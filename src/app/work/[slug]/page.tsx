@@ -156,7 +156,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
   const nextProject =
     currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 1] : allProjects[0];
 
-  const caseStudy = richCaseStudyDetails[slug] || {
+  const fallbackCaseStudy = richCaseStudyDetails[slug] || {
     client: project.client_name || "Client Enterprise",
     year: project.year || "2026",
     brief: project.one_liner || "Strategic brand and software initiative.",
@@ -171,6 +171,22 @@ export default async function ProjectDetailPage({ params }: PageProps) {
       "Provided scalable foundation for future product expansions",
     ],
   };
+
+  const clientName = project.client_name || fallbackCaseStudy.client;
+  const yearText = project.year || fallbackCaseStudy.year;
+  const overviewText = project.one_liner || fallbackCaseStudy.brief;
+  const challengeText =
+    (project.process_content as any)?.challenge ||
+    project.brief ||
+    fallbackCaseStudy.challenge;
+  const solutionText =
+    (project.process_content as any)?.solution ||
+    fallbackCaseStudy.solution;
+  const outcomesList: string[] =
+    Array.isArray((project.outcome_content as any)?.outcomes) &&
+    (project.outcome_content as any).outcomes.length > 0
+      ? (project.outcome_content as any).outcomes
+      : fallbackCaseStudy.outcomes;
 
   return (
     <main className="py-[60px] max-sm:py-[36px]">
@@ -191,7 +207,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               Client
             </span>
             <span className="text-[#25252a] text-[14px] font-semibold">
-              {caseStudy.client}
+              {clientName}
             </span>
           </div>
           <div>
@@ -199,7 +215,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               Year
             </span>
             <span className="text-[#25252a] text-[14px] font-semibold">
-              {caseStudy.year}
+              {yearText}
             </span>
           </div>
           <div>
@@ -240,7 +256,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 The Overview
               </h2>
               <p className="m-0 text-[#333337] text-[15px] leading-[1.65]">
-                {caseStudy.brief}
+                {overviewText}
               </p>
             </div>
           </Reveal>
@@ -251,7 +267,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 The Challenge
               </h2>
               <p className="m-0 text-[#8c8c93] text-[15px] leading-[1.65]">
-                {caseStudy.challenge}
+                {challengeText}
               </p>
             </div>
           </Reveal>
@@ -265,14 +281,14 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             Our Approach & Solution
           </h2>
           <p className="max-w-[760px] m-0 mb-[40px] text-[#333337] text-[16px] leading-[1.65]">
-            {caseStudy.solution}
+            {solutionText}
           </p>
 
           <h3 className="m-0 mb-[20px] text-[20px] font-bold text-[#25252a]">
             Key Outcomes & Impact
           </h3>
           <div className="grid grid-cols-3 gap-[18px] max-lg:grid-cols-1">
-            {caseStudy.outcomes.map((outcome, idx) => (
+            {outcomesList.map((outcome, idx) => (
               <Reveal key={idx} delay={idx * 0.08}>
                 <div className="p-[22px] bg-[#fafafa] border border-[var(--border)] rounded-[14px] h-full">
                   <span className="text-[#111111] text-[18px] font-bold block mb-[8px]">

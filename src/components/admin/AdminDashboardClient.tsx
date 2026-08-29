@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ImageUploadField } from "@/components/ui/ImageUploadField";
+import { CURATED_ICON_NAMES } from "@/components/ui/ServiceCard";
 import { Service, Project, Post } from "@/lib/supabase";
 
 export default function AdminDashboardClient() {
@@ -101,7 +102,13 @@ export default function AdminDashboardClient() {
         fetch("/api/admin/site-settings"),
       ]);
 
-      if (resS.status === 401 || resP.status === 401 || resB.status === 401 || resC.status === 401 || resSet.status === 401) {
+      if (
+        resS.status === 401 ||
+        resP.status === 401 ||
+        resB.status === 401 ||
+        resC.status === 401 ||
+        resSet.status === 401
+      ) {
         router.push("/admin/login");
         return;
       }
@@ -251,7 +258,16 @@ export default function AdminDashboardClient() {
     setError(null);
     setEditingItem(item);
     if (item) {
-      setFormData({ ...item });
+      setFormData({
+        ...item,
+        deliverables: item.deliverables || [],
+        process_steps: item.process_steps || [],
+        icon_type: item.icon_type || "lucide",
+        icon: item.icon || "Sparkles",
+        gallery_urls: item.gallery_urls || [],
+        process_content: item.process_content || { challenge: "", solution: "" },
+        outcome_content: item.outcome_content || { outcomes: [] },
+      });
     } else {
       // Default new item form data
       if (activeTab === "services") {
@@ -259,7 +275,11 @@ export default function AdminDashboardClient() {
           name: "",
           slug: "",
           one_liner: "",
+          icon: "Sparkles",
+          icon_type: "lucide",
           image_url: "",
+          deliverables: [""],
+          process_steps: [{ title: "", description: "" }],
           sort_order: services.length + 1,
         });
       } else if (activeTab === "projects") {
@@ -273,6 +293,8 @@ export default function AdminDashboardClient() {
           thumbnail_url: "",
           gallery_urls: [],
           service_tags: ["Product Design", "Branding"],
+          process_content: { challenge: "", solution: "" },
+          outcome_content: { outcomes: [""] },
           featured: true,
           sort_order: projects.length + 1,
         });
@@ -360,7 +382,7 @@ export default function AdminDashboardClient() {
       <main className="max-w-[1200px] mx-auto p-[36px_24px]">
         {/* Navigation Tabs */}
         <div className="flex items-center justify-between gap-[20px] mb-[32px] border-b border-[var(--border)] pb-[16px] max-sm:flex-col max-sm:items-start">
-          <div className="flex items-center gap-[12px]">
+          <div className="flex items-center gap-[12px] flex-wrap">
             <button
               onClick={() => setActiveTab("services")}
               className={`px-[18px] py-[10px] rounded-[12px] text-[14px] font-semibold transition-all ${
@@ -425,10 +447,10 @@ export default function AdminDashboardClient() {
               <div className="flex items-center justify-between mb-[24px] flex-wrap gap-[12px]">
                 <div>
                   <h2 className="m-0 text-[20px] font-bold text-[#25252a]">
-                    Home & About Page Copy
+                    Site-Wide Page Copy & Content
                   </h2>
                   <p className="m-0 text-[13px] text-[#8c8c93] mt-[4px]">
-                    Edit headlines, text blocks, and brand story for Home and About pages.
+                    Edit headlines, text blocks, intro copy, and CTAs for Home, About, Services, Work, Blog, and Contact pages.
                   </p>
                 </div>
                 {contentSuccessMsg && (
@@ -438,135 +460,343 @@ export default function AdminDashboardClient() {
                 )}
               </div>
 
-              <form onSubmit={handleSaveContent} className="space-y-[20px]">
-                <div className="grid grid-cols-2 gap-[20px] max-lg:grid-cols-1">
-                  <div>
-                    <label className="block text-[13px] font-bold mb-[6px]">Hero Headline</label>
-                    <input
-                      type="text"
-                      value={siteContent.hero_headline || ""}
-                      onChange={(e) => setSiteContent({ ...siteContent, hero_headline: e.target.value })}
-                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
-                    />
+              <form onSubmit={handleSaveContent} className="space-y-[28px]">
+                {/* 1. Home Page Copy */}
+                <div className="p-[20px] border border-[var(--border)] rounded-[14px] bg-[#fafafa] space-y-[16px]">
+                  <h3 className="m-0 text-[16px] font-bold text-[#111111]">Home Page Copy</h3>
+                  <div className="grid grid-cols-2 gap-[16px] max-lg:grid-cols-1">
+                    <div>
+                      <label className="block text-[13px] font-bold mb-[6px]">Hero Headline</label>
+                      <input
+                        type="text"
+                        value={siteContent.hero_headline || ""}
+                        onChange={(e) => setSiteContent({ ...siteContent, hero_headline: e.target.value })}
+                        className="w-full h-[44px] px-[14px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[13px] font-bold mb-[6px]">Hero CTA Text</label>
+                      <input
+                        type="text"
+                        value={siteContent.hero_cta_text || ""}
+                        onChange={(e) => setSiteContent({ ...siteContent, hero_cta_text: e.target.value })}
+                        className="w-full h-[44px] px-[14px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                      />
+                    </div>
                   </div>
                   <div>
-                    <label className="block text-[13px] font-bold mb-[6px]">Hero CTA Text</label>
-                    <input
-                      type="text"
-                      value={siteContent.hero_cta_text || ""}
-                      onChange={(e) => setSiteContent({ ...siteContent, hero_cta_text: e.target.value })}
-                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                    <label className="block text-[13px] font-bold mb-[6px]">Hero Subhead</label>
+                    <textarea
+                      rows={2}
+                      value={siteContent.hero_subhead || ""}
+                      onChange={(e) => setSiteContent({ ...siteContent, hero_subhead: e.target.value })}
+                      className="w-full p-[12px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
                     />
+                  </div>
+                  <div className="grid grid-cols-2 gap-[16px] max-lg:grid-cols-1">
+                    <div>
+                      <label className="block text-[13px] font-bold mb-[6px]">Who We Are Headline</label>
+                      <input
+                        type="text"
+                        value={siteContent.who_we_are_headline || ""}
+                        onChange={(e) => setSiteContent({ ...siteContent, who_we_are_headline: e.target.value })}
+                        className="w-full h-[44px] px-[14px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[13px] font-bold mb-[6px]">Who We Are Text</label>
+                      <textarea
+                        rows={2}
+                        value={siteContent.who_we_are_text || ""}
+                        onChange={(e) => setSiteContent({ ...siteContent, who_we_are_text: e.target.value })}
+                        className="w-full p-[12px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-[13px] font-bold mb-[6px]">Hero Subhead</label>
-                  <textarea
-                    rows={2}
-                    value={siteContent.hero_subhead || ""}
-                    onChange={(e) => setSiteContent({ ...siteContent, hero_subhead: e.target.value })}
-                    className="w-full p-[12px] border border-[var(--border)] rounded-[8px] text-[14px]"
-                  />
-                </div>
-
-                <hr className="border-[var(--border)] my-[20px]" />
-
-                <div className="grid grid-cols-2 gap-[20px] max-lg:grid-cols-1">
-                  <div>
-                    <label className="block text-[13px] font-bold mb-[6px]">Home "Who We Are" Headline</label>
-                    <input
-                      type="text"
-                      value={siteContent.who_we_are_headline || ""}
-                      onChange={(e) => setSiteContent({ ...siteContent, who_we_are_headline: e.target.value })}
-                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
-                    />
+                {/* 2. About Page Copy */}
+                <div className="p-[20px] border border-[var(--border)] rounded-[14px] bg-[#fafafa] space-y-[16px]">
+                  <h3 className="m-0 text-[16px] font-bold text-[#111111]">About Page Copy</h3>
+                  <div className="grid grid-cols-2 gap-[16px] max-lg:grid-cols-1">
+                    <div>
+                      <label className="block text-[13px] font-bold mb-[6px]">Hero Title</label>
+                      <input
+                        type="text"
+                        value={siteContent.about_hero_title || ""}
+                        onChange={(e) => setSiteContent({ ...siteContent, about_hero_title: e.target.value })}
+                        className="w-full h-[44px] px-[14px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[13px] font-bold mb-[6px]">Hero Subhead</label>
+                      <input
+                        type="text"
+                        value={siteContent.about_hero_subhead || ""}
+                        onChange={(e) => setSiteContent({ ...siteContent, about_hero_subhead: e.target.value })}
+                        className="w-full h-[44px] px-[14px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                      />
+                    </div>
                   </div>
                   <div>
-                    <label className="block text-[13px] font-bold mb-[6px]">About Page Hero Title</label>
-                    <input
-                      type="text"
-                      value={siteContent.about_hero_title || ""}
-                      onChange={(e) => setSiteContent({ ...siteContent, about_hero_title: e.target.value })}
-                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-[13px] font-bold mb-[6px]">Home "Who We Are" Text</label>
-                  <textarea
-                    rows={3}
-                    value={siteContent.who_we_are_text || ""}
-                    onChange={(e) => setSiteContent({ ...siteContent, who_we_are_text: e.target.value })}
-                    className="w-full p-[12px] border border-[var(--border)] rounded-[8px] text-[14px]"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-[20px] max-lg:grid-cols-1">
-                  <div>
-                    <label className="block text-[13px] font-bold mb-[6px]">About Page Subhead</label>
-                    <input
-                      type="text"
-                      value={siteContent.about_hero_subhead || ""}
-                      onChange={(e) => setSiteContent({ ...siteContent, about_hero_subhead: e.target.value })}
-                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[13px] font-bold mb-[6px]">About Philosophy Section Title</label>
+                    <label className="block text-[13px] font-bold mb-[6px]">Philosophy Title</label>
                     <input
                       type="text"
                       value={siteContent.about_philosophy_title || ""}
                       onChange={(e) => setSiteContent({ ...siteContent, about_philosophy_title: e.target.value })}
-                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[8px] text-[14px]"
+                      className="w-full h-[44px] px-[14px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[13px] font-bold mb-[6px]">Brand Story</label>
+                    <textarea
+                      rows={4}
+                      value={siteContent.about_story || ""}
+                      onChange={(e) => setSiteContent({ ...siteContent, about_story: e.target.value })}
+                      className="w-full p-[12px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
                     />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-[13px] font-bold mb-[6px]">About Page Brand Story</label>
-                  <textarea
-                    rows={5}
-                    value={siteContent.about_story || ""}
-                    onChange={(e) => setSiteContent({ ...siteContent, about_story: e.target.value })}
-                    className="w-full p-[12px] border border-[var(--border)] rounded-[8px] text-[14px]"
-                  />
+                {/* 3. Services Page Copy */}
+                <div className="p-[20px] border border-[var(--border)] rounded-[14px] bg-[#fafafa] space-y-[16px]">
+                  <h3 className="m-0 text-[16px] font-bold text-[#111111]">Services Page Copy</h3>
+                  <div className="grid grid-cols-2 gap-[16px] max-lg:grid-cols-1">
+                    <div>
+                      <label className="block text-[13px] font-bold mb-[6px]">Intro Eyebrow</label>
+                      <input
+                        type="text"
+                        value={siteContent.services_intro_eyebrow || "Our Services"}
+                        onChange={(e) => setSiteContent({ ...siteContent, services_intro_eyebrow: e.target.value })}
+                        className="w-full h-[44px] px-[14px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[13px] font-bold mb-[6px]">Intro Heading</label>
+                      <input
+                        type="text"
+                        value={siteContent.services_intro_heading || ""}
+                        onChange={(e) => setSiteContent({ ...siteContent, services_intro_heading: e.target.value })}
+                        className="w-full h-[44px] px-[14px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-[13px] font-bold mb-[6px]">Intro Subhead</label>
+                    <textarea
+                      rows={2}
+                      value={siteContent.services_intro_subhead || ""}
+                      onChange={(e) => setSiteContent({ ...siteContent, services_intro_subhead: e.target.value })}
+                      className="w-full p-[12px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-[16px] max-lg:grid-cols-1">
+                    <div>
+                      <label className="block text-[13px] font-bold mb-[6px]">CTA Heading</label>
+                      <input
+                        type="text"
+                        value={siteContent.services_cta_title || ""}
+                        onChange={(e) => setSiteContent({ ...siteContent, services_cta_title: e.target.value })}
+                        className="w-full h-[44px] px-[14px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[13px] font-bold mb-[6px]">CTA Text</label>
+                      <textarea
+                        rows={2}
+                        value={siteContent.services_cta_text || ""}
+                        onChange={(e) => setSiteContent({ ...siteContent, services_cta_text: e.target.value })}
+                        className="w-full p-[12px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                      />
+                    </div>
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-[13px] font-bold mb-[12px]">About Page Core Values / Principles</label>
-                  <div className="space-y-[12px]">
-                    {Array.isArray(siteContent.about_values) &&
-                      siteContent.about_values.map((val: any, idx: number) => (
-                        <div key={idx} className="p-[16px] border border-[var(--border)] rounded-[10px] bg-[#fafafa] flex gap-[16px] items-start">
-                          <span className="font-bold text-[14px] text-[#8c8c93] mt-[8px]">{val.number || `0${idx + 1}`}</span>
-                          <div className="flex-1 grid grid-cols-1 gap-[10px]">
-                            <input
-                              type="text"
-                              placeholder="Title"
-                              value={val.title || ""}
-                              onChange={(e) => {
-                                const newVals = [...siteContent.about_values];
-                                newVals[idx] = { ...newVals[idx], title: e.target.value };
-                                setSiteContent({ ...siteContent, about_values: newVals });
-                              }}
-                              className="w-full h-[40px] px-[12px] border border-[var(--border)] rounded-[6px] bg-white text-[13px] font-semibold"
-                            />
-                            <textarea
-                              rows={2}
-                              placeholder="Description"
-                              value={val.description || ""}
-                              onChange={(e) => {
-                                const newVals = [...siteContent.about_values];
-                                newVals[idx] = { ...newVals[idx], description: e.target.value };
-                                setSiteContent({ ...siteContent, about_values: newVals });
-                              }}
-                              className="w-full p-[10px] border border-[var(--border)] rounded-[6px] bg-white text-[13px]"
-                            />
-                          </div>
+                {/* 4. Works / Projects Page Copy */}
+                <div className="p-[20px] border border-[var(--border)] rounded-[14px] bg-[#fafafa] space-y-[16px]">
+                  <h3 className="m-0 text-[16px] font-bold text-[#111111]">Works Page Copy</h3>
+                  <div className="grid grid-cols-2 gap-[16px] max-lg:grid-cols-1">
+                    <div>
+                      <label className="block text-[13px] font-bold mb-[6px]">Intro Eyebrow</label>
+                      <input
+                        type="text"
+                        value={siteContent.works_intro_eyebrow || "Our Works"}
+                        onChange={(e) => setSiteContent({ ...siteContent, works_intro_eyebrow: e.target.value })}
+                        className="w-full h-[44px] px-[14px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[13px] font-bold mb-[6px]">Intro Heading</label>
+                      <input
+                        type="text"
+                        value={siteContent.works_intro_heading || ""}
+                        onChange={(e) => setSiteContent({ ...siteContent, works_intro_heading: e.target.value })}
+                        className="w-full h-[44px] px-[14px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-[13px] font-bold mb-[6px]">Intro Subhead</label>
+                    <textarea
+                      rows={2}
+                      value={siteContent.works_intro_subhead || ""}
+                      onChange={(e) => setSiteContent({ ...siteContent, works_intro_subhead: e.target.value })}
+                      className="w-full p-[12px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-[16px] max-lg:grid-cols-1">
+                    <div>
+                      <label className="block text-[13px] font-bold mb-[6px]">CTA Heading</label>
+                      <input
+                        type="text"
+                        value={siteContent.works_cta_title || ""}
+                        onChange={(e) => setSiteContent({ ...siteContent, works_cta_title: e.target.value })}
+                        className="w-full h-[44px] px-[14px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[13px] font-bold mb-[6px]">CTA Text</label>
+                      <textarea
+                        rows={2}
+                        value={siteContent.works_cta_text || ""}
+                        onChange={(e) => setSiteContent({ ...siteContent, works_cta_text: e.target.value })}
+                        className="w-full p-[12px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 5. Blog Page Copy */}
+                <div className="p-[20px] border border-[var(--border)] rounded-[14px] bg-[#fafafa] space-y-[16px]">
+                  <h3 className="m-0 text-[16px] font-bold text-[#111111]">Blog Page Copy</h3>
+                  <div className="grid grid-cols-2 gap-[16px] max-lg:grid-cols-1">
+                    <div>
+                      <label className="block text-[13px] font-bold mb-[6px]">Intro Eyebrow</label>
+                      <input
+                        type="text"
+                        value={siteContent.blog_intro_eyebrow || "Our Journal"}
+                        onChange={(e) => setSiteContent({ ...siteContent, blog_intro_eyebrow: e.target.value })}
+                        className="w-full h-[44px] px-[14px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[13px] font-bold mb-[6px]">Intro Heading</label>
+                      <input
+                        type="text"
+                        value={siteContent.blog_intro_heading || ""}
+                        onChange={(e) => setSiteContent({ ...siteContent, blog_intro_heading: e.target.value })}
+                        className="w-full h-[44px] px-[14px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-[13px] font-bold mb-[6px]">Intro Subhead</label>
+                    <textarea
+                      rows={2}
+                      value={siteContent.blog_intro_subhead || ""}
+                      onChange={(e) => setSiteContent({ ...siteContent, blog_intro_subhead: e.target.value })}
+                      className="w-full p-[12px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-[16px] max-lg:grid-cols-1">
+                    <div>
+                      <label className="block text-[13px] font-bold mb-[6px]">CTA Heading</label>
+                      <input
+                        type="text"
+                        value={siteContent.blog_cta_title || ""}
+                        onChange={(e) => setSiteContent({ ...siteContent, blog_cta_title: e.target.value })}
+                        className="w-full h-[44px] px-[14px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[13px] font-bold mb-[6px]">CTA Text</label>
+                      <textarea
+                        rows={2}
+                        value={siteContent.blog_cta_text || ""}
+                        onChange={(e) => setSiteContent({ ...siteContent, blog_cta_text: e.target.value })}
+                        className="w-full p-[12px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 6. Contact Page Copy & Steps */}
+                <div className="p-[20px] border border-[var(--border)] rounded-[14px] bg-[#fafafa] space-y-[16px]">
+                  <h3 className="m-0 text-[16px] font-bold text-[#111111]">Contact Page Copy</h3>
+                  <div className="grid grid-cols-2 gap-[16px] max-lg:grid-cols-1">
+                    <div>
+                      <label className="block text-[13px] font-bold mb-[6px]">Eyebrow Label</label>
+                      <input
+                        type="text"
+                        value={siteContent.contact_eyebrow || "Contact Us"}
+                        onChange={(e) => setSiteContent({ ...siteContent, contact_eyebrow: e.target.value })}
+                        className="w-full h-[44px] px-[14px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[13px] font-bold mb-[6px]">Main Heading</label>
+                      <input
+                        type="text"
+                        value={siteContent.contact_heading || ""}
+                        onChange={(e) => setSiteContent({ ...siteContent, contact_heading: e.target.value })}
+                        className="w-full h-[44px] px-[14px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[13px] font-bold mb-[6px]">"What Next?" Subheading</label>
+                    <input
+                      type="text"
+                      value={siteContent.contact_subheading || "What next?"}
+                      onChange={(e) => setSiteContent({ ...siteContent, contact_subheading: e.target.value })}
+                      className="w-full h-[44px] px-[14px] border border-[var(--border)] rounded-[8px] bg-white text-[14px]"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between mb-[8px]">
+                      <label className="block text-[13px] font-bold text-[#111111]">
+                        "What Next?" Repeatable Steps List
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const steps = Array.isArray(siteContent.contact_steps) ? [...siteContent.contact_steps] : [];
+                          setSiteContent({ ...siteContent, contact_steps: [...steps, ""] });
+                        }}
+                        className="text-[12px] font-semibold text-[#111111] underline hover:text-[#333337]"
+                      >
+                        + Add Step Item
+                      </button>
+                    </div>
+                    <div className="space-y-[8px]">
+                      {(Array.isArray(siteContent.contact_steps) ? siteContent.contact_steps : []).map((stepItem: string, idx: number) => (
+                        <div key={idx} className="flex items-center gap-[8px]">
+                          <span className="font-bold text-[12px] text-[#8c8c93] w-[20px]">{idx + 1}.</span>
+                          <input
+                            type="text"
+                            value={stepItem}
+                            onChange={(e) => {
+                              const newSteps = [...siteContent.contact_steps];
+                              newSteps[idx] = e.target.value;
+                              setSiteContent({ ...siteContent, contact_steps: newSteps });
+                            }}
+                            className="flex-1 h-[40px] px-[12px] border border-[var(--border)] rounded-[6px] bg-white text-[13px]"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newSteps = siteContent.contact_steps.filter((_: any, i: number) => i !== idx);
+                              setSiteContent({ ...siteContent, contact_steps: newSteps });
+                            }}
+                            className="px-[10px] py-[8px] text-[11px] font-bold text-[#e11d48] hover:bg-[#fff1f2] rounded"
+                          >
+                            ✕
+                          </button>
                         </div>
                       ))}
+                    </div>
                   </div>
                 </div>
 
@@ -575,7 +805,7 @@ export default function AdminDashboardClient() {
                   disabled={isSavingContent}
                   className="px-[24px] py-[12px] rounded-[10px] bg-[#111111] text-white text-[14px] font-bold hover:bg-[#333337] transition-colors disabled:opacity-50"
                 >
-                  {isSavingContent ? "Saving Copy..." : "Save Site Copy"}
+                  {isSavingContent ? "Saving Site Content..." : "Save All Site Copy"}
                 </button>
               </form>
             </div>
@@ -585,7 +815,7 @@ export default function AdminDashboardClient() {
               <div className="flex items-center justify-between mb-[24px] flex-wrap gap-[12px]">
                 <div>
                   <h2 className="m-0 text-[20px] font-bold text-[#25252a]">
-                    Global Site Settings & Contact
+                    Global Site Settings & Contact Info
                   </h2>
                   <p className="m-0 text-[13px] text-[#8c8c93] mt-[4px]">
                     Edit sitewide footer contact details, social URLs, site title, and copyright.
@@ -784,7 +1014,6 @@ export default function AdminDashboardClient() {
           </div>
         ) : (
           <div className="bg-white border border-[var(--border)] rounded-[var(--radius-lg)] overflow-hidden shadow-sm">
-
             {/* Services List */}
             {activeTab === "services" && (
               <div className="divide-y divide-[var(--border)]">
@@ -812,20 +1041,15 @@ export default function AdminDashboardClient() {
                         </button>
                       </div>
 
-                      {item.image_url && (
-                        <img
-                          src={item.image_url}
-                          alt={item.name}
-                          className="w-[48px] h-[48px] object-cover rounded-[10px] border border-[var(--border)] shrink-0"
-                        />
-                      )}
-
                       <div>
-                        <h3 className="m-0 text-[16px] font-bold text-[#25252a]">
+                        <h3 className="m-0 text-[16px] font-bold text-[#25252a] flex items-center gap-[8px]">
                           {item.name}
+                          <span className="text-[10px] font-semibold px-[8px] py-[2px] rounded bg-[#fafafa] border border-[var(--border)] text-[#77777e]">
+                            Icon: {item.icon || "Sparkles"} ({item.icon_type || "lucide"})
+                          </span>
                         </h3>
                         <span className="text-[12px] text-[#8c8c93] block">
-                          /services/{item.slug}
+                          /services/{item.slug} · Deliverables: {(item.deliverables || []).length} · Steps: {(item.process_steps || []).length}
                         </span>
                       </div>
                     </div>
@@ -980,8 +1204,8 @@ export default function AdminDashboardClient() {
       {/* Create / Edit Form Modal */}
       {isFormOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-[20px] overflow-y-auto">
-          <div className="w-full max-w-[680px] bg-white border border-[var(--border)] rounded-[var(--radius-lg)] p-[36px] my-[40px] shadow-xl relative max-sm:p-[24px]">
-            <div className="flex items-center justify-between mb-[24px]">
+          <div className="w-full max-w-[760px] bg-white border border-[var(--border)] rounded-[var(--radius-lg)] p-[36px] my-[40px] shadow-xl relative max-sm:p-[24px] max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-[24px] sticky top-0 bg-white py-[4px] z-10 border-b border-[var(--border)] pb-[12px]">
               <h2 className="m-0 text-[22px] font-bold text-[#25252a]">
                 {editingItem ? "Edit" : "Create"} {activeTab === "services" ? "Service" : activeTab === "projects" ? "Project" : "Blog Post"}
               </h2>
@@ -993,40 +1217,43 @@ export default function AdminDashboardClient() {
               </button>
             </div>
 
-            <form onSubmit={handleFormSubmit} className="space-y-[20px]">
+            <form onSubmit={handleFormSubmit} className="space-y-[24px]">
               {/* SERVICE FORM FIELDS */}
               {activeTab === "services" && (
                 <>
-                  <div>
-                    <label className="block text-[13px] font-semibold text-[#25252a] mb-[6px]">
-                      Service Name
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.name || ""}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          name: e.target.value,
-                          slug: formData.slug || e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-"),
-                        })
-                      }
-                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[10px] text-[14px]"
-                    />
+                  <div className="grid grid-cols-2 gap-[16px]">
+                    <div>
+                      <label className="block text-[13px] font-semibold text-[#25252a] mb-[6px]">
+                        Service Name
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.name || ""}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            name: e.target.value,
+                            slug: formData.slug || e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-"),
+                          })
+                        }
+                        className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[10px] text-[14px]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[13px] font-semibold text-[#25252a] mb-[6px]">
+                        Slug
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.slug || ""}
+                        onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                        className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[10px] text-[14px]"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-[13px] font-semibold text-[#25252a] mb-[6px]">
-                      Slug
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.slug || ""}
-                      onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                      className="w-full h-[46px] px-[14px] border border-[var(--border)] rounded-[10px] text-[14px]"
-                    />
-                  </div>
+
                   <div>
                     <label className="block text-[13px] font-semibold text-[#25252a] mb-[6px]">
                       One Liner Summary
@@ -1039,14 +1266,189 @@ export default function AdminDashboardClient() {
                     />
                   </div>
 
+                  {/* Icon Selection Section */}
+                  <div className="p-[18px] border border-[var(--border)] rounded-[12px] bg-[#fafafa] space-y-[14px]">
+                    <label className="block text-[13px] font-bold text-[#111111]">
+                      Service Icon Selector
+                    </label>
+                    <div className="flex items-center gap-[20px]">
+                      <label className="inline-flex items-center gap-[6px] text-[13px] font-semibold cursor-pointer">
+                        <input
+                          type="radio"
+                          name="icon_type"
+                          value="lucide"
+                          checked={formData.icon_type !== "custom"}
+                          onChange={() => setFormData({ ...formData, icon_type: "lucide" })}
+                          className="w-[16px] h-[16px]"
+                        />
+                        Curated Lucide Icon
+                      </label>
+                      <label className="inline-flex items-center gap-[6px] text-[13px] font-semibold cursor-pointer">
+                        <input
+                          type="radio"
+                          name="icon_type"
+                          value="custom"
+                          checked={formData.icon_type === "custom"}
+                          onChange={() => setFormData({ ...formData, icon_type: "custom" })}
+                          className="w-[16px] h-[16px]"
+                        />
+                        Upload Custom Icon Image (SVG/PNG)
+                      </label>
+                    </div>
+
+                    {formData.icon_type !== "custom" ? (
+                      <div>
+                        <label className="block text-[12px] font-bold text-[#77777e] mb-[4px]">
+                          Select Lucide Thin-Stroke Icon
+                        </label>
+                        <select
+                          value={formData.icon || "Sparkles"}
+                          onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+                          className="w-full h-[44px] px-[12px] border border-[var(--border)] rounded-[8px] bg-white text-[14px] font-semibold"
+                        >
+                          {CURATED_ICON_NAMES.map((name) => (
+                            <option key={name} value={name}>
+                              {name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    ) : (
+                      <ImageUploadField
+                        label="Custom Service Icon Image (Small SVG/PNG)"
+                        bucket="service-media"
+                        slug={`${formData.slug || "service"}-icon`}
+                        currentImageUrl={formData.icon}
+                        onUpload={(publicUrl) => setFormData({ ...formData, icon: publicUrl })}
+                        onClear={() => setFormData({ ...formData, icon: "" })}
+                      />
+                    )}
+                  </div>
+
                   <ImageUploadField
-                    label="Service Visual Image"
+                    label="Service Cover/Visual Image (Optional)"
                     bucket="service-media"
                     slug={formData.slug || "service"}
                     currentImageUrl={formData.image_url}
                     onUpload={(publicUrl) => setFormData({ ...formData, image_url: publicUrl })}
                     onClear={() => setFormData({ ...formData, image_url: "" })}
                   />
+
+                  {/* Deliverables Repeatable List Editor */}
+                  <div className="p-[18px] border border-[var(--border)] rounded-[12px] bg-[#fafafa] space-y-[12px]">
+                    <div className="flex items-center justify-between">
+                      <label className="block text-[13px] font-bold text-[#111111]">
+                        Deliverables List
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const deliverables = Array.isArray(formData.deliverables) ? [...formData.deliverables] : [];
+                          setFormData({ ...formData, deliverables: [...deliverables, ""] });
+                        }}
+                        className="text-[12px] font-semibold text-[#111111] underline hover:text-[#333337]"
+                      >
+                        + Add Deliverable
+                      </button>
+                    </div>
+
+                    <div className="space-y-[8px]">
+                      {(Array.isArray(formData.deliverables) ? formData.deliverables : []).map(
+                        (item: string, idx: number) => (
+                          <div key={idx} className="flex items-center gap-[8px]">
+                            <span className="font-bold text-[12px] text-[#8c8c93] w-[20px]">✓</span>
+                            <input
+                              type="text"
+                              placeholder="e.g. Brand Strategy & Positioning Framework"
+                              value={item}
+                              onChange={(e) => {
+                                const newD = [...formData.deliverables];
+                                newD[idx] = e.target.value;
+                                setFormData({ ...formData, deliverables: newD });
+                              }}
+                              className="flex-1 h-[40px] px-[12px] border border-[var(--border)] rounded-[8px] bg-white text-[13px]"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newD = formData.deliverables.filter((_: any, i: number) => i !== idx);
+                                setFormData({ ...formData, deliverables: newD });
+                              }}
+                              className="px-[10px] py-[8px] text-[11px] font-bold text-[#e11d48] hover:bg-[#fff1f2] rounded"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Process Steps Repeatable List Editor */}
+                  <div className="p-[18px] border border-[var(--border)] rounded-[12px] bg-[#fafafa] space-y-[14px]">
+                    <div className="flex items-center justify-between">
+                      <label className="block text-[13px] font-bold text-[#111111]">
+                        Process Steps List
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const steps = Array.isArray(formData.process_steps) ? [...formData.process_steps] : [];
+                          setFormData({
+                            ...formData,
+                            process_steps: [...steps, { title: "", description: "" }],
+                          });
+                        }}
+                        className="text-[12px] font-semibold text-[#111111] underline hover:text-[#333337]"
+                      >
+                        + Add Process Step
+                      </button>
+                    </div>
+
+                    <div className="space-y-[12px]">
+                      {(Array.isArray(formData.process_steps) ? formData.process_steps : []).map(
+                        (step: any, idx: number) => (
+                          <div key={idx} className="p-[14px] border border-[var(--border)] rounded-[10px] bg-white space-y-[8px] relative">
+                            <div className="flex items-center justify-between">
+                              <span className="font-bold text-[12px] text-[#8c8c93]">Step 0{idx + 1}</span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newSteps = formData.process_steps.filter((_: any, i: number) => i !== idx);
+                                  setFormData({ ...formData, process_steps: newSteps });
+                                }}
+                                className="text-[11px] font-bold text-[#e11d48] hover:underline"
+                              >
+                                ✕ Remove Step
+                              </button>
+                            </div>
+                            <input
+                              type="text"
+                              placeholder="Step Title (e.g. 1. Discovery & Market Audit)"
+                              value={step.title || ""}
+                              onChange={(e) => {
+                                const newSteps = [...formData.process_steps];
+                                newSteps[idx] = { ...newSteps[idx], title: e.target.value };
+                                setFormData({ ...formData, process_steps: newSteps });
+                              }}
+                              className="w-full h-[38px] px-[10px] border border-[var(--border)] rounded-[6px] text-[13px] font-semibold"
+                            />
+                            <textarea
+                              rows={2}
+                              placeholder="Step Description..."
+                              value={step.description || ""}
+                              onChange={(e) => {
+                                const newSteps = [...formData.process_steps];
+                                newSteps[idx] = { ...newSteps[idx], description: e.target.value };
+                                setFormData({ ...formData, process_steps: newSteps });
+                              }}
+                              className="w-full p-[8px] border border-[var(--border)] rounded-[6px] text-[13px]"
+                            />
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
                 </>
               )}
 
@@ -1125,7 +1527,7 @@ export default function AdminDashboardClient() {
 
                   <div>
                     <label className="block text-[13px] font-semibold text-[#25252a] mb-[6px]">
-                      Brief & Challenge Narrative
+                      Project Overview / Brief
                     </label>
                     <textarea
                       rows={3}
@@ -1133,6 +1535,106 @@ export default function AdminDashboardClient() {
                       onChange={(e) => setFormData({ ...formData, brief: e.target.value })}
                       className="w-full p-[12px] border border-[var(--border)] rounded-[10px] text-[14px]"
                     />
+                  </div>
+
+                  {/* Challenge & Solution Section */}
+                  <div className="p-[18px] border border-[var(--border)] rounded-[12px] bg-[#fafafa] space-y-[12px]">
+                    <label className="block text-[13px] font-bold text-[#111111]">
+                      Challenge & Solution Breakdown
+                    </label>
+                    <div>
+                      <label className="block text-[12px] font-semibold text-[#77777e] mb-[4px]">
+                        The Challenge
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={formData.process_content?.challenge || ""}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            process_content: { ...formData.process_content, challenge: e.target.value },
+                          })
+                        }
+                        className="w-full p-[10px] border border-[var(--border)] rounded-[8px] bg-white text-[13px]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[12px] font-semibold text-[#77777e] mb-[4px]">
+                        Our Solution
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={formData.process_content?.solution || ""}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            process_content: { ...formData.process_content, solution: e.target.value },
+                          })
+                        }
+                        className="w-full p-[10px] border border-[var(--border)] rounded-[8px] bg-white text-[13px]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Outcomes Repeatable List */}
+                  <div className="p-[18px] border border-[var(--border)] rounded-[12px] bg-[#fafafa] space-y-[12px]">
+                    <div className="flex items-center justify-between">
+                      <label className="block text-[13px] font-bold text-[#111111]">
+                        Key Outcomes & Impact
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const current = Array.isArray(formData.outcome_content?.outcomes)
+                            ? [...formData.outcome_content.outcomes]
+                            : [];
+                          setFormData({
+                            ...formData,
+                            outcome_content: { ...formData.outcome_content, outcomes: [...current, ""] },
+                          });
+                        }}
+                        className="text-[12px] font-semibold text-[#111111] underline hover:text-[#333337]"
+                      >
+                        + Add Outcome
+                      </button>
+                    </div>
+
+                    <div className="space-y-[8px]">
+                      {(Array.isArray(formData.outcome_content?.outcomes) ? formData.outcome_content.outcomes : []).map(
+                        (outcome: string, idx: number) => (
+                          <div key={idx} className="flex items-center gap-[8px]">
+                            <span className="font-bold text-[12px] text-[#8c8c93] w-[24px]">0{idx + 1}.</span>
+                            <input
+                              type="text"
+                              placeholder="e.g. Streamlined daily bookkeeping time by 65%"
+                              value={outcome}
+                              onChange={(e) => {
+                                const newO = [...formData.outcome_content.outcomes];
+                                newO[idx] = e.target.value;
+                                setFormData({
+                                  ...formData,
+                                  outcome_content: { ...formData.outcome_content, outcomes: newO },
+                                });
+                              }}
+                              className="flex-1 h-[40px] px-[12px] border border-[var(--border)] rounded-[8px] bg-white text-[13px]"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newO = formData.outcome_content.outcomes.filter((_: any, i: number) => i !== idx);
+                                setFormData({
+                                  ...formData,
+                                  outcome_content: { ...formData.outcome_content, outcomes: newO },
+                                });
+                              }}
+                              className="px-[10px] py-[8px] text-[11px] font-bold text-[#e11d48] hover:bg-[#fff1f2] rounded"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        )
+                      )}
+                    </div>
                   </div>
 
                   <div>

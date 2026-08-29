@@ -33,6 +33,7 @@ create table if not exists public.services (
   name                text not null,
   one_liner           text,
   icon                text,
+  icon_type           text default 'lucide',
   image_url           text,
   deliverables        jsonb default '[]',
   process_steps       jsonb default '[]',

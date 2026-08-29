@@ -200,6 +200,8 @@ export default async function Home() {
               <ServiceCard
                 title={service.name}
                 description={service.one_liner || ""}
+                icon={service.icon}
+                iconType={service.icon_type}
                 href={`/services/${service.slug}`}
               />
             </Reveal>

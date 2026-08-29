@@ -4,7 +4,7 @@ import { EyebrowLabel } from "@/components/ui/EyebrowLabel";
 import { Button } from "@/components/ui/Button";
 import { ProjectCard } from "@/components/ui/ProjectCard";
 import { Reveal } from "@/components/ui/Reveal";
-import { supabase, Project } from "@/lib/supabase";
+import { supabase, Project, getSiteContentMap, DEFAULT_SITE_CONTENT } from "@/lib/supabase";
 
 export const metadata: Metadata = {
   title: "Selected Works | Horode Design Studio",
@@ -59,18 +59,27 @@ async function getProjects(): Promise<Project[]> {
 }
 
 export default async function WorksPage() {
-  const projects = await getProjects();
+  const [projects, content] = await Promise.all([
+    getProjects(),
+    getSiteContentMap(),
+  ]);
+
+  const introEyebrow = content.works_intro_eyebrow || DEFAULT_SITE_CONTENT.works_intro_eyebrow;
+  const introHeading = content.works_intro_heading || DEFAULT_SITE_CONTENT.works_intro_heading;
+  const introSubhead = content.works_intro_subhead || DEFAULT_SITE_CONTENT.works_intro_subhead;
+  const ctaTitle = content.works_cta_title || DEFAULT_SITE_CONTENT.works_cta_title;
+  const ctaText = content.works_cta_text || DEFAULT_SITE_CONTENT.works_cta_text;
 
   return (
     <main className="py-[60px] max-sm:py-[36px]">
       {/* Header Section */}
       <Reveal as="section" className="works-header section-shell text-left">
-        <EyebrowLabel className="mb-[28px]">Our Works</EyebrowLabel>
+        <EyebrowLabel className="mb-[28px]">{introEyebrow}</EyebrowLabel>
         <h1 className="max-w-[840px] m-0 text-[clamp(44px,4.5vw,72px)] max-sm:text-[42px] max-[430px]:text-[32px] font-bold leading-[1.08] text-[#333337] tracking-normal">
-          Selected Projects
+          {introHeading}
         </h1>
         <p className="max-w-[620px] mt-[24px] mb-0 text-[#97979d] text-[18px] max-sm:text-[15px] leading-[1.4]">
-          A showcase of strategic brand design, digital products, and web/mobile application architectures built for client growth.
+          {introSubhead}
         </p>
       </Reveal>
 
@@ -96,10 +105,10 @@ export default async function WorksPage() {
       <Reveal as="section" className="works-cta section-shell pt-[140px] pb-[60px] text-center max-sm:pt-[90px]">
         <div className="max-w-[760px] mx-auto p-[64px_36px] border border-[var(--border)] rounded-[var(--radius-lg)] bg-[#fafafa] max-sm:p-[42px_24px]">
           <h2 className="m-0 text-[clamp(32px,3.5vw,48px)] font-bold text-[#25252a] leading-[1.15]">
-            Have a Project in Mind?
+            {ctaTitle}
           </h2>
           <p className="max-w-[500px] mx-auto mt-[18px] mb-[36px] text-[#8c8c93] text-[15px] leading-[1.5]">
-            Let's build a market-leading product or brand identity system tailored for your company.
+            {ctaText}
           </p>
           <Button variant="filled" href="/contact" className="min-h-[58px] px-[32px]">
             Start Your Project

@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { name, slug, one_liner, icon, image_url, deliverables, process_steps, sort_order } = body;
+    const { name, slug, one_liner, icon, icon_type, image_url, deliverables, process_steps, sort_order } = body;
 
     if (!name || !slug) {
       return NextResponse.json(
@@ -40,6 +40,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Server-side validation
+    const validDeliverables = Array.isArray(deliverables)
+      ? deliverables.map((d: any) => String(d).trim()).filter(Boolean)
+      : [];
+
+    const validProcessSteps = Array.isArray(process_steps)
+      ? process_steps
+          .filter((step: any) => step && typeof step === "object" && step.title)
+          .map((step: any) => ({
+            title: String(step.title).trim(),
+            description: String(step.description || "").trim(),
+          }))
+      : [];
+
+    const validIconType = icon_type === "custom" ? "custom" : "lucide";
+
     const adminSupabase = getAdminSupabase();
     const { data, error } = await adminSupabase
       .from("services")
@@ -47,12 +63,13 @@ export async function POST(request: NextRequest) {
         {
           name,
           slug: slug.toLowerCase().trim().replace(/[^a-z0-9-]/g, "-"),
-          one_liner,
-          icon,
-          image_url,
-          deliverables: deliverables || [],
-          process_steps: process_steps || [],
-          sort_order: sort_order || 0,
+          one_liner: one_liner || null,
+          icon: icon || null,
+          icon_type: validIconType,
+          image_url: image_url || null,
+          deliverables: validDeliverables,
+          process_steps: validProcessSteps,
+          sort_order: typeof sort_order === "number" ? sort_order : 0,
         },
       ])
       .select()

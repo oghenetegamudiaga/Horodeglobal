@@ -22,6 +22,7 @@ export interface Service {
   name: string;
   one_liner: string | null;
   icon: string | null;
+  icon_type?: "lucide" | "custom" | null;
   image_url: string | null;
   deliverables?: string[];
   process_steps?: { title: string; description: string }[];
@@ -117,6 +118,29 @@ export const DEFAULT_SITE_CONTENT: Record<string, any> = {
       title: "Measurable Impact",
       description: "Design and code are means to an end — driving user trust, market positioning, and sustainable enterprise revenue growth.",
     },
+  ],
+  services_intro_eyebrow: "Our Services",
+  services_intro_heading: "The Systems Behind Your Next Level",
+  services_intro_subhead: "We combine brand strategy, user experience design, and custom technology engineering to build foundations that scale with intention.",
+  services_cta_title: "Ready to Build Your System?",
+  services_cta_text: "Let's discuss how our strategic design and engineering capabilities can help transform your business ideas into market leaders.",
+  works_intro_eyebrow: "Our Works",
+  works_intro_heading: "Selected Projects",
+  works_intro_subhead: "A showcase of strategic brand design, digital products, and web/mobile application architectures built for client growth.",
+  works_cta_title: "Have a Project in Mind?",
+  works_cta_text: "Let's build a market-leading product or brand identity system tailored for your company.",
+  blog_intro_eyebrow: "Our Journal",
+  blog_intro_heading: "Articles & Insights",
+  blog_intro_subhead: "Perspectives on brand positioning, user experience design, and software engineering for modern companies.",
+  blog_cta_title: "Need Strategic Guidance?",
+  blog_cta_text: "Let's discuss how our design strategy and engineering capabilities can transform your brand.",
+  contact_eyebrow: "Contact Us",
+  contact_heading: "Have a project in mind? Let's create greatness",
+  contact_subheading: "What next?",
+  contact_steps: [
+    "We will reach out to you within one business day to discuss the next steps.",
+    "If necessary, we will sign the NDA and begin the project discussion.",
+    "Our team of experts will analyze your requirements and make recommendations on the best ways to bring your concept to life.",
   ],
 };
 

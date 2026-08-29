@@ -261,13 +261,13 @@ export default async function ServiceDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const richContent = richServiceDetails[slug] || {
-    deliverables: service.deliverables || [
+  const fallbackDetails = richServiceDetails[slug] || {
+    deliverables: [
       "Custom Strategy & Planning",
       "Professional Execution & Deliverables",
       "Quality Assurance & Support",
     ],
-    process_steps: service.process_steps || [
+    process_steps: [
       {
         title: "1. Discovery & Planning",
         description: "We analyze requirements and map out a clear execution plan.",
@@ -286,6 +286,16 @@ export default async function ServiceDetailPage({ params }: PageProps) {
       },
     ],
   };
+
+  const deliverables =
+    service.deliverables && service.deliverables.length > 0
+      ? service.deliverables
+      : fallbackDetails.deliverables;
+
+  const processSteps =
+    service.process_steps && service.process_steps.length > 0
+      ? service.process_steps
+      : fallbackDetails.process_steps;
 
   const relatedProjects = await getRelatedProjects(service);
 
@@ -309,7 +319,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             What We Deliver
           </h2>
           <div className="grid grid-cols-2 gap-[24px] max-lg:grid-cols-1">
-            {richContent.deliverables.map((item, idx) => (
+            {deliverables.map((item, idx) => (
               <Reveal key={idx} delay={idx * 0.06}>
                 <div className="flex items-start gap-[14px] p-[20px] bg-white border border-[var(--border)] rounded-[14px] h-full">
                   <span className="inline-flex items-center justify-center w-[26px] h-[26px] rounded-full bg-[#111111] text-white text-[12px] font-bold shrink-0 mt-[2px]">
@@ -333,7 +343,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         </h2>
 
         <div className="grid grid-cols-2 gap-[28px] max-lg:grid-cols-1">
-          {richContent.process_steps.map((step, idx) => (
+          {processSteps.map((step, idx) => (
             <Reveal key={idx} delay={idx * 0.08}>
               <div className="p-[38px] border border-[var(--border)] rounded-[var(--radius-md)] bg-white max-sm:p-[26px] h-full">
                 <h3 className="m-0 mb-[14px] text-[22px] font-semibold text-[#25252a]">
