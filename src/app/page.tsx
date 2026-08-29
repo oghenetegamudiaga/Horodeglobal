@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { ServiceCard } from "@/components/ui/ServiceCard";
 import { ProjectCard } from "@/components/ui/ProjectCard";
 import { HomeContactForm } from "@/components/home/HomeContactForm";
+import { Reveal } from "@/components/ui/Reveal";
 import {
   supabase,
   Service,
@@ -143,9 +144,9 @@ export default async function Home() {
   return (
     <main>
       {/* Hero Section */}
-      <section
+      <Reveal
+        as="section"
         className="hero section-shell relative grid grid-cols-[minmax(0,1fr)_520px] items-center min-h-[535px] mt-[38px] overflow-hidden rounded-[var(--radius-lg)] bg-[#fafafa] max-lg:grid-cols-1 max-lg:min-h-auto max-sm:mt-[18px] max-sm:rounded-[22px]"
-        aria-labelledby="hero-title"
       >
         <div className="hero-copy max-w-[720px] pl-[54px] max-lg:p-[58px_36px_0] max-sm:p-[42px_24px_0]">
           <h1
@@ -176,13 +177,12 @@ export default async function Home() {
             className="absolute top-[34px] right-0 w-[482px] h-[672px] max-w-none block object-contain max-lg:top-[24px] max-lg:right-[24px] max-lg:w-[min(482px,calc(100vw-72px))] max-lg:h-auto max-sm:top-[18px] max-sm:right-[-18px] max-sm:w-[min(420px,calc(100vw-18px))]"
           />
         </div>
-      </section>
+      </Reveal>
 
       {/* Services Section */}
-      <section
+      <Reveal
+        as="section"
         className="services section-shell pt-[132px] max-sm:pt-[92px]"
-        id="services"
-        aria-labelledby="services-title"
       >
         <EyebrowLabel className="flex w-max mx-auto mb-[32px]">
           Our Services
@@ -195,22 +195,22 @@ export default async function Home() {
         </h2>
 
         <div className="service-grid grid grid-cols-3 gap-[18px] mt-[52px] max-lg:grid-cols-1 max-sm:mt-[34px]">
-          {services.map((service) => (
-            <ServiceCard
-              key={service.id || service.slug}
-              title={service.name}
-              description={service.one_liner || ""}
-              href={`/services/${service.slug}`}
-            />
+          {services.map((service, index) => (
+            <Reveal key={service.id || service.slug} delay={index * 0.1}>
+              <ServiceCard
+                title={service.name}
+                description={service.one_liner || ""}
+                href={`/services/${service.slug}`}
+              />
+            </Reveal>
           ))}
         </div>
-      </section>
+      </Reveal>
 
       {/* About Section */}
-      <section
+      <Reveal
+        as="section"
         className="about section-shell grid grid-cols-2 gap-[80px] pt-[180px] max-lg:grid-cols-1 max-lg:gap-[28px] max-sm:pt-[92px]"
-        id="about"
-        aria-labelledby="about-title"
       >
         <div>
           <EyebrowLabel className="mb-[26px]">Who We Are</EyebrowLabel>
@@ -232,13 +232,12 @@ export default async function Home() {
             Learn more about our studio <span aria-hidden="true">&nearr;</span>
           </a>
         </div>
-      </section>
+      </Reveal>
 
       {/* Selected Works Section */}
-      <section
+      <Reveal
+        as="section"
         className="works section-shell pt-[172px] max-sm:pt-[92px]"
-        id="works"
-        aria-labelledby="works-title"
       >
         <EyebrowLabel className="mb-[28px]">Our Works</EyebrowLabel>
         <h2
@@ -249,25 +248,25 @@ export default async function Home() {
         </h2>
 
         <div className="project-grid grid grid-cols-2 gap-[62px] mt-[38px] max-lg:grid-cols-1 max-sm:gap-[44px]">
-          {projects.map((project) => (
-            <ProjectCard
-              key={project.id || project.slug}
-              title={project.name}
-              description={project.one_liner || ""}
-              imageSrc={project.thumbnail_url || "/assets/zalyx-ledger.png"}
-              imageAlt={project.name}
-              tags={project.service_tags || []}
-              href={`/work/${project.slug}`}
-            />
+          {projects.map((project, index) => (
+            <Reveal key={project.id || project.slug} delay={index * 0.1}>
+              <ProjectCard
+                title={project.name}
+                description={project.one_liner || ""}
+                imageSrc={project.thumbnail_url || "/assets/zalyx-ledger.png"}
+                imageAlt={project.name}
+                tags={project.service_tags || []}
+                href={`/work/${project.slug}`}
+              />
+            </Reveal>
           ))}
         </div>
-      </section>
+      </Reveal>
 
       {/* Contact Section */}
-      <section
+      <Reveal
+        as="section"
         className="contact section-shell pt-[285px] pb-[168px] max-sm:pt-[115px] max-sm:pb-[90px]"
-        id="contact"
-        aria-labelledby="contact-title"
       >
         <h2
           id="contact-title"
@@ -300,7 +299,7 @@ export default async function Home() {
 
           <HomeContactForm />
         </div>
-      </section>
+      </Reveal>
     </main>
   );
 }

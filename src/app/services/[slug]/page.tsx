@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { EyebrowLabel } from "@/components/ui/EyebrowLabel";
 import { Button } from "@/components/ui/Button";
 import { ProjectCard } from "@/components/ui/ProjectCard";
+import { Reveal } from "@/components/ui/Reveal";
 import { supabase, Service, Project } from "@/lib/supabase";
 
 interface PageProps {
@@ -291,7 +292,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
   return (
     <main className="py-[60px] max-sm:py-[36px]">
       {/* Header Section */}
-      <section className="service-detail-header section-shell">
+      <Reveal as="section" className="service-detail-header section-shell">
         <EyebrowLabel className="mb-[24px]">Service Overview</EyebrowLabel>
         <h1 className="max-w-[780px] m-0 text-[clamp(44px,4.5vw,68px)] max-sm:text-[38px] max-[430px]:text-[32px] font-bold text-[#333337] leading-[1.08]">
           {service.name}
@@ -299,34 +300,33 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         <p className="max-w-[640px] mt-[24px] mb-0 text-[#97979d] text-[19px] max-sm:text-[16px] leading-[1.45]">
           {service.one_liner}
         </p>
-      </section>
+      </Reveal>
 
       {/* Deliverables Section */}
-      <section className="deliverables-section section-shell pt-[90px] max-sm:pt-[60px]">
+      <Reveal as="section" className="deliverables-section section-shell pt-[90px] max-sm:pt-[60px]">
         <div className="p-[54px] border border-[var(--border)] rounded-[var(--radius-lg)] bg-[#fafafa] max-sm:p-[28px]">
           <h2 className="m-0 mb-[32px] text-[28px] max-sm:text-[22px] font-bold text-[#25252a]">
             What We Deliver
           </h2>
           <div className="grid grid-cols-2 gap-[24px] max-lg:grid-cols-1">
             {richContent.deliverables.map((item, idx) => (
-              <div
-                key={idx}
-                className="flex items-start gap-[14px] p-[20px] bg-white border border-[var(--border)] rounded-[14px]"
-              >
-                <span className="inline-flex items-center justify-center w-[26px] h-[26px] rounded-full bg-[#111111] text-white text-[12px] font-bold shrink-0 mt-[2px]">
-                  ✓
-                </span>
-                <span className="text-[#323236] text-[15px] font-medium leading-[1.4]">
-                  {item}
-                </span>
-              </div>
+              <Reveal key={idx} delay={idx * 0.06}>
+                <div className="flex items-start gap-[14px] p-[20px] bg-white border border-[var(--border)] rounded-[14px] h-full">
+                  <span className="inline-flex items-center justify-center w-[26px] h-[26px] rounded-full bg-[#111111] text-white text-[12px] font-bold shrink-0 mt-[2px]">
+                    ✓
+                  </span>
+                  <span className="text-[#323236] text-[15px] font-medium leading-[1.4]">
+                    {item}
+                  </span>
+                </div>
+              </Reveal>
             ))}
           </div>
         </div>
-      </section>
+      </Reveal>
 
       {/* Process Steps Section */}
-      <section className="process-section section-shell pt-[110px] max-sm:pt-[70px]">
+      <Reveal as="section" className="process-section section-shell pt-[110px] max-sm:pt-[70px]">
         <EyebrowLabel className="mb-[24px]">Our Approach</EyebrowLabel>
         <h2 className="m-0 mb-[52px] text-[clamp(36px,3.8vw,54px)] max-sm:text-[32px] font-medium text-[#25252a]">
           How We Build Systems
@@ -334,46 +334,46 @@ export default async function ServiceDetailPage({ params }: PageProps) {
 
         <div className="grid grid-cols-2 gap-[28px] max-lg:grid-cols-1">
           {richContent.process_steps.map((step, idx) => (
-            <div
-              key={idx}
-              className="p-[38px] border border-[var(--border)] rounded-[var(--radius-md)] bg-white max-sm:p-[26px]"
-            >
-              <h3 className="m-0 mb-[14px] text-[22px] font-semibold text-[#25252a]">
-                {step.title}
-              </h3>
-              <p className="m-0 text-[#8c8c93] text-[15px] leading-[1.6]">
-                {step.description}
-              </p>
-            </div>
+            <Reveal key={idx} delay={idx * 0.08}>
+              <div className="p-[38px] border border-[var(--border)] rounded-[var(--radius-md)] bg-white max-sm:p-[26px] h-full">
+                <h3 className="m-0 mb-[14px] text-[22px] font-semibold text-[#25252a]">
+                  {step.title}
+                </h3>
+                <p className="m-0 text-[#8c8c93] text-[15px] leading-[1.6]">
+                  {step.description}
+                </p>
+              </div>
+            </Reveal>
           ))}
         </div>
-      </section>
+      </Reveal>
 
       {/* Related Projects Section */}
       {relatedProjects.length > 0 && (
-        <section className="related-projects-section section-shell pt-[120px] max-sm:pt-[80px]">
+        <Reveal as="section" className="related-projects-section section-shell pt-[120px] max-sm:pt-[80px]">
           <EyebrowLabel className="mb-[24px]">Related Work</EyebrowLabel>
           <h2 className="m-0 mb-[48px] text-[clamp(36px,3.8vw,54px)] max-sm:text-[32px] font-medium text-[#25252a]">
             Projects Built With This Capability
           </h2>
 
           <div className="project-grid grid grid-cols-2 gap-[62px] max-lg:grid-cols-1 max-sm:gap-[44px]">
-            {relatedProjects.map((project) => (
-              <ProjectCard
-                key={project.id || project.slug}
-                title={project.name}
-                description={project.one_liner || ""}
-                imageSrc={project.thumbnail_url || "/assets/zalyx-ledger.png"}
-                imageAlt={project.name}
-                tags={project.service_tags || []}
-              />
+            {relatedProjects.map((project, index) => (
+              <Reveal key={project.id || project.slug} delay={index * 0.1}>
+                <ProjectCard
+                  title={project.name}
+                  description={project.one_liner || ""}
+                  imageSrc={project.thumbnail_url || "/assets/zalyx-ledger.png"}
+                  imageAlt={project.name}
+                  tags={project.service_tags || []}
+                />
+              </Reveal>
             ))}
           </div>
-        </section>
+        </Reveal>
       )}
 
       {/* Contextual CTA Section */}
-      <section className="service-detail-cta section-shell pt-[130px] pb-[40px] text-center max-sm:pt-[90px]">
+      <Reveal as="section" className="service-detail-cta section-shell pt-[130px] pb-[40px] text-center max-sm:pt-[90px]">
         <div className="max-w-[760px] mx-auto p-[64px_36px] border border-[var(--border)] rounded-[var(--radius-lg)] bg-[#fafafa] max-sm:p-[42px_24px]">
           <h2 className="m-0 text-[clamp(32px,3.5vw,48px)] font-bold text-[#25252a] leading-[1.15]">
             Have a {service.name} Project?
@@ -390,7 +390,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             Book Free Consultation
           </Button>
         </div>
-      </section>
+      </Reveal>
     </main>
   );
 }

@@ -2,6 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { EyebrowLabel } from "@/components/ui/EyebrowLabel";
 import { ContactForm } from "@/components/ui/ContactForm";
+import { Reveal } from "@/components/ui/Reveal";
 import { getSiteSettings } from "@/lib/supabase";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -16,9 +17,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function ContactPage() {
   return (
     <main className="pt-[40px] pb-[120px] max-sm:pt-[20px] max-sm:pb-[60px]">
-      <section
+      <Reveal
+        as="section"
         className="contact section-shell"
-        aria-labelledby="contact-title"
       >
         <EyebrowLabel className="flex w-max mx-auto mb-[32px]">
           Contact Us
@@ -55,7 +56,7 @@ export default function ContactPage() {
 
           <ContactForm />
         </div>
-      </section>
+      </Reveal>
     </main>
   );
 }

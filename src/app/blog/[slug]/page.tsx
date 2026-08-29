@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { EyebrowLabel } from "@/components/ui/EyebrowLabel";
 import { Button } from "@/components/ui/Button";
+import { Reveal } from "@/components/ui/Reveal";
 import { supabase, Post } from "@/lib/supabase";
 
 interface PageProps {
@@ -156,7 +157,7 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
   return (
     <main className="py-[60px] max-sm:py-[36px]">
       {/* Header Section */}
-      <article className="post-header section-shell">
+      <Reveal as="article" className="post-header section-shell">
         <div className="flex items-center gap-[12px] mb-[24px]">
           <span className="inline-flex items-center min-h-[24px] px-[10px] border border-[var(--border)] rounded-full text-[#77777e] text-[11px] font-bold uppercase">
             {post.category || "Insight"}
@@ -175,11 +176,11 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
             {post.excerpt}
           </p>
         )}
-      </article>
+      </Reveal>
 
       {/* Cover Image Banner */}
       {post.cover_image_url && (
-        <section className="post-banner section-shell pt-[48px]">
+        <Reveal as="section" className="post-banner section-shell pt-[48px]">
           <div className="overflow-hidden rounded-[24px] border border-[var(--border)] max-w-[960px] mx-auto">
             <img
               src={post.cover_image_url}
@@ -187,20 +188,20 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
               className="w-full aspect-[1.85/1] object-cover block"
             />
           </div>
-        </section>
+        </Reveal>
       )}
 
       {/* Article Body Markdown Section */}
-      <section className="post-body section-shell pt-[64px] max-sm:pt-[40px]">
+      <Reveal as="section" className="post-body section-shell pt-[64px] max-sm:pt-[40px]">
         <div className="max-w-[760px] mx-auto prose prose-neutral text-[#333337] text-[17px] max-sm:text-[15px] leading-[1.7]">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
             {post.content}
           </ReactMarkdown>
         </div>
-      </section>
+      </Reveal>
 
       {/* Contextual CTA Section */}
-      <section className="post-cta section-shell pt-[120px] pb-[40px] text-center max-sm:pt-[80px]">
+      <Reveal as="section" className="post-cta section-shell pt-[120px] pb-[40px] text-center max-sm:pt-[80px]">
         <div className="max-w-[760px] mx-auto p-[64px_36px] border border-[var(--border)] rounded-[var(--radius-lg)] bg-[#fafafa] max-sm:p-[42px_24px]">
           <h2 className="m-0 text-[clamp(32px,3.5vw,48px)] font-bold text-[#25252a] leading-[1.15]">
             Ready to Build Your System?
@@ -212,7 +213,7 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
             Book Free Consultation
           </Button>
         </div>
-      </section>
+      </Reveal>
     </main>
   );
 }

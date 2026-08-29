@@ -15,7 +15,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
 }) => {
   return (
     <article
-      className={`min-h-[290px] p-[64px_24px_36px] border border-[var(--border)] rounded-[var(--radius-md)] bg-white max-sm:min-h-[220px] max-sm:p-[34px_22px_28px] ${className}`}
+      className={`min-h-[290px] p-[64px_24px_36px] border border-[var(--border)] rounded-[var(--radius-md)] bg-white max-sm:min-h-[220px] max-sm:p-[34px_22px_28px] transition-all duration-200 ease-out hover:scale-[1.015] hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(0,0,0,0.04)] hover:border-[#d4d4d8] ${className}`}
     >
       <h3 className="m-0 mb-[18px] text-[#25252a] text-[24px] font-semibold leading-[1.18]">
         {title}

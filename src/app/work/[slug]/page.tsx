@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { EyebrowLabel } from "@/components/ui/EyebrowLabel";
 import { Button } from "@/components/ui/Button";
+import { Reveal } from "@/components/ui/Reveal";
 import { supabase, Project } from "@/lib/supabase";
 
 interface PageProps {
@@ -174,7 +175,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
   return (
     <main className="py-[60px] max-sm:py-[36px]">
       {/* Header Section */}
-      <section className="project-detail-header section-shell">
+      <Reveal as="section" className="project-detail-header section-shell">
         <EyebrowLabel className="mb-[24px]">Case Study</EyebrowLabel>
         <h1 className="max-w-[840px] m-0 text-[clamp(44px,4.5vw,72px)] max-sm:text-[38px] max-[430px]:text-[32px] font-bold text-[#333337] leading-[1.08]">
           {project.name}
@@ -217,10 +218,10 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             </div>
           </div>
         </div>
-      </section>
+      </Reveal>
 
       {/* Hero Thumbnail Banner */}
-      <section className="project-banner section-shell pt-[48px]">
+      <Reveal as="section" className="project-banner section-shell pt-[48px]">
         <div className="overflow-hidden rounded-[28px] border border-[var(--border)]">
           <img
             src={project.thumbnail_url || "/assets/zalyx-ledger.png"}
@@ -228,33 +229,37 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             className="w-full aspect-[1.78/1] object-cover block"
           />
         </div>
-      </section>
+      </Reveal>
 
       {/* Brief & Challenge Section */}
-      <section className="brief-section section-shell pt-[90px] max-sm:pt-[60px]">
+      <Reveal as="section" className="brief-section section-shell pt-[90px] max-sm:pt-[60px]">
         <div className="grid grid-cols-2 gap-[70px] max-lg:grid-cols-1 max-lg:gap-[36px]">
-          <div className="p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-[#fafafa] max-sm:p-[28px]">
-            <h2 className="m-0 mb-[16px] text-[24px] font-bold text-[#25252a]">
-              The Overview
-            </h2>
-            <p className="m-0 text-[#333337] text-[15px] leading-[1.65]">
-              {caseStudy.brief}
-            </p>
-          </div>
+          <Reveal delay={0}>
+            <div className="p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-[#fafafa] max-sm:p-[28px] h-full">
+              <h2 className="m-0 mb-[16px] text-[24px] font-bold text-[#25252a]">
+                The Overview
+              </h2>
+              <p className="m-0 text-[#333337] text-[15px] leading-[1.65]">
+                {caseStudy.brief}
+              </p>
+            </div>
+          </Reveal>
 
-          <div className="p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-white max-sm:p-[28px]">
-            <h2 className="m-0 mb-[16px] text-[24px] font-bold text-[#25252a]">
-              The Challenge
-            </h2>
-            <p className="m-0 text-[#8c8c93] text-[15px] leading-[1.65]">
-              {caseStudy.challenge}
-            </p>
-          </div>
+          <Reveal delay={0.1}>
+            <div className="p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-white max-sm:p-[28px] h-full">
+              <h2 className="m-0 mb-[16px] text-[24px] font-bold text-[#25252a]">
+                The Challenge
+              </h2>
+              <p className="m-0 text-[#8c8c93] text-[15px] leading-[1.65]">
+                {caseStudy.challenge}
+              </p>
+            </div>
+          </Reveal>
         </div>
-      </section>
+      </Reveal>
 
       {/* Solution & Outcomes Section */}
-      <section className="solution-section section-shell pt-[60px] max-sm:pt-[40px]">
+      <Reveal as="section" className="solution-section section-shell pt-[60px] max-sm:pt-[40px]">
         <div className="p-[54px] border border-[var(--border)] rounded-[var(--radius-lg)] bg-white max-sm:p-[28px]">
           <h2 className="m-0 mb-[18px] text-[28px] max-sm:text-[22px] font-bold text-[#25252a]">
             Our Approach & Solution
@@ -268,24 +273,23 @@ export default async function ProjectDetailPage({ params }: PageProps) {
           </h3>
           <div className="grid grid-cols-3 gap-[18px] max-lg:grid-cols-1">
             {caseStudy.outcomes.map((outcome, idx) => (
-              <div
-                key={idx}
-                className="p-[22px] bg-[#fafafa] border border-[var(--border)] rounded-[14px]"
-              >
-                <span className="text-[#111111] text-[18px] font-bold block mb-[8px]">
-                  0{idx + 1}.
-                </span>
-                <p className="m-0 text-[#323236] text-[14px] leading-[1.5] font-medium">
-                  {outcome}
-                </p>
-              </div>
+              <Reveal key={idx} delay={idx * 0.08}>
+                <div className="p-[22px] bg-[#fafafa] border border-[var(--border)] rounded-[14px] h-full">
+                  <span className="text-[#111111] text-[18px] font-bold block mb-[8px]">
+                    0{idx + 1}.
+                  </span>
+                  <p className="m-0 text-[#323236] text-[14px] leading-[1.5] font-medium">
+                    {outcome}
+                  </p>
+                </div>
+              </Reveal>
             ))}
           </div>
         </div>
-      </section>
+      </Reveal>
 
       {/* Next / Previous Project Navigation */}
-      <section className="project-nav section-shell pt-[100px] max-sm:pt-[60px]">
+      <Reveal as="section" className="project-nav section-shell pt-[100px] max-sm:pt-[60px]">
         <div className="flex items-center justify-between gap-[20px] pt-[32px] border-t border-[var(--border)] max-sm:flex-col max-sm:items-stretch">
           {prevProject && (
             <a
@@ -314,10 +318,10 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             </a>
           )}
         </div>
-      </section>
+      </Reveal>
 
       {/* Contextual CTA Section */}
-      <section className="case-study-cta section-shell pt-[110px] pb-[40px] text-center max-sm:pt-[70px]">
+      <Reveal as="section" className="case-study-cta section-shell pt-[110px] pb-[40px] text-center max-sm:pt-[70px]">
         <div className="max-w-[760px] mx-auto p-[64px_36px] border border-[var(--border)] rounded-[var(--radius-lg)] bg-[#fafafa] max-sm:p-[42px_24px]">
           <h2 className="m-0 text-[clamp(32px,3.5vw,48px)] font-bold text-[#25252a] leading-[1.15]">
             Have a Similar Initiative?
@@ -330,7 +334,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             Book Free Consultation
           </Button>
         </div>
-      </section>
+      </Reveal>
     </main>
   );
 }

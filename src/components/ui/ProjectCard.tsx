@@ -35,7 +35,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   );
 
   return (
-    <article className={`project-card ${className}`}>
+    <article className={`project-card group transition-transform duration-200 ease-out hover:-translate-y-1 ${className}`}>
       {href ? (
         <a href={href} className="block group">
           {content}

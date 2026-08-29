@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { EyebrowLabel } from "@/components/ui/EyebrowLabel";
 import { Button } from "@/components/ui/Button";
 import { ServiceCard } from "@/components/ui/ServiceCard";
+import { Reveal } from "@/components/ui/Reveal";
 import { supabase, Service } from "@/lib/supabase";
 
 export const metadata: Metadata = {
@@ -72,7 +73,7 @@ export default async function ServicesPage() {
   return (
     <main className="py-[60px] max-sm:py-[36px]">
       {/* Header Section */}
-      <section className="services-header section-shell text-center">
+      <Reveal as="section" className="services-header section-shell text-center">
         <EyebrowLabel className="flex w-max mx-auto mb-[32px]">
           Our Services
         </EyebrowLabel>
@@ -83,24 +84,25 @@ export default async function ServicesPage() {
           We combine brand strategy, user experience design, and custom technology
           engineering to build foundations that scale with intention.
         </p>
-      </section>
+      </Reveal>
 
       {/* Services Grid */}
-      <section className="services-grid-section section-shell pt-[72px] max-sm:pt-[48px]">
+      <Reveal as="section" className="services-grid-section section-shell pt-[72px] max-sm:pt-[48px]">
         <div className="service-grid grid grid-cols-3 gap-[18px] max-lg:grid-cols-1">
-          {services.map((service) => (
-            <ServiceCard
-              key={service.id || service.slug}
-              title={service.name}
-              description={service.one_liner || ""}
-              href={`/services/${service.slug}`}
-            />
+          {services.map((service, index) => (
+            <Reveal key={service.id || service.slug} delay={index * 0.1}>
+              <ServiceCard
+                title={service.name}
+                description={service.one_liner || ""}
+                href={`/services/${service.slug}`}
+              />
+            </Reveal>
           ))}
         </div>
-      </section>
+      </Reveal>
 
       {/* CTA Section */}
-      <section className="services-cta section-shell pt-[140px] pb-[60px] text-center max-sm:pt-[90px]">
+      <Reveal as="section" className="services-cta section-shell pt-[140px] pb-[60px] text-center max-sm:pt-[90px]">
         <div className="max-w-[720px] mx-auto p-[64px_36px] border border-[var(--border)] rounded-[var(--radius-lg)] bg-[#fafafa] max-sm:p-[42px_24px]">
           <h2 className="m-0 text-[clamp(32px,3.5vw,48px)] font-bold text-[#25252a] leading-[1.15]">
             Ready to Build Your System?
@@ -113,7 +115,7 @@ export default async function ServicesPage() {
             Book Free Consultation
           </Button>
         </div>
-      </section>
+      </Reveal>
     </main>
   );
 }
