@@ -90,6 +90,7 @@ async function getServices(): Promise<Service[]> {
       !process.env.NEXT_PUBLIC_SUPABASE_URL ||
       process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
     ) {
+      console.warn("[Supabase] NEXT_PUBLIC_SUPABASE_URL unconfigured, using defaultServices fallback.");
       return defaultServices;
     }
     const { data, error } = await supabase
@@ -97,12 +98,14 @@ async function getServices(): Promise<Service[]> {
       .select("*")
       .order("sort_order", { ascending: true });
 
-    if (error || !data || data.length === 0) {
-      return defaultServices;
+    if (error) {
+      console.error("[Supabase Error] getServices query failed:", error.message);
+      return [];
     }
-    return data;
-  } catch {
-    return defaultServices;
+    return data || [];
+  } catch (err: unknown) {
+    console.error("[Supabase Exception] getServices error:", err instanceof Error ? err.message : err);
+    return [];
   }
 }
 
@@ -112,6 +115,7 @@ async function getProjects(): Promise<Project[]> {
       !process.env.NEXT_PUBLIC_SUPABASE_URL ||
       process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
     ) {
+      console.warn("[Supabase] NEXT_PUBLIC_SUPABASE_URL unconfigured, using defaultProjects fallback.");
       return defaultProjects;
     }
     const { data, error } = await supabase
@@ -120,12 +124,14 @@ async function getProjects(): Promise<Project[]> {
       .eq("featured", true)
       .order("sort_order", { ascending: true });
 
-    if (error || !data || data.length === 0) {
-      return defaultProjects;
+    if (error) {
+      console.error("[Supabase Error] getProjects query failed:", error.message);
+      return [];
     }
-    return data;
-  } catch {
-    return defaultProjects;
+    return data || [];
+  } catch (err: unknown) {
+    console.error("[Supabase Exception] getProjects error:", err instanceof Error ? err.message : err);
+    return [];
   }
 }
 

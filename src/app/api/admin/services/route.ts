@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getAdminSupabase } from "@/lib/supabase";
 import { getAdminSession } from "@/lib/session";
 
@@ -76,6 +77,17 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) throw error;
+
+    try {
+      revalidatePath("/");
+      revalidatePath("/services");
+      if (data?.slug) {
+        revalidatePath(`/services/${data.slug}`);
+      }
+    } catch (e) {
+      console.warn("Revalidation warning:", e);
+    }
+
     return NextResponse.json(data);
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Error creating service";

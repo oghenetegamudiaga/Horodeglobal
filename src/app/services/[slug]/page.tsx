@@ -213,15 +213,18 @@ async function getServiceBySlug(slug: string): Promise<Service | null> {
       process.env.NEXT_PUBLIC_SUPABASE_URL &&
       !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
     ) {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("services")
         .select("*")
         .eq("slug", slug)
         .single();
+      if (error) {
+        console.error("[Supabase Error] getServiceBySlug query error:", error.message);
+      }
       if (data) return data;
     }
-  } catch {
-    // fallback below
+  } catch (err: unknown) {
+    console.error("[Supabase Exception] getServiceBySlug exception:", err instanceof Error ? err.message : err);
   }
   return fallbackServices.find((s) => s.slug === slug) || null;
 }
@@ -233,22 +236,28 @@ async function getRelatedProjects(service: Service): Promise<Project[]> {
       !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
     ) {
       if (service.related_project_ids && service.related_project_ids.length > 0) {
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from("projects")
           .select("*")
           .in("id", service.related_project_ids);
+        if (error) {
+          console.error("[Supabase Error] getRelatedProjects in-ids query error:", error.message);
+        }
         if (data && data.length > 0) return data;
       }
-      const { data: featured } = await supabase
+      const { data: featured, error: fError } = await supabase
         .from("projects")
         .select("*")
         .eq("featured", true)
         .order("sort_order", { ascending: true })
         .limit(2);
+      if (fError) {
+        console.error("[Supabase Error] getRelatedProjects featured query error:", fError.message);
+      }
       if (featured && featured.length > 0) return featured;
     }
-  } catch {
-    // fallback below
+  } catch (err: unknown) {
+    console.error("[Supabase Exception] getRelatedProjects exception:", err instanceof Error ? err.message : err);
   }
   return defaultProjects;
 }

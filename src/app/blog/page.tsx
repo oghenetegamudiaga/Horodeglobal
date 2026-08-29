@@ -51,6 +51,7 @@ async function getPublishedPosts(): Promise<Post[]> {
       !process.env.NEXT_PUBLIC_SUPABASE_URL ||
       process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
     ) {
+      console.warn("[Supabase] NEXT_PUBLIC_SUPABASE_URL unconfigured, using defaultPosts fallback.");
       return defaultPosts;
     }
     const { data, error } = await supabase
@@ -59,12 +60,14 @@ async function getPublishedPosts(): Promise<Post[]> {
       .eq("published", true)
       .order("created_at", { ascending: false });
 
-    if (error || !data || data.length === 0) {
-      return defaultPosts;
+    if (error) {
+      console.error("[Supabase Error] getPublishedPosts query failed:", error.message);
+      return [];
     }
-    return data;
-  } catch {
-    return defaultPosts;
+    return data || [];
+  } catch (err: unknown) {
+    console.error("[Supabase Exception] getPublishedPosts error:", err instanceof Error ? err.message : err);
+    return [];
   }
 }
 

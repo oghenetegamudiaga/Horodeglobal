@@ -124,16 +124,19 @@ async function getPostBySlug(slug: string): Promise<Post | null> {
       process.env.NEXT_PUBLIC_SUPABASE_URL &&
       !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
     ) {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("posts")
         .select("*")
         .eq("slug", slug)
         .eq("published", true)
         .single();
+      if (error) {
+        console.error("[Supabase Error] getPostBySlug query error:", error.message);
+      }
       if (data) return data;
     }
-  } catch {
-    // fallback
+  } catch (err: unknown) {
+    console.error("[Supabase Exception] getPostBySlug exception:", err instanceof Error ? err.message : err);
   }
   return defaultPosts.find((p) => p.slug === slug) || null;
 }

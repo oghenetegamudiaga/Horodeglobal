@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getAdminSupabase } from "@/lib/supabase";
 import { getAdminSession } from "@/lib/session";
 import { deleteStorageObject } from "@/lib/storage";
@@ -26,6 +27,17 @@ export async function PUT(request: NextRequest, { params }: ParamsProps) {
       .single();
 
     if (error) throw error;
+
+    try {
+      revalidatePath("/");
+      revalidatePath("/services");
+      if (data?.slug) {
+        revalidatePath(`/services/${data.slug}`);
+      }
+    } catch (e) {
+      console.warn("Revalidation warning:", e);
+    }
+
     return NextResponse.json(data);
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Error updating service";
@@ -46,7 +58,7 @@ export async function DELETE(_request: NextRequest, { params }: ParamsProps) {
     // Fetch item first to delete associated image file
     const { data: item } = await adminSupabase
       .from("services")
-      .select("image_url")
+      .select("image_url, slug")
       .eq("id", id)
       .single();
 
@@ -59,6 +71,16 @@ export async function DELETE(_request: NextRequest, { params }: ParamsProps) {
 
     const { error } = await adminSupabase.from("services").delete().eq("id", id);
     if (error) throw error;
+
+    try {
+      revalidatePath("/");
+      revalidatePath("/services");
+      if (item?.slug) {
+        revalidatePath(`/services/${item.slug}`);
+      }
+    } catch (e) {
+      console.warn("Revalidation warning:", e);
+    }
 
     return NextResponse.json({ success: true });
   } catch (err: unknown) {

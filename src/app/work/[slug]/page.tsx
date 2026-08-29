@@ -124,14 +124,18 @@ async function getAllProjects(): Promise<Project[]> {
       process.env.NEXT_PUBLIC_SUPABASE_URL &&
       !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
     ) {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("projects")
         .select("*")
         .order("sort_order", { ascending: true });
+
+      if (error) {
+        console.error("[Supabase Error] getAllProjects query error:", error.message);
+      }
       if (data && data.length > 0) return data;
     }
-  } catch {
-    // fallback
+  } catch (err: unknown) {
+    console.error("[Supabase Exception] getAllProjects exception:", err instanceof Error ? err.message : err);
   }
   return defaultProjects;
 }

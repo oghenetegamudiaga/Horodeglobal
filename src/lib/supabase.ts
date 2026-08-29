@@ -181,10 +181,15 @@ export async function getSiteContentMap(): Promise<Record<string, any>> {
       !process.env.NEXT_PUBLIC_SUPABASE_URL ||
       process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
     ) {
+      console.warn("[Supabase] NEXT_PUBLIC_SUPABASE_URL unconfigured, using DEFAULT_SITE_CONTENT.");
       return DEFAULT_SITE_CONTENT;
     }
     const { data, error } = await supabase.from("site_content").select("*");
-    if (error || !data || data.length === 0) {
+    if (error) {
+      console.error("[Supabase Error] getSiteContentMap failed:", error.message);
+      return DEFAULT_SITE_CONTENT;
+    }
+    if (!data || data.length === 0) {
       return DEFAULT_SITE_CONTENT;
     }
     const contentMap: Record<string, any> = { ...DEFAULT_SITE_CONTENT };
@@ -192,7 +197,8 @@ export async function getSiteContentMap(): Promise<Record<string, any>> {
       contentMap[item.key] = item.value;
     });
     return contentMap;
-  } catch {
+  } catch (err: unknown) {
+    console.error("[Supabase Exception] getSiteContentMap exception:", err instanceof Error ? err.message : err);
     return DEFAULT_SITE_CONTENT;
   }
 }
@@ -203,6 +209,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       !process.env.NEXT_PUBLIC_SUPABASE_URL ||
       process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
     ) {
+      console.warn("[Supabase] NEXT_PUBLIC_SUPABASE_URL unconfigured, using DEFAULT_SITE_SETTINGS.");
       return DEFAULT_SITE_SETTINGS;
     }
     const { data, error } = await supabase
@@ -210,11 +217,17 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       .select("*")
       .limit(1)
       .maybeSingle();
-    if (error || !data) {
+
+    if (error) {
+      console.error("[Supabase Error] getSiteSettings failed:", error.message);
+      return DEFAULT_SITE_SETTINGS;
+    }
+    if (!data) {
       return DEFAULT_SITE_SETTINGS;
     }
     return { ...DEFAULT_SITE_SETTINGS, ...data };
-  } catch {
+  } catch (err: unknown) {
+    console.error("[Supabase Exception] getSiteSettings exception:", err instanceof Error ? err.message : err);
     return DEFAULT_SITE_SETTINGS;
   }
 }
