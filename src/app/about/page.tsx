@@ -151,7 +151,7 @@ export default async function AboutPage() {
             <Button variant="filled" href="/contact" className="min-h-[58px] px-[32px]">
               Book Free Consultation
             </Button>
-            <Button variant="outline" href="#works" className="min-h-[58px] px-[32px]">
+            <Button variant="outline" href="/#works" className="min-h-[58px] px-[32px]">
               View Selected Works
             </Button>
           </div>

@@ -155,7 +155,7 @@ export default async function Home() {
         as="section"
         className="hero section-shell relative grid grid-cols-[minmax(0,1fr)_520px] items-center min-h-[535px] mt-[38px] overflow-hidden rounded-[var(--radius-lg)] bg-[#fafafa] max-lg:grid-cols-1 max-lg:min-h-auto max-sm:mt-[18px] max-sm:rounded-[22px]"
       >
-        <div className="hero-copy max-w-[720px] pl-[54px] max-lg:p-[58px_36px_0] max-sm:p-[42px_24px_0]">
+        <div className="hero-copy relative z-10 max-w-[720px] pl-[54px] max-lg:p-[58px_36px_0] max-sm:p-[42px_24px_0]">
           <h1
             id="hero-title"
             className="max-w-[690px] m-0 mb-[28px] text-[#333337] text-[clamp(44px,4.1vw,72px)] max-sm:text-[42px] max-[430px]:text-[32px] font-bold leading-[1.08] tracking-normal"
@@ -175,7 +175,7 @@ export default async function Home() {
         </div>
 
         <div
-          className="hero-visual relative self-stretch min-h-[535px] max-lg:min-h-[340px] max-sm:min-h-[285px]"
+          className="hero-visual relative self-stretch min-h-[535px] max-lg:min-h-[340px] max-sm:min-h-[285px] pointer-events-none"
           aria-hidden="true"
         >
           <img
@@ -189,6 +189,7 @@ export default async function Home() {
       {/* Services Section */}
       <Reveal
         as="section"
+        id="services"
         className="services section-shell pt-[132px] max-sm:pt-[92px]"
       >
         <EyebrowLabel className="flex w-max mx-auto mb-[32px]">
@@ -219,6 +220,7 @@ export default async function Home() {
       {/* About Section */}
       <Reveal
         as="section"
+        id="about"
         className="about section-shell grid grid-cols-2 gap-[80px] pt-[180px] max-lg:grid-cols-1 max-lg:gap-[28px] max-sm:pt-[92px]"
       >
         <div>
@@ -246,6 +248,7 @@ export default async function Home() {
       {/* Selected Works Section */}
       <Reveal
         as="section"
+        id="works"
         className="works section-shell pt-[172px] max-sm:pt-[92px]"
       >
         <EyebrowLabel className="mb-[28px]">Our Works</EyebrowLabel>
@@ -275,6 +278,7 @@ export default async function Home() {
       {/* Contact Section */}
       <Reveal
         as="section"
+        id="contact"
         className="contact section-shell pt-[285px] pb-[168px] max-sm:pt-[115px] max-sm:pb-[90px]"
       >
         <h2
