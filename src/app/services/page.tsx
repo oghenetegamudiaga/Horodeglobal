@@ -89,7 +89,7 @@ export default async function ServicesPage() {
     <main className="py-[60px] max-sm:py-[36px]">
       {/* Header Section */}
       <Reveal as="section" className="services-header section-shell text-center">
-        <EyebrowLabel className="flex w-max mx-auto mb-[32px]">
+        <EyebrowLabel className="mx-auto mb-[32px]">
           {introEyebrow}
         </EyebrowLabel>
         <h1 className="max-w-[840px] mx-auto m-0 text-[clamp(44px,4.5vw,72px)] max-sm:text-[42px] max-[430px]:text-[32px] font-bold leading-[1.08] text-[#333337] tracking-normal">

@@ -48,7 +48,7 @@ export default function AdminLoginPage() {
   return (
     <main className="min-h-screen bg-[#fafafa] flex items-center justify-center p-[24px]">
       <div className="w-full max-w-[440px] bg-white border border-[var(--border)] rounded-[var(--radius-lg)] p-[48px_36px] shadow-sm max-sm:p-[32px_20px]">
-        <EyebrowLabel className="mb-[20px] mx-auto flex w-max">
+        <EyebrowLabel className="mb-[20px] mx-auto">
           Horode Studio Admin
         </EyebrowLabel>
 

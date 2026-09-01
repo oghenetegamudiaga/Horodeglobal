@@ -166,8 +166,8 @@ export default function AdminResetPasswordPage() {
   return (
     <main className="min-h-screen bg-[#fafafa] flex items-center justify-center p-[24px]">
       <div className="w-full max-w-[440px] bg-white border border-[var(--border)] rounded-[var(--radius-lg)] p-[48px_36px] shadow-sm max-sm:p-[32px_20px]">
-        <EyebrowLabel className="mb-[20px] mx-auto flex w-max">
-          Horode Studio Admin
+        <EyebrowLabel className="mb-[20px] mx-auto">
+          Admin Security
         </EyebrowLabel>
 
         <h1 className="text-center text-[26px] font-bold text-[#25252a] m-0 mb-[8px]">

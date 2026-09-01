@@ -192,7 +192,7 @@ export default async function Home() {
         id="services"
         className="services section-shell pt-[132px] max-sm:pt-[92px]"
       >
-        <EyebrowLabel className="flex w-max mx-auto mb-[32px]">
+        <EyebrowLabel className="mx-auto mb-[32px]">
           Our Services
         </EyebrowLabel>
         <h2

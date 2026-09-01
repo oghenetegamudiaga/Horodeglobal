@@ -26,11 +26,8 @@ export default async function ContactPage() {
 
   return (
     <main className="pt-[40px] pb-[120px] max-sm:pt-[20px] max-sm:pb-[60px]">
-      <Reveal
-        as="section"
-        className="contact section-shell"
-      >
-        <EyebrowLabel className="flex w-max mx-auto mb-[32px]">
+      <Reveal as="section" className="contact-header section-shell">
+        <EyebrowLabel className="mx-auto mb-[32px]">
           {eyebrow}
         </EyebrowLabel>
 
