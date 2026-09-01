@@ -169,8 +169,12 @@ export const supabase = createClient(
 // Admin Supabase Client (Service Role Key - Server Side Only)
 export const getAdminSupabase = () => {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
-  if (!supabaseUrl || !serviceRoleKey) {
-    throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_URL");
+  const missing: string[] = [];
+  if (!supabaseUrl) missing.push("NEXT_PUBLIC_SUPABASE_URL");
+  if (!serviceRoleKey) missing.push("SUPABASE_SERVICE_ROLE_KEY");
+
+  if (missing.length > 0) {
+    throw new Error(`Missing ${missing.join(" and ")}`);
   }
   return createClient(supabaseUrl, serviceRoleKey);
 };
