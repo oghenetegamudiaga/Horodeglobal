@@ -513,6 +513,15 @@ export default function AdminDashboardClient() {
                       />
                     </div>
                   </div>
+
+                  <ImageUploadField
+                    label="Who We Are Section Image"
+                    bucket="site-media"
+                    slug="who-we-are"
+                    currentImageUrl={siteContent.who_we_are_image_url}
+                    onUpload={(publicUrl) => setSiteContent({ ...siteContent, who_we_are_image_url: publicUrl })}
+                    onClear={() => setSiteContent({ ...siteContent, who_we_are_image_url: "" })}
+                  />
                 </div>
 
                 {/* 2. About Page Copy */}

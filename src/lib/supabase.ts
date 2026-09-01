@@ -93,6 +93,7 @@ export const DEFAULT_SITE_CONTENT: Record<string, any> = {
   hero_cta_text: "Book Free Consultation",
   who_we_are_headline: "We Create Solutions We Build Systems,",
   who_we_are_text: "We build digital foundations that help businesses grow with intention. From brand strategy and identity design to custom software and app development, every system we build is engineered to make your company visible, trusted, and infinitely scalable.",
+  who_we_are_image_url: null,
   about_hero_title: "We Create Solutions, We Build Systems.",
   about_hero_subhead: "We combine strategy, design, and technology to help ambitious businesses grow into market leaders.",
   about_philosophy_title: "Building Foundations for Intention and Scale",

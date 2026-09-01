@@ -1,6 +1,6 @@
 import { getAdminSupabase } from "@/lib/supabase";
 
-export const ALLOWED_BUCKETS = ["blog-media", "service-media", "project-media"] as const;
+export const ALLOWED_BUCKETS = ["blog-media", "service-media", "project-media", "site-media"] as const;
 export type StorageBucket = (typeof ALLOWED_BUCKETS)[number];
 
 export const ALLOWED_MIME_TYPES = [

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 interface ImageUploadFieldProps {
   label?: string;
-  bucket: "blog-media" | "service-media" | "project-media";
+  bucket: "blog-media" | "service-media" | "project-media" | "site-media";
   slug?: string;
   currentImageUrl?: string;
   onUpload: (publicUrl: string, path: string) => void;

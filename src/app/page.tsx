@@ -147,6 +147,7 @@ export default async function Home() {
   const heroCtaText = content.hero_cta_text || DEFAULT_SITE_CONTENT.hero_cta_text;
   const whoWeAreHeadline = content.who_we_are_headline || DEFAULT_SITE_CONTENT.who_we_are_headline;
   const whoWeAreText = content.who_we_are_text || DEFAULT_SITE_CONTENT.who_we_are_text;
+  const whoWeAreImageUrl = content.who_we_are_image_url || DEFAULT_SITE_CONTENT.who_we_are_image_url;
 
   return (
     <main>
@@ -221,18 +222,16 @@ export default async function Home() {
       <Reveal
         as="section"
         id="about"
-        className="about section-shell grid grid-cols-2 gap-[80px] pt-[180px] max-lg:grid-cols-1 max-lg:gap-[28px] max-sm:pt-[92px]"
+        className="about section-shell grid grid-cols-2 gap-[80px] items-center pt-[180px] max-lg:grid-cols-1 max-lg:gap-[36px] max-sm:pt-[92px]"
       >
-        <div>
+        <div className="max-w-[560px]">
           <EyebrowLabel className="mb-[26px]">Who We Are</EyebrowLabel>
           <h2
             id="about-title"
-            className="m-0 text-[clamp(42px,4vw,63px)] max-sm:text-[38px] max-[430px]:text-[32px] font-medium leading-[1.08] tracking-normal"
+            className="m-0 mb-[24px] text-[clamp(42px,4vw,63px)] max-sm:text-[38px] max-[430px]:text-[32px] font-medium leading-[1.08] tracking-normal"
           >
             {whoWeAreHeadline}
           </h2>
-        </div>
-        <div className="max-w-[560px] m-0 mt-[76px] ml-auto max-lg:m-0">
           <p className="m-0 mb-[24px] text-[#333337] text-[16px] leading-[1.55]">
             {whoWeAreText}
           </p>
@@ -242,6 +241,28 @@ export default async function Home() {
           >
             Learn more about our studio <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
           </a>
+        </div>
+
+        <div className="relative w-full aspect-[4/3] min-h-[320px] rounded-[var(--radius-lg)] border border-[var(--border)] bg-[#fafafa] flex flex-col items-center justify-center p-[32px] overflow-hidden shadow-sm">
+          {whoWeAreImageUrl ? (
+            <img
+              src={whoWeAreImageUrl}
+              alt="Who We Are - Horode Studio"
+              className="absolute inset-0 w-full h-full object-cover rounded-[var(--radius-lg)]"
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center space-y-[12px] text-[#8c8c93] text-center">
+              <div className="w-[52px] h-[52px] rounded-full bg-white border border-[var(--border)] flex items-center justify-center text-[#111111] font-bold text-[20px] shadow-xs">
+                H
+              </div>
+              <span className="text-[13px] font-semibold tracking-wider uppercase text-[#333337]">
+                Horode Design Studio
+              </span>
+              <span className="text-[12px] text-[#97979d]">
+                Integrated Brand & Software Systems
+              </span>
+            </div>
+          )}
         </div>
       </Reveal>
 
