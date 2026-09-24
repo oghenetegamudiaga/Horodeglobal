@@ -1,13 +1,28 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   if (pathname?.startsWith("/admin")) {
     return null;
@@ -29,7 +44,7 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="site-header" id="top">
+    <header className={`site-header ${isScrolled ? "scrolled" : ""}`} id="top">
       <Link href="/" className="brand" aria-label="Horode home" onClick={closeMenu}>
         <img src="/assets/horode-logo-black.png" alt="Horode" />
       </Link>

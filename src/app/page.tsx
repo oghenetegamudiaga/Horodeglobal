@@ -154,36 +154,43 @@ export default async function Home() {
       {/* Hero Section */}
       <Reveal
         as="section"
-        className="hero section-shell relative grid grid-cols-[minmax(0,1fr)_520px] items-center min-h-[535px] mt-[38px] overflow-hidden rounded-[var(--radius-lg)] bg-[var(--card-bg)] border border-[var(--border)] max-lg:grid-cols-1 max-lg:min-h-auto max-sm:mt-[18px] max-sm:rounded-[22px]"
+        className="hero section-shell relative flex flex-col items-center justify-center text-center pt-[88px] pb-[108px] max-sm:pt-[48px] max-sm:pb-[68px]"
       >
-        <div className="hero-copy relative z-10 max-w-[720px] pl-[54px] max-lg:p-[58px_36px_0] max-sm:p-[42px_24px_0]">
+        {/* Directional White Radial Glow (Bottom-Left & Behind Text) */}
+        <div
+          className="absolute -bottom-[140px] -left-[140px] w-[750px] h-[750px] rounded-full pointer-events-none z-0"
+          style={{
+            background: "radial-gradient(circle at 45% 55%, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 42%, transparent 72%)",
+            filter: "blur(64px)",
+          }}
+          aria-hidden="true"
+        />
+        <div
+          className="absolute -top-[100px] left-1/2 -translate-x-1/2 w-[920px] h-[450px] rounded-full pointer-events-none z-0"
+          style={{
+            background: "radial-gradient(ellipse at 50% 30%, rgba(255, 255, 255, 0.06) 0%, transparent 65%)",
+            filter: "blur(70px)",
+          }}
+          aria-hidden="true"
+        />
+
+        <div className="hero-copy relative z-10 max-w-[960px] mx-auto flex flex-col items-center text-center">
           <h1
             id="hero-title"
-            className="max-w-[690px] m-0 mb-[28px] text-[var(--color-ink)] text-[clamp(44px,4.1vw,72px)] max-sm:text-[42px] max-[430px]:text-[32px] font-bold leading-[1.08] tracking-normal"
+            className="max-w-[900px] mx-auto m-0 mb-[28px] text-[var(--color-ink)] text-[clamp(46px,5.2vw,80px)] max-sm:text-[38px] max-[430px]:text-[32px] font-bold leading-[1.08] tracking-normal text-center"
           >
             {heroHeadline}
           </h1>
-          <p className="max-w-[540px] m-0 mb-[36px] text-[var(--color-text)] text-[18px] max-sm:text-[15px] leading-[1.28]">
+          <p className="max-w-[620px] mx-auto m-0 mb-[40px] text-[var(--color-text)] text-[19px] max-sm:text-[16px] leading-[1.45] text-center">
             {heroSubhead}
           </p>
           <Button
             variant="outline"
             href="#contact"
-            className="primary-button min-h-[72px] px-[30px] text-[18px] max-sm:min-h-[58px] max-sm:px-[22px] max-sm:text-[14px]"
+            className="primary-button min-h-[64px] px-[36px] text-[17px] max-sm:min-h-[54px] max-sm:px-[26px] max-sm:text-[14px]"
           >
             {heroCtaText}
           </Button>
-        </div>
-
-        <div
-          className="hero-visual relative self-stretch min-h-[535px] max-lg:min-h-[340px] max-sm:min-h-[285px] pointer-events-none"
-          aria-hidden="true"
-        >
-          <img
-            src="/assets/hero-visual.png"
-            alt=""
-            className="absolute top-[34px] right-0 w-[482px] h-[672px] max-w-none block object-contain max-lg:top-[24px] max-lg:right-[24px] max-lg:w-[min(482px,calc(100vw-72px))] max-lg:h-auto max-sm:top-[18px] max-sm:right-[-18px] max-sm:w-[min(420px,calc(100vw-18px))]"
-          />
         </div>
       </Reveal>
 

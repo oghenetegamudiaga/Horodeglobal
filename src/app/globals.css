@@ -149,9 +149,16 @@ textarea {
   align-items: center;
   justify-content: space-between;
   height: 92px;
-  background: rgba(5, 5, 5, 0.82);
+  background: transparent;
+  backdrop-filter: blur(0px);
+  border-bottom: 1px solid transparent;
+  transition: background-color 220ms ease, border-color 220ms ease, backdrop-filter 220ms ease;
+}
+
+.site-header.scrolled {
+  background: rgba(5, 5, 5, 0.85);
   backdrop-filter: blur(18px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .brand img {
