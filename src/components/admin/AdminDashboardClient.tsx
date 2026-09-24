@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ImageUploadField } from "@/components/ui/ImageUploadField";
-import { CURATED_ICON_NAMES } from "@/components/ui/ServiceCard";
 import { Service, Project, Post } from "@/lib/supabase";
 
 export default function AdminDashboardClient() {
@@ -1273,65 +1272,6 @@ export default function AdminDashboardClient() {
                       onChange={(e) => setFormData({ ...formData, one_liner: e.target.value })}
                       className="w-full p-[12px] border border-[var(--border)] rounded-[10px] text-[14px]"
                     />
-                  </div>
-
-                  {/* Icon Selection Section */}
-                  <div className="p-[18px] border border-[var(--border)] rounded-[12px] bg-[#fafafa] space-y-[14px]">
-                    <label className="block text-[13px] font-bold text-[#111111]">
-                      Service Icon Selector
-                    </label>
-                    <div className="flex items-center gap-[20px]">
-                      <label className="inline-flex items-center gap-[6px] text-[13px] font-semibold cursor-pointer">
-                        <input
-                          type="radio"
-                          name="icon_type"
-                          value="lucide"
-                          checked={formData.icon_type !== "custom"}
-                          onChange={() => setFormData({ ...formData, icon_type: "lucide" })}
-                          className="w-[16px] h-[16px]"
-                        />
-                        Curated Lucide Icon
-                      </label>
-                      <label className="inline-flex items-center gap-[6px] text-[13px] font-semibold cursor-pointer">
-                        <input
-                          type="radio"
-                          name="icon_type"
-                          value="custom"
-                          checked={formData.icon_type === "custom"}
-                          onChange={() => setFormData({ ...formData, icon_type: "custom" })}
-                          className="w-[16px] h-[16px]"
-                        />
-                        Upload Custom Icon Image (SVG/PNG)
-                      </label>
-                    </div>
-
-                    {formData.icon_type !== "custom" ? (
-                      <div>
-                        <label className="block text-[12px] font-bold text-[#77777e] mb-[4px]">
-                          Select Lucide Thin-Stroke Icon
-                        </label>
-                        <select
-                          value={formData.icon || "Sparkles"}
-                          onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                          className="w-full h-[44px] px-[12px] border border-[var(--border)] rounded-[8px] bg-white text-[14px] font-semibold"
-                        >
-                          {CURATED_ICON_NAMES.map((name) => (
-                            <option key={name} value={name}>
-                              {name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    ) : (
-                      <ImageUploadField
-                        label="Custom Service Icon Image (Small SVG/PNG)"
-                        bucket="service-media"
-                        slug={`${formData.slug || "service"}-icon`}
-                        currentImageUrl={formData.icon}
-                        onUpload={(publicUrl) => setFormData({ ...formData, icon: publicUrl })}
-                        onClear={() => setFormData({ ...formData, icon: "" })}
-                      />
-                    )}
                   </div>
 
                   <ImageUploadField
