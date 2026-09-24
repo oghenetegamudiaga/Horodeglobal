@@ -162,20 +162,20 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
       {/* Header Section */}
       <Reveal as="article" className="post-header section-shell">
         <div className="flex items-center gap-[12px] mb-[24px]">
-          <span className="inline-flex items-center min-h-[24px] px-[10px] border border-[var(--border)] rounded-full text-[#77777e] text-[11px] font-bold uppercase">
+          <span className="inline-flex items-center min-h-[24px] px-[10px] border border-[var(--border)] rounded-full text-[var(--color-muted)] text-[11px] font-bold uppercase">
             {post.category || "Insight"}
           </span>
-          <span className="text-[#8c8c93] text-[13px]">{post.read_time}</span>
-          <span className="text-[#8c8c93] text-[13px]">·</span>
-          <span className="text-[#8c8c93] text-[13px]">{formattedDate}</span>
+          <span className="text-[var(--color-muted)] text-[13px]">{post.read_time}</span>
+          <span className="text-[var(--color-muted)] text-[13px]">·</span>
+          <span className="text-[var(--color-muted)] text-[13px]">{formattedDate}</span>
         </div>
 
-        <h1 className="max-w-[860px] m-0 text-[clamp(40px,4.2vw,64px)] max-sm:text-[34px] font-bold text-[#333337] leading-[1.12]">
+        <h1 className="max-w-[860px] m-0 text-[clamp(40px,4.2vw,64px)] max-sm:text-[34px] font-bold text-[var(--color-ink)] leading-[1.12]">
           {post.title}
         </h1>
 
         {post.excerpt && (
-          <p className="max-w-[680px] mt-[24px] mb-0 text-[#8c8c93] text-[19px] max-sm:text-[16px] leading-[1.5]">
+          <p className="max-w-[680px] mt-[24px] mb-0 text-[var(--color-text)] text-[19px] max-sm:text-[16px] leading-[1.5]">
             {post.excerpt}
           </p>
         )}
@@ -196,7 +196,7 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
 
       {/* Article Body Markdown Section */}
       <Reveal as="section" className="post-body section-shell pt-[64px] max-sm:pt-[40px]">
-        <div className="max-w-[760px] mx-auto prose prose-neutral text-[#333337] text-[17px] max-sm:text-[15px] leading-[1.7]">
+        <div className="max-w-[760px] mx-auto prose prose-neutral text-[var(--color-text)] text-[17px] max-sm:text-[15px] leading-[1.7]">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
             {post.content}
           </ReactMarkdown>
@@ -205,11 +205,11 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
 
       {/* Contextual CTA Section */}
       <Reveal as="section" className="post-cta section-shell pt-[120px] pb-[40px] text-center max-sm:pt-[80px]">
-        <div className="max-w-[760px] mx-auto p-[64px_36px] border border-[var(--border)] rounded-[var(--radius-lg)] bg-[#fafafa] max-sm:p-[42px_24px]">
-          <h2 className="m-0 text-[clamp(32px,3.5vw,48px)] font-bold text-[#25252a] leading-[1.15]">
+        <div className="max-w-[760px] mx-auto p-[64px_36px] border border-[var(--border)] rounded-[var(--radius-lg)] bg-[var(--card-bg)] max-sm:p-[42px_24px]">
+          <h2 className="m-0 text-[clamp(32px,3.5vw,48px)] font-bold text-[var(--color-ink)] leading-[1.15]">
             Ready to Build Your System?
           </h2>
-          <p className="max-w-[500px] mx-auto mt-[18px] mb-[36px] text-[#8c8c93] text-[15px] leading-[1.5]">
+          <p className="max-w-[500px] mx-auto mt-[18px] mb-[36px] text-[var(--color-text)] text-[15px] leading-[1.5]">
             Let's discuss how Horode's design and software capabilities can bring your business ideas to life.
           </p>
           <Button variant="filled" href="/contact" className="min-h-[58px] px-[32px]">

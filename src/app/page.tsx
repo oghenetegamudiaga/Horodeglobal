@@ -154,16 +154,16 @@ export default async function Home() {
       {/* Hero Section */}
       <Reveal
         as="section"
-        className="hero section-shell relative grid grid-cols-[minmax(0,1fr)_520px] items-center min-h-[535px] mt-[38px] overflow-hidden rounded-[var(--radius-lg)] bg-[#fafafa] max-lg:grid-cols-1 max-lg:min-h-auto max-sm:mt-[18px] max-sm:rounded-[22px]"
+        className="hero section-shell relative grid grid-cols-[minmax(0,1fr)_520px] items-center min-h-[535px] mt-[38px] overflow-hidden rounded-[var(--radius-lg)] bg-[var(--card-bg)] border border-[var(--border)] max-lg:grid-cols-1 max-lg:min-h-auto max-sm:mt-[18px] max-sm:rounded-[22px]"
       >
         <div className="hero-copy relative z-10 max-w-[720px] pl-[54px] max-lg:p-[58px_36px_0] max-sm:p-[42px_24px_0]">
           <h1
             id="hero-title"
-            className="max-w-[690px] m-0 mb-[28px] text-[#333337] text-[clamp(44px,4.1vw,72px)] max-sm:text-[42px] max-[430px]:text-[32px] font-bold leading-[1.08] tracking-normal"
+            className="max-w-[690px] m-0 mb-[28px] text-[var(--color-ink)] text-[clamp(44px,4.1vw,72px)] max-sm:text-[42px] max-[430px]:text-[32px] font-bold leading-[1.08] tracking-normal"
           >
             {heroHeadline}
           </h1>
-          <p className="max-w-[540px] m-0 mb-[36px] text-[#97979d] text-[18px] max-sm:text-[15px] leading-[1.28]">
+          <p className="max-w-[540px] m-0 mb-[36px] text-[var(--color-text)] text-[18px] max-sm:text-[15px] leading-[1.28]">
             {heroSubhead}
           </p>
           <Button
@@ -232,18 +232,18 @@ export default async function Home() {
           >
             {whoWeAreHeadline}
           </h2>
-          <p className="m-0 mb-[24px] text-[#333337] text-[16px] leading-[1.55]">
+          <p className="m-0 mb-[24px] text-[var(--color-text)] text-[16px] leading-[1.55]">
             {whoWeAreText}
           </p>
           <a
             href="/about"
-            className="text-[#222226] text-[13px] font-bold inline-flex items-center gap-1 hover:underline"
+            className="text-[var(--color-ink)] text-[13px] font-bold inline-flex items-center gap-1 hover:underline"
           >
             Learn more about our studio <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
           </a>
         </div>
 
-        <div className="relative w-full aspect-[4/3] min-h-[320px] rounded-[var(--radius-lg)] border border-[var(--border)] bg-[#fafafa] flex flex-col items-center justify-center p-[32px] overflow-hidden shadow-sm">
+        <div className="relative w-full aspect-[4/3] min-h-[320px] rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--card-bg)] flex flex-col items-center justify-center p-[32px] overflow-hidden shadow-sm">
           {whoWeAreImageUrl ? (
             <img
               src={whoWeAreImageUrl}
@@ -251,14 +251,14 @@ export default async function Home() {
               className="absolute inset-0 w-full h-full object-cover rounded-[var(--radius-lg)]"
             />
           ) : (
-            <div className="flex flex-col items-center justify-center space-y-[12px] text-[#8c8c93] text-center">
-              <div className="w-[52px] h-[52px] rounded-full bg-white border border-[var(--border)] flex items-center justify-center text-[#111111] font-bold text-[20px] shadow-xs">
+            <div className="flex flex-col items-center justify-center space-y-[12px] text-[var(--color-muted)] text-center">
+              <div className="w-[52px] h-[52px] rounded-full bg-[#141416] border border-[var(--border)] flex items-center justify-center text-white font-bold text-[20px] shadow-xs">
                 H
               </div>
-              <span className="text-[13px] font-semibold tracking-wider uppercase text-[#333337]">
+              <span className="text-[13px] font-semibold tracking-wider uppercase text-[var(--color-ink)]">
                 Horode Design Studio
               </span>
-              <span className="text-[12px] text-[#97979d]">
+              <span className="text-[12px] text-[var(--color-text)]">
                 Integrated Brand & Software Systems
               </span>
             </div>
@@ -315,7 +315,7 @@ export default async function Home() {
             <h3 className="m-0 mb-[26px] text-[24px] font-semibold">
               What next?
             </h3>
-            <ol className="max-w-[390px] m-0 p-0 text-[#8b8b92] text-[14px] leading-[1.72] list-inside">
+            <ol className="max-w-[390px] m-0 p-0 text-[var(--color-text)] text-[14px] leading-[1.72] list-inside">
               <li>
                 We will reach out to you within one business day to discuss the
                 next steps.

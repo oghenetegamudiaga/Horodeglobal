@@ -197,40 +197,40 @@ export default async function ProjectDetailPage({ params }: PageProps) {
       {/* Header Section */}
       <Reveal as="section" className="project-detail-header section-shell">
         <EyebrowLabel className="mb-[24px]">Case Study</EyebrowLabel>
-        <h1 className="max-w-[840px] m-0 text-[clamp(44px,4.5vw,72px)] max-sm:text-[38px] max-[430px]:text-[32px] font-bold text-[#333337] leading-[1.08]">
+        <h1 className="max-w-[840px] m-0 text-[clamp(44px,4.5vw,72px)] max-sm:text-[38px] max-[430px]:text-[32px] font-bold text-[var(--color-ink)] leading-[1.08]">
           {project.name}
         </h1>
-        <p className="max-w-[640px] mt-[24px] mb-[40px] text-[#97979d] text-[19px] max-sm:text-[16px] leading-[1.45]">
+        <p className="max-w-[640px] mt-[24px] mb-[40px] text-[var(--color-text)] text-[19px] max-sm:text-[16px] leading-[1.45]">
           {project.one_liner}
         </p>
 
         {/* Metadata Row */}
         <div className="flex flex-wrap items-center gap-[36px] pt-[28px] border-t border-[var(--border)] max-sm:gap-[20px]">
           <div>
-            <span className="text-[#9999a0] text-[11px] font-bold uppercase tracking-wider block mb-[4px]">
+            <span className="text-[var(--color-muted)] text-[11px] font-bold uppercase tracking-wider block mb-[4px]">
               Client
             </span>
-            <span className="text-[#25252a] text-[14px] font-semibold">
+            <span className="text-[var(--color-ink)] text-[14px] font-semibold">
               {clientName}
             </span>
           </div>
           <div>
-            <span className="text-[#9999a0] text-[11px] font-bold uppercase tracking-wider block mb-[4px]">
+            <span className="text-[var(--color-muted)] text-[11px] font-bold uppercase tracking-wider block mb-[4px]">
               Year
             </span>
-            <span className="text-[#25252a] text-[14px] font-semibold">
+            <span className="text-[var(--color-ink)] text-[14px] font-semibold">
               {yearText}
             </span>
           </div>
           <div>
-            <span className="text-[#9999a0] text-[11px] font-bold uppercase tracking-wider block mb-[4px]">
+            <span className="text-[var(--color-muted)] text-[11px] font-bold uppercase tracking-wider block mb-[4px]">
               Capabilities
             </span>
             <div className="flex flex-wrap gap-[6px]">
               {(project.service_tags || []).map((tag, idx) => (
                 <span
                   key={idx}
-                  className="inline-flex items-center min-h-[22px] px-[9px] border border-[var(--border)] rounded-full text-[#77777e] text-[10px] font-semibold"
+                  className="inline-flex items-center min-h-[22px] px-[9px] border border-[var(--border)] rounded-full text-[var(--color-muted)] text-[10px] font-semibold"
                 >
                   {tag}
                 </span>
@@ -255,22 +255,22 @@ export default async function ProjectDetailPage({ params }: PageProps) {
       <Reveal as="section" className="brief-section section-shell pt-[90px] max-sm:pt-[60px]">
         <div className="grid grid-cols-2 gap-[70px] max-lg:grid-cols-1 max-lg:gap-[36px]">
           <Reveal delay={0}>
-            <div className="p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-[#fafafa] max-sm:p-[28px] h-full">
-              <h2 className="m-0 mb-[16px] text-[24px] font-bold text-[#25252a]">
+            <div className="p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-[var(--card-bg)] max-sm:p-[28px] h-full">
+              <h2 className="m-0 mb-[16px] text-[24px] font-bold text-[var(--color-ink)]">
                 The Overview
               </h2>
-              <p className="m-0 text-[#333337] text-[15px] leading-[1.65]">
+              <p className="m-0 text-[var(--color-text)] text-[15px] leading-[1.65]">
                 {overviewText}
               </p>
             </div>
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-white max-sm:p-[28px] h-full">
-              <h2 className="m-0 mb-[16px] text-[24px] font-bold text-[#25252a]">
+            <div className="p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-[var(--card-bg)] max-sm:p-[28px] h-full">
+              <h2 className="m-0 mb-[16px] text-[24px] font-bold text-[var(--color-ink)]">
                 The Challenge
               </h2>
-              <p className="m-0 text-[#8c8c93] text-[15px] leading-[1.65]">
+              <p className="m-0 text-[var(--color-text)] text-[15px] leading-[1.65]">
                 {challengeText}
               </p>
             </div>
@@ -280,25 +280,25 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
       {/* Solution & Outcomes Section */}
       <Reveal as="section" className="solution-section section-shell pt-[60px] max-sm:pt-[40px]">
-        <div className="p-[54px] border border-[var(--border)] rounded-[var(--radius-lg)] bg-white max-sm:p-[28px]">
-          <h2 className="m-0 mb-[18px] text-[28px] max-sm:text-[22px] font-bold text-[#25252a]">
+        <div className="p-[54px] border border-[var(--border)] rounded-[var(--radius-lg)] bg-[var(--card-bg)] max-sm:p-[28px]">
+          <h2 className="m-0 mb-[18px] text-[28px] max-sm:text-[22px] font-bold text-[var(--color-ink)]">
             Our Approach & Solution
           </h2>
-          <p className="max-w-[760px] m-0 mb-[40px] text-[#333337] text-[16px] leading-[1.65]">
+          <p className="max-w-[760px] m-0 mb-[40px] text-[var(--color-text)] text-[16px] leading-[1.65]">
             {solutionText}
           </p>
 
-          <h3 className="m-0 mb-[20px] text-[20px] font-bold text-[#25252a]">
+          <h3 className="m-0 mb-[20px] text-[20px] font-bold text-[var(--color-ink)]">
             Key Outcomes & Impact
           </h3>
           <div className="grid grid-cols-3 gap-[18px] max-lg:grid-cols-1">
             {outcomesList.map((outcome, idx) => (
               <Reveal key={idx} delay={idx * 0.08}>
-                <div className="p-[22px] bg-[#fafafa] border border-[var(--border)] rounded-[14px] h-full">
-                  <span className="text-[#111111] text-[18px] font-bold block mb-[8px]">
+                <div className="p-[22px] bg-[#141416] border border-[var(--border)] rounded-[14px] h-full">
+                  <span className="text-white text-[18px] font-bold block mb-[8px]">
                     0{idx + 1}.
                   </span>
-                  <p className="m-0 text-[#323236] text-[14px] leading-[1.5] font-medium">
+                  <p className="m-0 text-[var(--color-text)] text-[14px] leading-[1.5] font-medium">
                     {outcome}
                   </p>
                 </div>
@@ -314,12 +314,12 @@ export default async function ProjectDetailPage({ params }: PageProps) {
           {prevProject && (
             <a
               href={`/work/${prevProject.slug}`}
-              className="p-[20px_28px] border border-[var(--border)] rounded-[16px] hover:border-black transition-colors block text-left group"
+              className="p-[20px_28px] border border-[var(--border)] rounded-[16px] hover:border-[var(--color-ink)] transition-colors block text-left group"
             >
-              <span className="text-[#9999a0] text-[11px] font-bold uppercase block mb-[4px]">
+              <span className="text-[var(--color-muted)] text-[11px] font-bold uppercase block mb-[4px]">
                 ← Previous Project
               </span>
-              <span className="text-[#25252a] text-[18px] font-bold group-hover:underline">
+              <span className="text-[var(--color-ink)] text-[18px] font-bold group-hover:underline">
                 {prevProject.name}
               </span>
             </a>
@@ -327,12 +327,12 @@ export default async function ProjectDetailPage({ params }: PageProps) {
           {nextProject && (
             <a
               href={`/work/${nextProject.slug}`}
-              className="p-[20px_28px] border border-[var(--border)] rounded-[16px] hover:border-black transition-colors block text-right max-sm:text-left group"
+              className="p-[20px_28px] border border-[var(--border)] rounded-[16px] hover:border-[var(--color-ink)] transition-colors block text-right max-sm:text-left group"
             >
-              <span className="text-[#9999a0] text-[11px] font-bold uppercase block mb-[4px]">
+              <span className="text-[var(--color-muted)] text-[11px] font-bold uppercase block mb-[4px]">
                 Next Project →
               </span>
-              <span className="text-[#25252a] text-[18px] font-bold group-hover:underline">
+              <span className="text-[var(--color-ink)] text-[18px] font-bold group-hover:underline">
                 {nextProject.name}
               </span>
             </a>
@@ -342,11 +342,11 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
       {/* Contextual CTA Section */}
       <Reveal as="section" className="case-study-cta section-shell pt-[110px] pb-[40px] text-center max-sm:pt-[70px]">
-        <div className="max-w-[760px] mx-auto p-[64px_36px] border border-[var(--border)] rounded-[var(--radius-lg)] bg-[#fafafa] max-sm:p-[42px_24px]">
-          <h2 className="m-0 text-[clamp(32px,3.5vw,48px)] font-bold text-[#25252a] leading-[1.15]">
+        <div className="max-w-[760px] mx-auto p-[64px_36px] border border-[var(--border)] rounded-[var(--radius-lg)] bg-[var(--card-bg)] max-sm:p-[42px_24px]">
+          <h2 className="m-0 text-[clamp(32px,3.5vw,48px)] font-bold text-[var(--color-ink)] leading-[1.15]">
             Have a Similar Initiative?
           </h2>
-          <p className="max-w-[500px] mx-auto mt-[18px] mb-[36px] text-[#8c8c93] text-[15px] leading-[1.5]">
+          <p className="max-w-[500px] mx-auto mt-[18px] mb-[36px] text-[var(--color-text)] text-[15px] leading-[1.5]">
             Let's discuss how our brand design and software engineering capabilities
             can bring clarity and scale to your next project.
           </p>

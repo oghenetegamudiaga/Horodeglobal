@@ -63,7 +63,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
     const IconComponent = CURATED_LUCIDE_ICONS[iconName] || CURATED_LUCIDE_ICONS["Sparkles"] || HelpCircle;
 
     return (
-      <div className="mb-[18px] text-[#25252a] flex items-center justify-start">
+      <div className="mb-[18px] text-[var(--color-ink)] flex items-center justify-start">
         <IconComponent className="w-6 h-6 stroke-[1.75]" aria-hidden="true" />
       </div>
     );
@@ -71,21 +71,21 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
 
   return (
     <article
-      className={`min-h-[290px] p-[48px_24px_36px] border border-[var(--border)] rounded-[var(--radius-md)] bg-white max-sm:min-h-[220px] max-sm:p-[34px_22px_28px] transition-all duration-200 ease-out hover:scale-[1.015] hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(0,0,0,0.04)] hover:border-[#d4d4d8] flex flex-col justify-between ${className}`}
+      className={`min-h-[290px] p-[48px_24px_36px] border border-[var(--border)] rounded-[var(--radius-md)] bg-[var(--card-bg)] max-sm:min-h-[220px] max-sm:p-[34px_22px_28px] transition-all duration-200 ease-out hover:scale-[1.015] hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(0,0,0,0.4)] hover:border-[rgba(255,255,255,0.25)] flex flex-col justify-between ${className}`}
     >
       <div>
         {renderIcon()}
-        <h3 className="m-0 mb-[14px] text-[#25252a] text-[24px] font-semibold leading-[1.18]">
+        <h3 className="m-0 mb-[14px] text-[var(--color-ink)] text-[24px] font-semibold leading-[1.18]">
           {title}
         </h3>
-        <p className="max-w-[330px] min-h-[72px] m-0 mb-[28px] text-[#8c8c93] text-[14px] leading-[1.56] max-sm:min-h-0">
+        <p className="max-w-[330px] min-h-[72px] m-0 mb-[28px] text-[var(--color-text)] text-[14px] leading-[1.56] max-sm:min-h-0">
           {description}
         </p>
       </div>
 
       <a
         href={href}
-        className="text-[#222226] text-[12px] font-bold inline-flex items-center gap-1 hover:underline"
+        className="text-[var(--color-ink)] text-[12px] font-bold inline-flex items-center gap-1 hover:underline"
       >
         Learn more <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
       </a>

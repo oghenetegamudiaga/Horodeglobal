@@ -28,26 +28,26 @@ export default async function AboutPage() {
       {/* Header Section */}
       <Reveal as="section" className="about-header section-shell">
         <EyebrowLabel className="mb-[26px]">Who We Are</EyebrowLabel>
-        <h1 className="max-w-[840px] m-0 text-[clamp(44px,4.5vw,72px)] max-sm:text-[42px] max-[430px]:text-[32px] font-bold text-[#333337] leading-[1.08] tracking-normal">
+        <h1 className="max-w-[840px] m-0 text-[clamp(44px,4.5vw,72px)] max-sm:text-[42px] max-[430px]:text-[32px] font-bold text-[var(--color-ink)] leading-[1.08] tracking-normal">
           {heroTitle}
         </h1>
-        <p className="max-w-[640px] mt-[24px] mb-0 text-[#97979d] text-[19px] max-sm:text-[16px] leading-[1.45]">
+        <p className="max-w-[640px] mt-[24px] mb-0 text-[var(--color-text)] text-[19px] max-sm:text-[16px] leading-[1.45]">
           {heroSubhead}
         </p>
       </Reveal>
 
       {/* Brand Story Section */}
       <Reveal as="section" className="story-section section-shell pt-[100px] max-sm:pt-[60px]">
-        <div className="grid grid-cols-2 gap-[80px] p-[60px] border border-[var(--border)] rounded-[var(--radius-lg)] bg-[#fafafa] max-lg:grid-cols-1 max-lg:gap-[36px] max-sm:p-[28px]">
+        <div className="grid grid-cols-2 gap-[80px] p-[60px] border border-[var(--border)] rounded-[var(--radius-lg)] bg-[var(--card-bg)] max-lg:grid-cols-1 max-lg:gap-[36px] max-sm:p-[28px]">
           <div>
-            <span className="text-[#8c8c93] text-[13px] font-semibold uppercase tracking-wider block mb-[12px]">
+            <span className="text-[var(--color-muted)] text-[13px] font-semibold uppercase tracking-wider block mb-[12px]">
               Our Philosophy
             </span>
-            <h2 className="m-0 text-[clamp(32px,3.2vw,48px)] font-bold text-[#25252a] leading-[1.12]">
+            <h2 className="m-0 text-[clamp(32px,3.2vw,48px)] font-bold text-[var(--color-ink)] leading-[1.12]">
               {philosophyTitle}
             </h2>
           </div>
-          <div className="space-y-[20px] text-[#333337] text-[16px] leading-[1.6]">
+          <div className="space-y-[20px] text-[var(--color-text)] text-[16px] leading-[1.6]">
             {storyParagraphs.map((paragraph: string, idx: number) => (
               <p key={idx} className="m-0">
                 {paragraph}
@@ -60,21 +60,21 @@ export default async function AboutPage() {
       {/* Working Principles Section */}
       <Reveal as="section" className="principles-section section-shell pt-[120px] max-sm:pt-[80px]">
         <EyebrowLabel className="mb-[24px]">Core Values</EyebrowLabel>
-        <h2 className="m-0 mb-[52px] text-[clamp(36px,3.8vw,54px)] max-sm:text-[32px] font-medium text-[#25252a]">
+        <h2 className="m-0 mb-[52px] text-[clamp(36px,3.8vw,54px)] max-sm:text-[32px] font-medium text-[var(--color-ink)]">
           How We Work
         </h2>
 
         <div className="grid grid-cols-2 gap-[24px] max-lg:grid-cols-1">
           {values.map((item: any, idx: number) => (
             <Reveal key={item.number || idx} delay={idx * 0.08}>
-              <div className="p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-white max-sm:p-[28px] h-full">
-                <span className="text-[#9999a0] text-[14px] font-bold block mb-[16px]">
+              <div className="p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-[var(--card-bg)] max-sm:p-[28px] h-full">
+                <span className="text-[var(--color-muted)] text-[14px] font-bold block mb-[16px]">
                   {item.number || `0${idx + 1}`}
                 </span>
-                <h3 className="m-0 mb-[12px] text-[22px] font-semibold text-[#25252a]">
+                <h3 className="m-0 mb-[12px] text-[22px] font-semibold text-[var(--color-ink)]">
                   {item.title}
                 </h3>
-                <p className="m-0 text-[#8c8c93] text-[15px] leading-[1.6]">
+                <p className="m-0 text-[var(--color-text)] text-[15px] leading-[1.6]">
                   {item.description}
                 </p>
               </div>
@@ -86,25 +86,25 @@ export default async function AboutPage() {
       {/* Team / Leadership Section */}
       <Reveal as="section" className="team-section section-shell pt-[120px] max-sm:pt-[80px]">
         <EyebrowLabel className="mb-[24px]">Leadership</EyebrowLabel>
-        <h2 className="m-0 mb-[52px] text-[clamp(36px,3.8vw,54px)] max-sm:text-[32px] font-medium text-[#25252a]">
+        <h2 className="m-0 mb-[52px] text-[clamp(36px,3.8vw,54px)] max-sm:text-[32px] font-medium text-[var(--color-ink)]">
           The Minds Behind Horode
         </h2>
 
         <div className="grid grid-cols-2 gap-[32px] max-lg:grid-cols-1">
           {/* Founder Profile */}
           <Reveal delay={0}>
-            <div className="p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-white flex flex-col justify-between max-sm:p-[28px] h-full">
+            <div className="p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-[var(--card-bg)] flex flex-col justify-between max-sm:p-[28px] h-full">
               <div>
-                <div className="w-[56px] h-[56px] rounded-full bg-[#111111] text-white flex items-center justify-center font-bold text-[18px] mb-[24px]">
+                <div className="w-[56px] h-[56px] rounded-full bg-white text-black flex items-center justify-center font-bold text-[18px] mb-[24px]">
                   T
                 </div>
-                <h3 className="m-0 text-[24px] font-bold text-[#25252a]">
+                <h3 className="m-0 text-[24px] font-bold text-[var(--color-ink)]">
                   Oghenetegamudiaga (Tega)
                 </h3>
-                <span className="text-[#8c8c93] text-[14px] font-medium block mt-[4px] mb-[18px]">
+                <span className="text-[var(--color-muted)] text-[14px] font-medium block mt-[4px] mb-[18px]">
                   Founder & Lead Systems Architect
                 </span>
-                <p className="m-0 text-[#333337] text-[15px] leading-[1.6]">
+                <p className="m-0 text-[var(--color-text)] text-[15px] leading-[1.6]">
                   Tega leads brand strategy and software architecture at Horode, bringing
                   a unified engineering approach to design systems, digital
                   infrastructure, and scalable web/mobile products.
@@ -115,18 +115,18 @@ export default async function AboutPage() {
 
           {/* Team Placeholder */}
           <Reveal delay={0.1}>
-            <div className="p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-white flex flex-col justify-between max-sm:p-[28px] h-full">
+            <div className="p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-[var(--card-bg)] flex flex-col justify-between max-sm:p-[28px] h-full">
               <div>
-                <div className="w-[56px] h-[56px] rounded-full bg-[#fafafa] border border-[var(--border)] text-[#111111] flex items-center justify-center font-bold text-[18px] mb-[24px]">
+                <div className="w-[56px] h-[56px] rounded-full bg-[#141416] border border-[var(--border)] text-white flex items-center justify-center font-bold text-[18px] mb-[24px]">
                   H
                 </div>
-                <h3 className="m-0 text-[24px] font-bold text-[#25252a]">
+                <h3 className="m-0 text-[24px] font-bold text-[var(--color-ink)]">
                   Studio Specialists
                 </h3>
-                <span className="text-[#8c8c93] text-[14px] font-medium block mt-[4px] mb-[18px]">
+                <span className="text-[var(--color-muted)] text-[14px] font-medium block mt-[4px] mb-[18px]">
                   Design & Engineering Network
                 </span>
-                <p className="m-0 text-[#333337] text-[15px] leading-[1.6]">
+                <p className="m-0 text-[var(--color-text)] text-[15px] leading-[1.6]">
                   A multi-disciplinary team of brand strategists, UI/UX designers, and
                   software engineers collaborating to execute complex client initiatives
                   with speed and precision.
@@ -139,11 +139,11 @@ export default async function AboutPage() {
 
       {/* Closing CTA Section */}
       <Reveal as="section" className="about-cta section-shell pt-[130px] pb-[40px] text-center max-sm:pt-[90px]">
-        <div className="max-w-[760px] mx-auto p-[64px_36px] border border-[var(--border)] rounded-[var(--radius-lg)] bg-[#fafafa] max-sm:p-[42px_24px]">
-          <h2 className="m-0 text-[clamp(32px,3.5vw,48px)] font-bold text-[#25252a] leading-[1.15]">
+        <div className="max-w-[760px] mx-auto p-[64px_36px] border border-[var(--border)] rounded-[var(--radius-lg)] bg-[var(--card-bg)] max-sm:p-[42px_24px]">
+          <h2 className="m-0 text-[clamp(32px,3.5vw,48px)] font-bold text-[var(--color-ink)] leading-[1.15]">
             Let's Create Greatness Together
           </h2>
-          <p className="max-w-[520px] mx-auto mt-[18px] mb-[36px] text-[#8c8c93] text-[15px] leading-[1.5]">
+          <p className="max-w-[520px] mx-auto mt-[18px] mb-[36px] text-[var(--color-text)] text-[15px] leading-[1.5]">
             Whether you are launching a new company or scaling an established product,
             we are ready to engineer your digital foundation.
           </p>

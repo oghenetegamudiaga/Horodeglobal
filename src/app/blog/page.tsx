@@ -88,10 +88,10 @@ export default async function BlogIndexPage() {
       {/* Header Section */}
       <Reveal as="section" className="blog-header section-shell">
         <EyebrowLabel className="mb-[26px]">{introEyebrow}</EyebrowLabel>
-        <h1 className="max-w-[840px] m-0 text-[clamp(44px,4.5vw,72px)] max-sm:text-[42px] max-[430px]:text-[32px] font-bold leading-[1.08] text-[#333337] tracking-normal">
+        <h1 className="max-w-[840px] m-0 text-[clamp(44px,4.5vw,72px)] max-sm:text-[42px] max-[430px]:text-[32px] font-bold leading-[1.08] text-[var(--color-ink)] tracking-normal">
           {introHeading}
         </h1>
-        <p className="max-w-[620px] mt-[24px] mb-0 text-[#97979d] text-[18px] max-sm:text-[15px] leading-[1.4]">
+        <p className="max-w-[620px] mt-[24px] mb-0 text-[var(--color-text)] text-[18px] max-sm:text-[15px] leading-[1.4]">
           {introSubhead}
         </p>
       </Reveal>
@@ -101,7 +101,7 @@ export default async function BlogIndexPage() {
         <div className="grid grid-cols-2 gap-[48px] max-lg:grid-cols-1">
           {posts.map((post, index) => (
             <Reveal key={post.id || post.slug} delay={index * 0.1}>
-              <article className="blog-card border border-[var(--border)] rounded-[var(--radius-lg)] overflow-hidden bg-white transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-md group flex flex-col justify-between h-full">
+              <article className="blog-card border border-[var(--border)] rounded-[var(--radius-lg)] overflow-hidden bg-[var(--card-bg)] transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-md group flex flex-col justify-between h-full">
                 <div>
                   {post.cover_image_url && (
                     <a href={`/blog/${post.slug}`} className="block overflow-hidden">
@@ -114,19 +114,19 @@ export default async function BlogIndexPage() {
                   )}
                   <div className="p-[36px] max-sm:p-[24px]">
                     <div className="flex items-center gap-[12px] mb-[16px]">
-                      <span className="inline-flex items-center min-h-[22px] px-[9px] border border-[var(--border)] rounded-full text-[#77777e] text-[10px] font-bold uppercase">
+                      <span className="inline-flex items-center min-h-[22px] px-[9px] border border-[var(--border)] rounded-full text-[var(--color-muted)] text-[10px] font-bold uppercase">
                         {post.category || "Insight"}
                       </span>
-                      <span className="text-[#8c8c93] text-[12px]">
+                      <span className="text-[var(--color-muted)] text-[12px]">
                         {post.read_time || "5 min read"}
                       </span>
                     </div>
 
-                    <h2 className="m-0 mb-[12px] text-[24px] max-sm:text-[20px] font-bold text-[#25252a] group-hover:text-black transition-colors leading-[1.25]">
+                    <h2 className="m-0 mb-[12px] text-[24px] max-sm:text-[20px] font-bold text-[var(--color-ink)] group-hover:text-white transition-colors leading-[1.25]">
                       <a href={`/blog/${post.slug}`}>{post.title}</a>
                     </h2>
 
-                    <p className="m-0 text-[#8c8c93] text-[15px] leading-[1.6]">
+                    <p className="m-0 text-[var(--color-text)] text-[15px] leading-[1.6]">
                       {post.excerpt}
                     </p>
                   </div>
@@ -135,7 +135,7 @@ export default async function BlogIndexPage() {
                 <div className="p-[0_36px_36px] max-sm:p-[0_24px_24px]">
                   <a
                     href={`/blog/${post.slug}`}
-                    className="text-[#222226] text-[13px] font-bold inline-flex items-center gap-1 group-hover:underline"
+                    className="text-[var(--color-ink)] text-[13px] font-bold inline-flex items-center gap-1 group-hover:underline"
                   >
                     Read article <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
                   </a>
@@ -148,11 +148,11 @@ export default async function BlogIndexPage() {
 
       {/* CTA Section */}
       <Reveal as="section" className="blog-cta section-shell pt-[140px] pb-[60px] text-center max-sm:pt-[90px]">
-        <div className="max-w-[760px] mx-auto p-[64px_36px] border border-[var(--border)] rounded-[var(--radius-lg)] bg-[#fafafa] max-sm:p-[42px_24px]">
-          <h2 className="m-0 text-[clamp(32px,3.5vw,48px)] font-bold text-[#25252a] leading-[1.15]">
+        <div className="max-w-[760px] mx-auto p-[64px_36px] border border-[var(--border)] rounded-[var(--radius-lg)] bg-[var(--card-bg)] max-sm:p-[42px_24px]">
+          <h2 className="m-0 text-[clamp(32px,3.5vw,48px)] font-bold text-[var(--color-ink)] leading-[1.15]">
             {ctaTitle}
           </h2>
-          <p className="max-w-[500px] mx-auto mt-[18px] mb-[36px] text-[#8c8c93] text-[15px] leading-[1.5]">
+          <p className="max-w-[500px] mx-auto mt-[18px] mb-[36px] text-[var(--color-text)] text-[15px] leading-[1.5]">
             {ctaText}
           </p>
           <Button variant="filled" href="/contact" className="min-h-[58px] px-[32px]">

@@ -125,22 +125,22 @@ function ContactFormInner() {
 
   if (submitStatus === "success") {
     return (
-      <div className="contact-form p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-white max-sm:p-[24px] max-sm:rounded-[18px]">
+      <div className="contact-form p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-[var(--card-bg)] max-sm:p-[24px] max-sm:rounded-[18px]">
         <div className="flex flex-col items-start gap-4">
-          <div className="w-12 h-12 rounded-full bg-[#10b981]/10 text-[#10b981] flex items-center justify-center text-xl font-bold">
+          <div className="w-12 h-12 rounded-full bg-[#10b981]/15 text-[#10b981] flex items-center justify-center text-xl font-bold">
             ✓
           </div>
           <div>
-            <h3 className="text-[20px] font-semibold text-[#060606] mb-2">
+            <h3 className="text-[20px] font-semibold text-[var(--color-ink)] mb-2">
               Submission Received!
             </h3>
-            <p className="text-[#4f4f55] text-[14px] leading-relaxed mb-4">
+            <p className="text-[var(--color-text)] text-[14px] leading-relaxed mb-4">
               {statusMessage}
             </p>
             {serviceSlug && (
-              <p className="text-[13px] text-[#8b8b92] mb-4">
+              <p className="text-[13px] text-[var(--color-muted)] mb-4">
                 Service Context:{" "}
-                <span className="font-medium text-[#232327]">{serviceSlug}</span>
+                <span className="font-medium text-[var(--color-ink)]">{serviceSlug}</span>
               </p>
             )}
           </div>
@@ -161,14 +161,14 @@ function ContactFormInner() {
 
   return (
     <form
-      className="contact-form p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-white max-sm:p-[20px] max-sm:rounded-[18px]"
+      className="contact-form p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-[var(--card-bg)] max-sm:p-[20px] max-sm:rounded-[18px]"
       onSubmit={handleSubmit(onSubmit)}
       noValidate
     >
       {serviceSlug && (
-        <div className="mb-[18px] p-[12px_16px] bg-[#fafafa] border border-dashed border-[#d4d4d7] rounded-[10px] text-[13px] text-[#4f4f55]">
+        <div className="mb-[18px] p-[12px_16px] bg-[rgba(255,255,255,0.04)] border border-dashed border-[var(--border-dashed)] rounded-[10px] text-[13px] text-[var(--color-text)]">
           Inquiry regarding:{" "}
-          <span className="font-semibold text-[#060606]">{serviceSlug}</span>
+          <span className="font-semibold text-[var(--color-ink)]">{serviceSlug}</span>
         </div>
       )}
 
@@ -179,11 +179,11 @@ function ContactFormInner() {
           placeholder="Full Name*"
           {...register("name")}
           className={`w-full h-[60px] px-[22px] border border-dashed ${
-            errors.name ? "border-red-500" : "border-[#d4d4d7]"
-          } rounded-[10px] bg-white text-[#232327] text-[13px] outline-none placeholder-[#a0a0a6] focus:border-[#777] focus:ring-2 focus:ring-black/5 max-sm:h-[54px]`}
+            errors.name ? "border-red-500" : "border-[var(--border-dashed)]"
+          } rounded-[10px] bg-[var(--input-bg)] text-[var(--color-ink)] text-[13px] outline-none placeholder-[#66666c] focus:border-[var(--color-ink)] focus:ring-2 focus:ring-white/10 max-sm:h-[54px]`}
         />
         {errors.name && (
-          <span className="text-red-500 text-[12px] mt-1 block">
+          <span className="text-red-400 text-[12px] mt-1 block">
             {errors.name.message}
           </span>
         )}
@@ -196,11 +196,11 @@ function ContactFormInner() {
           placeholder="Email*"
           {...register("email")}
           className={`w-full h-[60px] px-[22px] border border-dashed ${
-            errors.email ? "border-red-500" : "border-[#d4d4d7]"
-          } rounded-[10px] bg-white text-[#232327] text-[13px] outline-none placeholder-[#a0a0a6] focus:border-[#777] focus:ring-2 focus:ring-black/5 max-sm:h-[54px]`}
+            errors.email ? "border-red-500" : "border-[var(--border-dashed)]"
+          } rounded-[10px] bg-[var(--input-bg)] text-[var(--color-ink)] text-[13px] outline-none placeholder-[#66666c] focus:border-[var(--color-ink)] focus:ring-2 focus:ring-white/10 max-sm:h-[54px]`}
         />
         {errors.email && (
-          <span className="text-red-500 text-[12px] mt-1 block">
+          <span className="text-red-400 text-[12px] mt-1 block">
             {errors.email.message}
           </span>
         )}
@@ -212,7 +212,7 @@ function ContactFormInner() {
           type="tel"
           placeholder="🇺🇸  +1 Phone"
           {...register("phone")}
-          className="w-full h-[60px] px-[22px] border border-dashed border-[#d4d4d7] rounded-[10px] bg-white text-[#232327] text-[13px] outline-none placeholder-[#a0a0a6] focus:border-[#777] focus:ring-2 focus:ring-black/5 max-sm:h-[54px]"
+          className="w-full h-[60px] px-[22px] border border-dashed border-[var(--border-dashed)] rounded-[10px] bg-[var(--input-bg)] text-[var(--color-ink)] text-[13px] outline-none placeholder-[#66666c] focus:border-[var(--color-ink)] focus:ring-2 focus:ring-white/10 max-sm:h-[54px]"
         />
       </label>
 
@@ -221,13 +221,13 @@ function ContactFormInner() {
           <span className="sr-only">How did you hear about us</span>
           <select
             {...register("source")}
-            className="w-full h-[60px] px-[22px] border border-dashed border-[#d4d4d7] rounded-[10px] bg-white text-[#232327] text-[13px] outline-none text-[#232327] focus:border-[#777] focus:ring-2 focus:ring-black/5 max-sm:h-[54px]"
+            className="w-full h-[60px] px-[22px] border border-dashed border-[var(--border-dashed)] rounded-[10px] bg-[var(--input-bg)] text-[var(--color-ink)] text-[13px] outline-none focus:border-[var(--color-ink)] focus:ring-2 focus:ring-white/10 max-sm:h-[54px]"
           >
-            <option value="">How did you hear about us</option>
-            <option value="Instagram">Instagram</option>
-            <option value="Referral">Referral</option>
-            <option value="Google Search">Google Search</option>
-            <option value="LinkedIn">LinkedIn</option>
+            <option value="" className="bg-[#141416] text-[#a8a8ad]">How did you hear about us</option>
+            <option value="Instagram" className="bg-[#141416] text-[#f5f5f5]">Instagram</option>
+            <option value="Referral" className="bg-[#141416] text-[#f5f5f5]">Referral</option>
+            <option value="Google Search" className="bg-[#141416] text-[#f5f5f5]">Google Search</option>
+            <option value="LinkedIn" className="bg-[#141416] text-[#f5f5f5]">LinkedIn</option>
           </select>
         </label>
 
@@ -235,12 +235,12 @@ function ContactFormInner() {
           <span className="sr-only">What is your budget</span>
           <select
             {...register("budget")}
-            className="w-full h-[60px] px-[22px] border border-dashed border-[#d4d4d7] rounded-[10px] bg-white text-[#232327] text-[13px] outline-none text-[#232327] focus:border-[#777] focus:ring-2 focus:ring-black/5 max-sm:h-[54px]"
+            className="w-full h-[60px] px-[22px] border border-dashed border-[var(--border-dashed)] rounded-[10px] bg-[var(--input-bg)] text-[var(--color-ink)] text-[13px] outline-none focus:border-[var(--color-ink)] focus:ring-2 focus:ring-white/10 max-sm:h-[54px]"
           >
-            <option value="">What is your budget</option>
-            <option value="$1,000 - $5,000">$1,000 - $5,000</option>
-            <option value="$5,000 - $10,000">$5,000 - $10,000</option>
-            <option value="$10,000+">$10,000+</option>
+            <option value="" className="bg-[#141416] text-[#a8a8ad]">What is your budget</option>
+            <option value="$1,000 - $5,000" className="bg-[#141416] text-[#f5f5f5]">$1,000 - $5,000</option>
+            <option value="$5,000 - $10,000" className="bg-[#141416] text-[#f5f5f5]">$5,000 - $10,000</option>
+            <option value="$10,000+" className="bg-[#141416] text-[#f5f5f5]">$10,000+</option>
           </select>
         </label>
       </div>
@@ -251,7 +251,7 @@ function ContactFormInner() {
           rows={7}
           placeholder="Message"
           {...register("message")}
-          className="w-full min-h-[170px] p-[24px_22px] border border-dashed border-[#d4d4d7] rounded-[10px] bg-white text-[#232327] text-[13px] outline-none resize-y placeholder-[#a0a0a6] focus:border-[#777] focus:ring-2 focus:ring-black/5"
+          className="w-full min-h-[170px] p-[24px_22px] border border-dashed border-[var(--border-dashed)] rounded-[10px] bg-[var(--input-bg)] text-[var(--color-ink)] text-[13px] outline-none resize-y placeholder-[#66666c] focus:border-[var(--color-ink)] focus:ring-2 focus:ring-white/10"
         ></textarea>
       </label>
 
@@ -261,16 +261,16 @@ function ContactFormInner() {
           {selectedFiles.map((file, idx) => (
             <div
               key={idx}
-              className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#f4f4f6] border border-[#e8e8ea] rounded-[8px] text-[12px] text-[#323236]"
+              className="inline-flex items-center gap-2 px-3 py-1.5 bg-[rgba(255,255,255,0.06)] border border-[var(--border)] rounded-[8px] text-[12px] text-[var(--color-text)]"
             >
               <span className="truncate max-w-[180px]">{file.name}</span>
-              <span className="text-[#8b8b92]">
+              <span className="text-[var(--color-muted)]">
                 ({(file.size / (1024 * 1024)).toFixed(1)}MB)
               </span>
               <button
                 type="button"
                 onClick={() => removeFile(idx)}
-                className="text-[#8b8b92] hover:text-red-600 font-bold ml-1"
+                className="text-[var(--color-muted)] hover:text-red-400 font-bold ml-1"
                 aria-label={`Remove file ${file.name}`}
               >
                 ✕
@@ -281,11 +281,11 @@ function ContactFormInner() {
       )}
 
       {fileError && (
-        <p className="text-red-500 text-[12px] mb-[18px]">{fileError}</p>
+        <p className="text-red-400 text-[12px] mb-[18px]">{fileError}</p>
       )}
 
       <div className="form-actions flex items-center justify-between gap-[18px] mt-[28px] max-sm:flex-col max-sm:items-start">
-        <label className="file-link inline-flex items-center gap-[7px] text-[#9999a0] text-[13px] cursor-pointer hover:text-[#232327] transition-colors">
+        <label className="file-link inline-flex items-center gap-[7px] text-[var(--color-muted)] text-[13px] cursor-pointer hover:text-[var(--color-ink)] transition-colors">
           <input
             type="file"
             multiple
@@ -306,7 +306,7 @@ function ContactFormInner() {
       </div>
 
       {submitStatus === "error" && (
-        <div className="mt-[18px] p-[12px_16px] bg-red-50 border border-red-200 rounded-[10px] text-red-600 text-[13px]">
+        <div className="mt-[18px] p-[12px_16px] bg-red-950/40 border border-red-800 rounded-[10px] text-red-300 text-[13px]">
           {statusMessage}
         </div>
       )}
@@ -318,10 +318,10 @@ export function ContactForm() {
   return (
     <Suspense
       fallback={
-        <div className="contact-form p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-white max-sm:p-[20px] max-sm:rounded-[18px] animate-pulse">
-          <div className="h-10 bg-gray-100 rounded mb-4"></div>
-          <div className="h-10 bg-gray-100 rounded mb-4"></div>
-          <div className="h-24 bg-gray-100 rounded mb-4"></div>
+        <div className="contact-form p-[42px] border border-[var(--border)] rounded-[var(--radius-md)] bg-[var(--card-bg)] max-sm:p-[20px] max-sm:rounded-[18px] animate-pulse">
+          <div className="h-10 bg-white/5 rounded mb-4"></div>
+          <div className="h-10 bg-white/5 rounded mb-4"></div>
+          <div className="h-24 bg-white/5 rounded mb-4"></div>
         </div>
       }
     >

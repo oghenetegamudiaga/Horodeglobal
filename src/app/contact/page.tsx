@@ -43,7 +43,7 @@ export default async function ContactPage() {
             <h2 className="m-0 mb-[26px] text-[24px] font-semibold">
               {subheading}
             </h2>
-            <ol className="max-w-[390px] m-0 p-0 text-[#8b8b92] text-[14px] leading-[1.72] list-inside space-y-[12px]">
+            <ol className="max-w-[390px] m-0 p-0 text-[var(--color-text)] text-[14px] leading-[1.72] list-inside space-y-[12px]">
               {steps.map((stepItem: string, idx: number) => (
                 <li key={idx}>{stepItem}</li>
               ))}

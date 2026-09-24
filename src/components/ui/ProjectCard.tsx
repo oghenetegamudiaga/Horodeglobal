@@ -28,7 +28,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           className="block w-full aspect-[1.56/1] object-cover rounded-[22px] transition-transform duration-300 group-hover:scale-[1.02]"
         />
       </div>
-      <h3 className="m-[28px_0_8px] text-[#25252a] text-[28px] max-sm:text-[24px] font-semibold hover:text-black transition-colors">
+      <h3 className="m-[28px_0_8px] text-[var(--color-ink)] text-[28px] max-sm:text-[24px] font-semibold hover:text-white transition-colors">
         {title}
       </h3>
     </>
@@ -43,14 +43,14 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
       ) : (
         content
       )}
-      <p className="max-w-[620px] m-0 mb-[18px] text-[#8e8e95] text-[14px] leading-[1.6]">
+      <p className="max-w-[620px] m-0 mb-[18px] text-[var(--color-text)] text-[14px] leading-[1.6]">
         {description}
       </p>
       <div className="flex flex-wrap gap-[9px]" aria-label="Project services">
         {tags.map((tag, index) => (
           <span
             key={index}
-            className="inline-flex items-center min-h-[24px] px-[10px] border border-[var(--border)] rounded-full text-[#77777e] text-[10px] font-semibold"
+            className="inline-flex items-center min-h-[24px] px-[10px] border border-[var(--border)] rounded-full text-[var(--color-muted)] text-[10px] font-semibold"
           >
             {tag}
           </span>
