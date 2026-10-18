@@ -402,7 +402,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             clarity, structure, and scale to your business.
           </p>
           <Button
-            variant="filled"
+            variant="outline"
             href={`/contact?service=${slug}`}
             className="min-h-[58px] px-[32px]"
           >

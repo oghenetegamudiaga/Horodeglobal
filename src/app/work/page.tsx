@@ -113,7 +113,7 @@ export default async function WorksPage() {
           <p className="max-w-[500px] mx-auto mt-[18px] mb-[36px] text-[var(--color-text)] text-[15px] leading-[1.5]">
             {ctaText}
           </p>
-          <Button variant="filled" href="/contact" className="min-h-[58px] px-[32px]">
+          <Button variant="outline" href="/contact" className="min-h-[58px] px-[32px]">
             Start Your Project
           </Button>
         </div>

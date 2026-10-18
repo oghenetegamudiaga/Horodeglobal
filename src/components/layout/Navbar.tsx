@@ -77,7 +77,7 @@ export const Navbar: React.FC = () => {
           Blog
         </Link>
         <Button
-          variant="filled"
+          variant="outline"
           href="/contact"
           className="nav-button"
           onClick={closeMenu}

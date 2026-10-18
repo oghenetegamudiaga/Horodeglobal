@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
       try {
         const resend = new Resend(resendApiKey);
         await resend.emails.send({
-          from: "Horode Admin <onboarding@resend.dev>",
+          from: "Horode Admin <hello@horodeglobal.com>",
           to: configuredEmail,
           subject: "Reset Your Admin Password - Horode Design Studio",
           html: `

@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "outline" | "filled";
+  variant?: "outline" | "filled" | "hero";
   href?: string;
   children: React.ReactNode;
   className?: string;

@@ -185,9 +185,9 @@ export default async function Home() {
             {heroSubhead}
           </p>
           <Button
-            variant="outline"
-            href="#contact"
-            className="primary-button min-h-[64px] px-[36px] text-[17px] max-sm:min-h-[54px] max-sm:px-[26px] max-sm:text-[14px]"
+            variant="hero"
+            href="/contact"
+            className="hero-cta-btn min-h-[76px] py-[24px] px-[36px] text-[17px] max-sm:min-h-[62px] max-sm:py-[18px] max-sm:px-[26px] max-sm:text-[14px]"
           >
             {heroCtaText}
           </Button>

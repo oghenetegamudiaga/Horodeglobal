@@ -212,7 +212,7 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
           <p className="max-w-[500px] mx-auto mt-[18px] mb-[36px] text-[var(--color-text)] text-[15px] leading-[1.5]">
             Let's discuss how Horode's design and software capabilities can bring your business ideas to life.
           </p>
-          <Button variant="filled" href="/contact" className="min-h-[58px] px-[32px]">
+          <Button variant="outline" href="/contact" className="min-h-[58px] px-[32px]">
             Book Free Consultation
           </Button>
         </div>

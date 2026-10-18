@@ -350,7 +350,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             Let's discuss how our brand design and software engineering capabilities
             can bring clarity and scale to your next project.
           </p>
-          <Button variant="filled" href="/contact" className="min-h-[58px] px-[32px]">
+          <Button variant="outline" href="/contact" className="min-h-[58px] px-[32px]">
             Book Free Consultation
           </Button>
         </div>

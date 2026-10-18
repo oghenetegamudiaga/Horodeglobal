@@ -148,7 +148,7 @@ export default async function AboutPage() {
             we are ready to engineer your digital foundation.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-[16px]">
-            <Button variant="filled" href="/contact" className="min-h-[58px] px-[32px]">
+            <Button variant="outline" href="/contact" className="min-h-[58px] px-[32px]">
               Book Free Consultation
             </Button>
             <Button variant="outline" href="/#works" className="min-h-[58px] px-[32px]">
