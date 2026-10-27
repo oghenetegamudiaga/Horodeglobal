@@ -32,3 +32,6 @@ next-env.d.ts
 # scratch
 scratch/
 
+# source assets
+/source-assets/
+

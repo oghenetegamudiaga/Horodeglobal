@@ -1,11 +1,13 @@
 import React from "react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { EyebrowLabel } from "@/components/ui/EyebrowLabel";
 import { Button } from "@/components/ui/Button";
 import { ServiceCard } from "@/components/ui/ServiceCard";
 import { ProjectCard } from "@/components/ui/ProjectCard";
 import { HomeContactForm } from "@/components/home/HomeContactForm";
+import { HeroCarouselVideo } from "@/components/home/HeroCarouselVideo";
 import { Reveal } from "@/components/ui/Reveal";
 import {
   supabase,
@@ -154,43 +156,54 @@ export default async function Home() {
       {/* Hero Section */}
       <Reveal
         as="section"
-        className="hero section-shell relative flex flex-col items-center justify-center text-center pt-[88px] pb-[108px] max-sm:pt-[48px] max-sm:pb-[68px]"
+        className="hero relative w-full overflow-hidden flex flex-col items-center justify-center text-center pt-[92px] pb-[80px] max-sm:pt-[52px] max-sm:pb-[56px]"
       >
-        {/* Directional White Radial Glow (Bottom-Left & Behind Text) */}
+        {/* Full-width Background Layer Edge-to-Edge with Smooth Bottom Fade */}
         <div
-          className="absolute -bottom-[140px] -left-[140px] w-[750px] h-[750px] rounded-full pointer-events-none z-0"
-          style={{
-            background: "radial-gradient(circle at 45% 55%, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 42%, transparent 72%)",
-            filter: "blur(64px)",
-          }}
+          className="hero-bg-layer absolute inset-0 z-0 pointer-events-none select-none overflow-hidden"
           aria-hidden="true"
-        />
-        <div
-          className="absolute -top-[100px] left-1/2 -translate-x-1/2 w-[920px] h-[450px] rounded-full pointer-events-none z-0"
           style={{
-            background: "radial-gradient(ellipse at 50% 30%, rgba(255, 255, 255, 0.06) 0%, transparent 65%)",
-            filter: "blur(70px)",
+            maskImage: "linear-gradient(to bottom, black 0%, black 72%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 72%, transparent 100%)",
           }}
-          aria-hidden="true"
-        />
+        >
+          <Image
+            src="/assets/horode-hero-bg.png"
+            alt=""
+            fill
+            priority
+            quality={90}
+            sizes="100vw"
+            className="object-cover object-bottom"
+          />
+          {/* Bottom gradient overlay so the Services section starts cleanly without seam */}
+          <div className="absolute inset-x-0 bottom-0 h-[140px] max-sm:h-[80px] bg-gradient-to-t from-[var(--bg,#050505)] via-[var(--bg,#050505)]/70 to-transparent" />
+        </div>
 
-        <div className="hero-copy relative z-10 max-w-[960px] mx-auto flex flex-col items-center text-center">
-          <h1
-            id="hero-title"
-            className="max-w-[900px] mx-auto m-0 mb-[28px] text-[var(--color-ink)] text-[clamp(46px,5.2vw,80px)] max-sm:text-[38px] max-[430px]:text-[32px] font-bold leading-[1.08] tracking-normal text-center"
-          >
-            {heroHeadline}
-          </h1>
-          <p className="max-w-[620px] mx-auto m-0 mb-[40px] text-[var(--color-text)] text-[19px] max-sm:text-[16px] leading-[1.45] text-center">
-            {heroSubhead}
-          </p>
-          <Button
-            variant="hero"
-            href="/contact"
-            className="hero-cta-btn min-h-[76px] py-[24px] px-[36px] text-[17px] max-sm:min-h-[62px] max-sm:py-[18px] max-sm:px-[26px] max-sm:text-[14px]"
-          >
-            {heroCtaText}
-          </Button>
+        <div className="section-shell relative z-10 flex flex-col items-center text-center w-full">
+          <div className="hero-copy relative z-10 max-w-[960px] mx-auto flex flex-col items-center text-center">
+            <h1
+              id="hero-title"
+              className="max-w-[900px] mx-auto m-0 mb-[28px] text-[var(--color-ink)] text-[clamp(46px,5.2vw,80px)] max-sm:text-[38px] max-[430px]:text-[32px] font-bold leading-[1.08] tracking-normal text-center"
+            >
+              {heroHeadline}
+            </h1>
+            <p className="max-w-[620px] mx-auto m-0 mb-[40px] text-[var(--color-text)] text-[19px] max-sm:text-[16px] leading-[1.45] text-center">
+              {heroSubhead}
+            </p>
+            <Button
+              variant="hero"
+              href="/contact"
+              className="hero-cta-btn min-h-[76px] py-[24px] px-[36px] text-[17px] max-sm:min-h-[62px] max-sm:py-[18px] max-sm:px-[26px] max-sm:text-[14px]"
+            >
+              {heroCtaText}
+            </Button>
+          </div>
+
+          {/* Looping Work Showcase Carousel Video on Top of the Gradient */}
+          <div className="hero-video-wrapper relative z-20 w-full max-w-[960px] mx-auto mt-[48px] max-sm:mt-[36px] px-[16px] max-sm:px-0 flex justify-center">
+            <HeroCarouselVideo className="w-full max-w-[880px] max-sm:w-[90vw]" />
+          </div>
         </div>
       </Reveal>
 

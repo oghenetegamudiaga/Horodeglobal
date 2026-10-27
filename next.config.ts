@@ -8,6 +8,7 @@ const supabaseHost =
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
+    qualities: [75, 90],
     remotePatterns: [
       {
         protocol: "https",
