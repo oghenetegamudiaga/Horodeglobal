@@ -101,25 +101,21 @@ export const HeroCarouselVideo: React.FC<HeroCarouselVideoProps> = ({
   return (
     <div
       className={`hero-carousel-container relative w-full aspect-[16/9] overflow-hidden rounded-[22px] max-sm:rounded-[16px] pointer-events-none select-none ${className}`}
-      style={{
-        mixBlendMode: "screen",
-      }}
     >
       {/* Poster Image (shown immediately on load, and kept permanently if reduced motion or data saver is active) */}
       <img
         src="/assets/hero-carousel-poster.webp"
         alt="Horode featured creative and software showcase"
-        width={1280}
-        height={720}
+        width={1920}
+        height={1080}
         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
           isVideoPlaying ? "opacity-0" : "opacity-100"
         }`}
-        style={{ mixBlendMode: "screen" }}
         loading="eager"
         decoding="async"
       />
 
-      {/* Optimized Video Stream (VP9 WebM first, H.264 MP4 second) */}
+      {/* Optimized Video Stream (VP9 WebM with native alpha) */}
       {canLoadVideo && !prefersReducedMotion && (
         <video
           ref={videoRef}
@@ -130,7 +126,6 @@ export const HeroCarouselVideo: React.FC<HeroCarouselVideoProps> = ({
           preload="auto"
           aria-label="Looping motion carousel of selected Horode client work"
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ mixBlendMode: "screen" }}
           onPlay={() => setIsVideoPlaying(true)}
         >
           <source src="/assets/hero-carousel.webm" type="video/webm" />
